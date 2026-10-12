@@ -1,0 +1,1 @@
+const fs=require('fs');const path='app/components/explore.tsx';let s=fs.readFileSync(path,'utf8');s=s.replace(/(<span className="major-category">\{selected\.category\}[^<]*<\/span>)(<h2 id="dialog-title">\{selected\.name\}<\/h2>)/,'$2$1');fs.writeFileSync(path,s);
