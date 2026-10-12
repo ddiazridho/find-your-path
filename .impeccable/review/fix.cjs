@@ -1,0 +1,12 @@
+const fs = require('fs');
+const task = 'app/components/task-preview.tsx';
+let source = fs.readFileSync(task, 'utf8');
+source = source.replace(/<div className="preview-caption">[^<]*<\/div>/g, '').replace(/<span className="(?:preview-caption|design-label)">[^<]*<\/span>/g, '');
+fs.writeFileSync(task, source);
+const explore = 'app/components/explore.tsx';
+source = fs.readFileSync(explore, 'utf8');
+source = source.replace(/<span className="board-card-label">.*?<\/span><div className="board-code">/, '<div className="board-code">');
+source = source.replace(/<span className="board-card-label">[^<]*<\/span>/g, '');
+source = source.replace('<span className="major-category">{major.category}</span><h3>{major.name}</h3>', '<h3>{major.name}</h3><span className="major-category">{major.category}</span>');
+source = source.replace('<span className="major-category">{selected.category} · {selected.minutes} minute preview</span><h2 id="dialog-title">{selected.name}</h2>', '<h2 id="dialog-title">{selected.name}</h2><span className="major-category">{selected.category} · {selected.minutes} minute preview</span>');
+fs.writeFileSync(explore, source);
