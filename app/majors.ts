@@ -14,7 +14,7 @@ export type Major = {
 
 // Preview content. Replace this collection with your backend response.
 export const majors: Major[] = [
-  { id: "computer-science", name: "Computer Science", category: "Technology", description: "Turn a tricky problem into something that just works.", task: "Think like a developer", minutes: 15, skills: ["Logic", "Problem solving"], visual: "code", color: "mint" },
+  { id: "computer-science", name: "Computer Science", category: "Technology", description: "Turn a tricky problem into something that just works. Learn by experimenting, solving problems, and discovering better ways to make things work.", task: "Think like a developer", minutes: 15, skills: ["Logic", "Problem solving"], visual: "code", color: "mint" },
   { id: "business-management", name: "Business Management", category: "Business", description: "Make the big decisions behind a small business.", task: "Launch your first idea", minutes: 20, skills: ["Strategy", "Decision making"], visual: "business", color: "peach" },
   { id: "visual-communication", name: "Visual Communication", category: "Design", description: "Give an idea a voice people can see and feel.", task: "Shape a brand story", minutes: 20, skills: ["Creativity", "Communication"], visual: "design", color: "lilac" },
   { id: "psychology", name: "Psychology", category: "Social sciences", description: "Look a little closer at what makes people, people.", task: "Understand a human story", minutes: 15, skills: ["Empathy", "Observation"], visual: "psychology", color: "sky" },
