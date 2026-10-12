@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180" fill="none">
+  <defs>
+    <linearGradient id="mm-bg" x1="0" y1="0" x2="440" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2D2338" />
+      <stop offset="1" stop-color="#1A1422" />
+    </linearGradient>
+    <linearGradient id="audio-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#E4DEF4" />
+      <stop offset="1" stop-color="#BA68C8" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="440" height="180" rx="10" fill="url(#mm-bg)"/>
+
+  <!-- Canvas Preview Frame (Upper half) -->
+  <rect x="22" y="16" width="220" height="96" rx="6" fill="#140E1B" stroke="#453358" stroke-width="1.2"/>
+  
+  <!-- Canvas Inner Graphic (Video scene) -->
+  <circle cx="95" cy="54" r="22" fill="#7E57C2" opacity="0.4"/>
+  <rect x="120" y="38" width="55" height="42" rx="4" fill="#CE93D8" opacity="0.3"/>
+  <polygon points="120,70 145,45 175,70" fill="#BA68C8"/>
+  <circle cx="160" cy="42" r="6" fill="#FFF59D"/>
+
+  <!-- Play overlay button -->
+  <circle cx="132" cy="64" r="16" fill="#4A148C" stroke="#BA68C8" stroke-width="1.5"/>
+  <polygon points="128,57 140,64 128,71" fill="#FFFFFF"/>
+
+  <!-- Inspector / Audio Meter Right Panel -->
+  <rect x="254" y="16" width="164" height="96" rx="6" fill="#1F1729" stroke="#453358" stroke-width="1.2"/>
+  <text x="268" y="34" fill="#E4DEF4" font-family="system-ui, sans-serif" font-size="9" font-weight="700">COMPOSITION</text>
+  <text x="268" y="48" fill="#B39DDB" font-family="monospace" font-size="8">3840×2160 · 60fps</text>
+
+  <!-- Audio VU meters -->
+  <text x="268" y="68" fill="#B39DDB" font-family="monospace" font-size="7">L</text>
+  <rect x="280" y="62" width="120" height="7" rx="3.5" fill="#312340"/>
+  <rect x="280" y="62" width="88" height="7" rx="3.5" fill="#81C784"/>
+
+  <text x="268" y="82" fill="#B39DDB" font-family="monospace" font-size="7">R</text>
+  <rect x="280" y="76" width="120" height="7" rx="3.5" fill="#312340"/>
+  <rect x="280" y="76" width="96" height="7" rx="3.5" fill="#81C784"/>
+
+  <text x="268" y="100" fill="#E4DEF4" font-family="monospace" font-size="8">00:01:24:18</text>
+  <rect x="364" y="90" width="44" height="15" rx="3" fill="#6A1B9A"/>
+  <text x="386" y="101" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="7" font-weight="700" text-anchor="middle">RENDER</text>
+
+  <!-- Timeline (Lower half) -->
+  <rect x="22" y="120" width="396" height="46" rx="5" fill="#181120" stroke="#453358" stroke-width="1.2"/>
+  
+  <!-- Track 1: Video clip -->
+  <rect x="26" y="125" width="40" height="16" rx="3" fill="#2E1B42"/>
+  <text x="46" y="136" fill="#B39DDB" font-family="system-ui, sans-serif" font-size="7" font-weight="700" text-anchor="middle">V1</text>
+  <rect x="70" y="125" width="150" height="16" rx="3" fill="#5E35B1"/>
+  <text x="145" y="136" fill="#EDE7F6" font-family="system-ui, sans-serif" font-size="7" font-weight="600" text-anchor="middle">Hero_Sequence_A.mp4</text>
+  <rect x="224" y="125" width="180" height="16" rx="3" fill="#4527A0"/>
+  <text x="314" y="136" fill="#EDE7F6" font-family="system-ui, sans-serif" font-size="7" font-weight="600" text-anchor="middle">Motion_Graphic_Intro.mov</text>
+
+  <!-- Track 2: Audio Waveform -->
+  <rect x="26" y="145" width="40" height="16" rx="3" fill="#2E1B42"/>
+  <text x="46" y="156" fill="#B39DDB" font-family="system-ui, sans-serif" font-size="7" font-weight="700" text-anchor="middle">A1</text>
+  <rect x="70" y="145" width="334" height="16" rx="3" fill="#3B2352"/>
+  <path d="M 75 153 Q 85 147 95 153 T 115 153 T 135 153 T 155 153 T 175 153 T 195 153 T 215 153 T 235 153 T 255 153 T 275 153 T 295 153 T 315 153 T 335 153 T 355 153 T 375 153 T 395 153" fill="none" stroke="url(#audio-grad)" stroke-width="2"/>
+
+  <!-- Playhead line -->
+  <line x1="180" y1="116" x2="180" y2="168" stroke="#FF4081" stroke-width="2"/>
+  <polygon points="175,116 185,116 180,123" fill="#FF4081"/>
+</svg>
