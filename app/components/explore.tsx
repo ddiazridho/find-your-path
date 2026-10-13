@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { categories, type Category, type Major } from "../majors";
 import Icon from "./ui-icon";
 import TaskPreview from "./task-preview";
+import { lawFields } from "../law/stories";
+import Link from "next/link";
 
 type SimulationTrack = "hardware" | "software" | "networking" | "multimedia";
 
@@ -73,14 +75,19 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="closing-section container"><span className="closing-symbol"><Icon name="compass" /></span><div><h2>You’re exploring, not committing.</h2><p>Follow your curiosity. Try something unexpected. Your path can change as you do.</p></div><a href="#explore" className="closing-link">Find your first spark<Icon name="arrow" /></a></section>
     </main>
     <footer className="site-footer container"><a href="#" className="footer-brand">find your path.</a><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
-    <dialog ref={dialog} className="preview-dialog" aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
+    <dialog ref={dialog} className={`preview-dialog ${selected?.id === "law" ? "law-preview-dialog" : ""}`} aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
       <button className="dialog-close" aria-label="Close preview" onClick={closeDialog} autoFocus><Icon name="close" /></button>
       {selected ? <div className="dialog-content">
         <h2 id="dialog-title">{selected.name}</h2>
         <span className="major-category">{selected.category} · {selected.minutes} minute preview</span>
         <p>{selected.description}</p>
         <div className="skill-list">{selected.skills.map(skill => <span key={skill}>{skill}</span>)}</div>
-        <div className="simulation-section">
+        {selected.id === "law" ? <div className="law-field-picker" aria-label="Choose a law field">
+          <p className="law-field-picker-intro">Choose a case to enter. Your decisions will change what happens next.</p>
+          {lawFields.map(field => <Link href={field.href} key={field.href} className="law-field-link" onClick={closeDialog}>
+            <span><strong>{field.title}</strong><small>{field.description}</small></span><Icon name="arrow" />
+          </Link>)}
+        </div> : <div className="simulation-section">
           <div className="simulation-field">
             <label htmlFor="simulation-track-select" className="simulation-label">Simulation Focus</label>
             <div className="simulation-select-wrap">
@@ -116,7 +123,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
             Try Simulation
             <Icon name="arrow" />
           </a>
-        </div>
+        </div>}
       </div> : <div className="dialog-content how-content"><span className="how-compass"><Icon name="compass" /></span><h2 id="dialog-title">Find out by trying it out.</h2><p>Small experiences can lead to big discoveries.</p><ol className="how-steps"><li><h3>Follow your curiosity</h3><p>Browse majors and choose a challenge that catches your eye.</p></li><li><h3>Step into the work</h3><p>The planned simulations let you try real-world tasks from each field.</p></li><li><h3>Get to know yourself</h3><p>Personalized insights will help you reflect on what interests you and where your strengths shine.</p></li></ol><p className="how-note">You’re viewing an early preview. Simulations and AI insights aren’t connected yet.</p><button className="button button-primary" onClick={closeDialog}>Let’s explore<Icon name="arrow" /></button></div>}
     </dialog>
   </>

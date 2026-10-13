@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "georgia",
+        "createdAt": "2026-10-13T06:34:34.901Z",
+        "reason": "Law storytelling pages intentionally use an editorial serif for their distinct visual identity requested by the user."
+      }
+    ]
+  }
+}
