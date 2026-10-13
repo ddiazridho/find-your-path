@@ -4,6 +4,7 @@ import { categories, type Category, type Major } from "../majors";
 import Icon from "./ui-icon";
 import TaskPreview from "./task-preview";
 import { lawFields } from "../law/stories";
+import { medicineTracks } from "../medicine/tracks";
 import Link from "next/link";
 
 type SimulationTrack = "hardware" | "software" | "networking" | "multimedia";
@@ -75,7 +76,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="closing-section container"><span className="closing-symbol"><Icon name="compass" /></span><div><h2>You’re exploring, not committing.</h2><p>Follow your curiosity. Try something unexpected. Your path can change as you do.</p></div><a href="#explore" className="closing-link">Find your first spark<Icon name="arrow" /></a></section>
     </main>
     <footer className="site-footer container"><a href="#" className="footer-brand">find your path.</a><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
-    <dialog ref={dialog} className={`preview-dialog ${selected?.id === "law" ? "law-preview-dialog" : ""}`} aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
+    <dialog ref={dialog} className={`preview-dialog ${selected?.id === "law" || selected?.id === "medicine" ? "law-preview-dialog" : ""}`} aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
       <button className="dialog-close" aria-label="Close preview" onClick={closeDialog} autoFocus><Icon name="close" /></button>
       {selected ? <div className="dialog-content">
         <h2 id="dialog-title">{selected.name}</h2>
@@ -86,6 +87,11 @@ export default function Explore({ majors }: { majors: Major[] }) {
           <p className="law-field-picker-intro">Choose a case to enter. Your decisions will change what happens next.</p>
           {lawFields.map(field => <Link href={field.href} key={field.href} className="law-field-link" onClick={closeDialog}>
             <span><strong>{field.title}</strong><small>{field.description}</small></span><Icon name="arrow" />
+          </Link>)}
+        </div> : selected.id === "medicine" ? <div className="law-field-picker" aria-label="Choose a medicine simulation">
+          <p className="law-field-picker-intro">Enter a clinical learning space. Explore the room and try the hands-on activities.</p>
+          {medicineTracks.map(track => <Link href={track.href} key={track.href} className="law-field-link" onClick={closeDialog}>
+            <span><strong>{track.title}: {track.subtitle}</strong><small>{track.description}</small></span><Icon name="arrow" />
           </Link>)}
         </div> : <div className="simulation-section">
           <div className="simulation-field">
