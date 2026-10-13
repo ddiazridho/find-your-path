@@ -109,7 +109,10 @@ export default function Explore({ majors }: { majors: Major[] }) {
               className="simulation-preview-img"
             />
           </div>
-          <a href="#" className="button button-primary simulation-action">
+          <a
+            href={selected.id === "computer-science" && simulationTrack === "software" ? "/computer-science/software" : "#"}
+            className="button button-primary simulation-action"
+          >
             Try Simulation
             <Icon name="arrow" />
           </a>
