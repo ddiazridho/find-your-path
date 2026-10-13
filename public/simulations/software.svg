@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180" fill="none">
+  <defs>
+    <linearGradient id="sw-bg" x1="0" y1="0" x2="440" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E2833" />
+      <stop offset="1" stop-color="#141C24" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="440" height="180" rx="10" fill="url(#sw-bg)"/>
+
+  <!-- Code Window Frame -->
+  <rect x="20" y="16" width="400" height="148" rx="8" fill="#17202A" stroke="#2B3A48" stroke-width="1.5"/>
+
+  <!-- Window Header -->
+  <path d="M 20 24 Q 20 16 28 16 L 412 16 Q 420 16 420 24 L 420 44 L 20 44 Z" fill="#1C2733"/>
+  <line x1="20" y1="44" x2="420" y2="44" stroke="#2B3A48" stroke-width="1"/>
+
+  <!-- Dots -->
+  <circle cx="36" cy="30" r="4" fill="#E57373"/>
+  <circle cx="48" cy="30" r="4" fill="#FFB74D"/>
+  <circle cx="60" cy="30" r="4" fill="#81C784"/>
+
+  <!-- Tab -->
+  <rect x="76" y="21" width="130" height="23" rx="4" fill="#17202A"/>
+  <text x="88" y="36" fill="#DCEBF0" font-family="system-ui, monospace" font-size="9" font-weight="600">algorithm.ts</text>
+  <circle cx="194" cy="32" r="2.5" fill="#64B5F6"/>
+
+  <!-- Environment badge -->
+  <rect x="330" y="23" width="78" height="18" rx="4" fill="#243342"/>
+  <text x="369" y="35" fill="#90CAF9" font-family="system-ui, sans-serif" font-size="8" font-weight="700" text-anchor="middle">NODE v20 · OK</text>
+
+  <!-- Line numbers and Code Content -->
+  <!-- Line 1 -->
+  <text x="36" y="65" fill="#4B6275" font-family="monospace" font-size="10">1</text>
+  <text x="56" y="65" fill="#BB86FC" font-family="monospace" font-size="10">async function</text>
+  <text x="145" y="65" fill="#64B5F6" font-family="monospace" font-size="10">optimizePath</text>
+  <text x="220" y="65" fill="#E0E6DD" font-family="monospace" font-size="10">(nodes: Node[]) {</text>
+
+  <!-- Line 2 -->
+  <text x="36" y="83" fill="#4B6275" font-family="monospace" font-size="10">2</text>
+  <text x="70" y="83" fill="#BB86FC" font-family="monospace" font-size="10">const</text>
+  <text x="108" y="83" fill="#FFE082" font-family="monospace" font-size="10">graph</text>
+  <text x="145" y="83" fill="#E0E6DD" font-family="monospace" font-size="10">= buildAdjacencyMatrix(nodes);</text>
+
+  <!-- Line 3 -->
+  <text x="36" y="101" fill="#4B6275" font-family="monospace" font-size="10">3</text>
+  <text x="70" y="101" fill="#BB86FC" font-family="monospace" font-size="10">return</text>
+  <text x="114" y="101" fill="#81C784" font-family="monospace" font-size="10">dijkstra</text>
+  <text x="165" y="101" fill="#E0E6DD" font-family="monospace" font-size="10">(graph, { start: 0, end: 42 });</text>
+
+  <!-- Line 4 -->
+  <text x="36" y="119" fill="#4B6275" font-family="monospace" font-size="10">4</text>
+  <text x="56" y="119" fill="#E0E6DD" font-family="monospace" font-size="10">}</text>
+
+  <!-- Console Drawer bar -->
+  <rect x="20" y="132" width="400" height="32" rx="0" fill="#121820"/>
+  <line x1="20" y1="132" x2="420" y2="132" stroke="#2B3A48" stroke-width="1"/>
+  <circle cx="36" cy="148" r="3.5" fill="#81C784"/>
+  <text x="48" y="151" fill="#A5D6A7" font-family="monospace" font-size="9" font-weight="600">PASS</text>
+  <text x="82" y="151" fill="#90A4AE" font-family="monospace" font-size="9">Path found: 5 hops · Execution: 1.4ms (Memory: 18MB)</text>
+</svg>

@@ -4,11 +4,21 @@ import { categories, type Category, type Major } from "../majors";
 import Icon from "./ui-icon";
 import TaskPreview from "./task-preview";
 
+type SimulationTrack = "hardware" | "software" | "networking" | "multimedia";
+
+const simulationPreviews: Record<SimulationTrack, { image: string; alt: string }> = {
+  hardware: { image: "/simulations/hardware.svg", alt: "Hardware simulation preview" },
+  software: { image: "/simulations/software.svg", alt: "Software simulation preview" },
+  networking: { image: "/simulations/networking.svg", alt: "Networking simulation preview" },
+  multimedia: { image: "/simulations/multimedia.svg", alt: "Multimedia simulation preview" },
+};
+
 export default function Explore({ majors }: { majors: Major[] }) {
   const [category, setCategory] = useState<Category>("All majors");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Major | null>(null);
   const [showHow, setShowHow] = useState(false);
+  const [simulationTrack, setSimulationTrack] = useState<SimulationTrack>("hardware");
   const dialog = useRef<HTMLDialogElement>(null);
   const filtered = majors.filter(major => (category === "All majors" || major.category === category) && `${major.name} ${major.category} ${major.skills.join(" ")}`.toLowerCase().includes(query.toLowerCase().trim()));
   useEffect(() => {
@@ -20,7 +30,15 @@ export default function Explore({ majors }: { majors: Major[] }) {
     }
     dialog.current?.close();
   }, [selected, showHow]);
-  function closeDialog() { setSelected(null); setShowHow(false); }
+  function openMajor(major: Major) {
+    setSelected(major);
+    setSimulationTrack("hardware");
+  }
+  function closeDialog() {
+    setSelected(null);
+    setShowHow(false);
+    setSimulationTrack("hardware");
+  }
   return <>
     <header className="site-header"><div className="container header-inner">
       <a href="#" className="brand" aria-label="Find Your Path home"><span className="brand-symbol"><Icon name="compass" /></span><span>find your path<span className="brand-period">.</span></span></a>
@@ -45,7 +63,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="exploration-section" id="explore" aria-labelledby="explore-title"><div className="container">
         <div className="section-heading"><div><h2 id="explore-title">Big possibilities. Small first steps.</h2><p>Pick a major. Step into its world. See how it feels.</p></div><label className="search-field"><Icon name="search" /><span className="sr-only">Search majors or skills</span><input type="search" placeholder="Search majors or skills…" value={query} onChange={event => setQuery(event.target.value)} /></label></div>
         <div className="filter-row"><div className="category-filters" role="group" aria-label="Filter majors by field">{categories.map(item => <button key={item} className={`filter-chip ${category === item ? "is-active" : ""}`} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div><span className="result-count" role="status">{filtered.length} {filtered.length === 1 ? "major" : "majors"} to explore</span></div>
-        <div className="major-grid">{filtered.map(major => <button key={major.id} className={`major-card tone-${major.color}`} onClick={() => setSelected(major)} aria-label={`Preview ${major.name} simulation`}>
+        <div className="major-grid">{filtered.map(major => <button key={major.id} className={`major-card tone-${major.color}`} onClick={() => openMajor(major)} aria-label={`Preview ${major.name} simulation`}>
           <div className="major-visual"><TaskPreview visual={major.visual} /><span className="duration"><Icon name="clock" />{major.minutes} min</span></div>
           <div className="major-body"><h3>{major.name}</h3><span className="major-category">{major.category}</span><p>{major.description}</p><div className="skill-list">{major.skills.map(skill => <span key={skill}>{skill}</span>)}</div><div className="major-action"><span>{major.task}</span><span className="card-arrow"><Icon name="arrow" /></span></div></div>
         </button>)}</div>
@@ -57,8 +75,49 @@ export default function Explore({ majors }: { majors: Major[] }) {
     <footer className="site-footer container"><a href="#" className="footer-brand">find your path.</a><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
     <dialog ref={dialog} className="preview-dialog" aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
       <button className="dialog-close" aria-label="Close preview" onClick={closeDialog} autoFocus><Icon name="close" /></button>
-      {selected ? <><div className={`dialog-visual tone-${selected.color}`}><TaskPreview visual={selected.visual} /></div><div className="dialog-content"><h2 id="dialog-title">{selected.name}</h2><span className="major-category">{selected.category} · {selected.minutes} minute preview</span><p>{selected.description}</p><h3>Your challenge</h3><p>{selected.task}. Get a feel for the thinking and skills behind this major through a hands-on task.</p><div className="skill-list">{selected.skills.map(skill => <span key={skill}>{skill}</span>)}</div><div className="dialog-notice"><Icon name="spark" /><p>This is a preview. We’re still shaping the simulation experience—your next chapter is on its way.</p></div><button className="button button-primary dialog-done" onClick={closeDialog}>Keep exploring<Icon name="arrow" /></button></div></> : <div className="dialog-content how-content"><span className="how-compass"><Icon name="compass" /></span><h2 id="dialog-title">Find out by trying it out.</h2><p>Small experiences can lead to big discoveries.</p><ol className="how-steps"><li><h3>Follow your curiosity</h3><p>Browse majors and choose a challenge that catches your eye.</p></li><li><h3>Step into the work</h3><p>The planned simulations let you try real-world tasks from each field.</p></li><li><h3>Get to know yourself</h3><p>Personalized insights will help you reflect on what interests you and where your strengths shine.</p></li></ol><p className="how-note">You’re viewing an early preview. Simulations and AI insights aren’t connected yet.</p><button className="button button-primary" onClick={closeDialog}>Let’s explore<Icon name="arrow" /></button></div>}
+      {selected ? <div className="dialog-content">
+        <h2 id="dialog-title">{selected.name}</h2>
+        <span className="major-category">{selected.category} · {selected.minutes} minute preview</span>
+        <p>{selected.description}</p>
+        <div className="skill-list">{selected.skills.map(skill => <span key={skill}>{skill}</span>)}</div>
+        <div className="simulation-section">
+          <div className="simulation-field">
+            <label htmlFor="simulation-track-select" className="simulation-label">Simulation Focus</label>
+            <div className="simulation-select-wrap">
+              <select
+                id="simulation-track-select"
+                className="simulation-select"
+                value={simulationTrack}
+                onChange={event => setSimulationTrack(event.target.value as SimulationTrack)}
+              >
+                <option value="hardware">hardware</option>
+                <option value="software">software</option>
+                <option value="networking">networking</option>
+                <option value="multimedia">multimedia</option>
+              </select>
+              <span className="simulation-select-icon" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div className="simulation-preview-frame">
+            <img
+              src={simulationPreviews[simulationTrack].image}
+              alt={simulationPreviews[simulationTrack].alt}
+              className="simulation-preview-img"
+            />
+          </div>
+          <a
+            href={selected.id === "computer-science" && simulationTrack === "software" ? "/computer-science/software" : "#"}
+            className="button button-primary simulation-action"
+          >
+            Try Simulation
+            <Icon name="arrow" />
+          </a>
+        </div>
+      </div> : <div className="dialog-content how-content"><span className="how-compass"><Icon name="compass" /></span><h2 id="dialog-title">Find out by trying it out.</h2><p>Small experiences can lead to big discoveries.</p><ol className="how-steps"><li><h3>Follow your curiosity</h3><p>Browse majors and choose a challenge that catches your eye.</p></li><li><h3>Step into the work</h3><p>The planned simulations let you try real-world tasks from each field.</p></li><li><h3>Get to know yourself</h3><p>Personalized insights will help you reflect on what interests you and where your strengths shine.</p></li></ol><p className="how-note">You’re viewing an early preview. Simulations and AI insights aren’t connected yet.</p><button className="button button-primary" onClick={closeDialog}>Let’s explore<Icon name="arrow" /></button></div>}
     </dialog>
-  </>;
+  </>
 }
-
