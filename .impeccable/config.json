@@ -26,6 +26,24 @@
         ],
         "createdAt": "2026-10-14T13:12:27.054Z",
         "reason": "Codex reviewed: inset shadows shade illustrated characters, not cards or side-tab accents."
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "app/medicine/surgery/surgery-game.css"
+        ],
+        "createdAt": "2026-10-14T21:44:41.119Z",
+        "reason": "Codex reviewed: the thick top border depicts the physical edge of the illustrated sterile instrument table, not a card accent."
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "app/medicine/surgery/surgery-game.css"
+        ],
+        "createdAt": "2026-10-14T21:44:42.493Z",
+        "reason": "Codex reviewed: inset shadows shade the illustrated blanket and characters, not card side accents."
       }
     ]
   }
