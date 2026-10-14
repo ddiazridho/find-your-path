@@ -44,6 +44,15 @@
         ],
         "createdAt": "2026-10-14T21:44:42.493Z",
         "reason": "Codex reviewed: inset shadows shade the illustrated blanket and characters, not card side accents."
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "app/medicine/radiology/radiology-game.css"
+        ],
+        "createdAt": "2026-10-14T23:16:21.265Z",
+        "reason": "Agent: inset shading on illustrated staff torso and arms matches Emergency figures; it is not a card accent border"
       }
     ]
   }
