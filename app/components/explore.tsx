@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { categories, type Category, type Major } from "../majors";
 import Icon from "./ui-icon";
 import TaskPreview from "./task-preview";
@@ -14,9 +16,10 @@ const simulationPreviews: Record<SimulationTrack, { image: string; alt: string }
 };
 
 export default function Explore({ majors }: { majors: Major[] }) {
+  const searchParams = useSearchParams();
   const [category, setCategory] = useState<Category>("All majors");
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<Major | null>(null);
+  const [selected, setSelected] = useState<Major | null>(() => majors.find(major => major.id === searchParams.get("major")) ?? null);
   const [showHow, setShowHow] = useState(false);
   const [simulationTrack, setSimulationTrack] = useState<SimulationTrack>("hardware");
   const dialog = useRef<HTMLDialogElement>(null);
@@ -49,7 +52,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="hero container" aria-labelledby="hero-title">
         <div className="hero-copy"><h1 id="hero-title">Your future.<br />Yours to <span className="explore-word">explore<svg viewBox="0 0 310 16" fill="none" aria-hidden="true"><path d="M3 12C83 1 199 1 306 9" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg></span>.</h1>
           <p>You don’t have to have it all figured out.<br className="desktop-break" /> Try real-world challenges, discover what clicks,<br className="desktop-break" /> and find a major that feels like you.</p>
-          <div className="hero-actions"><a className="button button-primary" href="#explore">Explore the possibilities<Icon name="arrow" /></a><button className="button button-text" onClick={() => setShowHow(true)}>How it works<span className="play-icon"><svg width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><path d="m2 1 8 5-8 5Z" fill="currentColor" /></svg></span></button></div>
+          <div className="hero-actions"><Link className="button button-primary" href="/quiz">Explore the possibilities<Icon name="arrow" /></Link><button className="button button-text" onClick={() => setShowHow(true)}>How it works<span className="play-icon"><svg width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><path d="m2 1 8 5-8 5Z" fill="currentColor" /></svg></span></button></div>
           <div className="hero-reassurance"><span><Icon name="check" />No right or wrong answers</span><span><Icon name="check" />Go at your own pace</span></div>
         </div>
         <div className="possibility-board" aria-label="Explore by doing: build, create, and understand">

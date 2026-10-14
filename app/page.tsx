@@ -1,6 +1,7 @@
 import Explore from "./components/explore";
 import { majors } from "./majors";
+import { Suspense } from "react";
 
 export default function Home() {
-  return <Explore majors={majors} />;
+  return <Suspense><Explore majors={majors} /></Suspense>;
 }

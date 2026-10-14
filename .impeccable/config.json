@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "app/quiz/quiz.css"
+        ],
+        "createdAt": "2026-10-13T06:58:44.728Z",
+        "reason": "User explicitly requested blue-to-purple gradient emphasis on Minatmu in the quiz."
+      }
+    ]
+  }
+}
