@@ -108,3 +108,112 @@
 @media (max-width: 900px) { .law-header-note { display: none; }.law-intro { align-items: start; }.law-premise { max-width: 270px; }.law-stage { height: 450px; }.law-choice-bubble { width: 30%; padding: 15px; }.law-choice-bubble--left { left: 2%; }.law-choice-bubble--right { right: 2%; }.law-character--left { left: 32%; }.law-character--right { right: 29%; }.law-story-panel { gap: 18px; }.law-story-actions { min-width: 175px; } }
 @media (max-width: 650px) { .law-header { height: 65px; }.law-brand { font-size: 9px; letter-spacing: .08em; }.law-brand svg { width: 15px; }.law-back { font-size: 0; gap: 0; }.law-back svg { width: 20px; height: 20px; }.law-main { padding-top: 31px; }.law-intro { display: block; margin-bottom: 23px; }.law-intro h1 { font-size: clamp(42px, 11vw, 60px); }.law-subtitle { font-size: 12px; }.law-premise { max-width: 55ch; margin-top: 17px; padding-left: 0; border-left: 0; font-size: 12px; }.law-experience { border-radius: 14px; }.law-experience-top { height: 44px; padding: 0 14px; font-size: 8px; }.law-experience-top span:last-child { display: none; }.law-stage { height: 430px; }.law-stage-sign { top: 7%; min-width: 165px; padding: 9px 12px; font-size: 8px; }.law-stage-sign svg { width: 16px; height: 16px; }.law-stage-window { left: 4%; top: 14%; width: 20%; height: 33%; border-width: 5px; }.law-stage-clock { right: 8%; width: 33px; height: 33px; border-width: 3px; }.law-character { transform: scale(.73); transform-origin: bottom center; bottom: 30%; }.law-character--left { left: 26%; }.law-character--right { right: 22%; }.law-character-name { bottom: -12px; }.law-stage-object { bottom: 36%; left: 35%; width: 30%; }.law-prop { bottom: 39%; }.law-stage-place { left: 12px; bottom: 158px; font-size: 8px; }.law-choice-orbit { display: flex; align-items: end; gap: 8px; padding: 0 10px 12px; }.law-choice-bubble, .law-choice-bubble--left, .law-choice-bubble--right { position: relative; inset: auto; flex: 1; width: auto; min-width: 0; min-height: 132px; padding: 12px; border-radius: 12px; }.law-choice-number { font-size: 8px; margin-bottom: 6px; }.law-choice-bubble strong { font-size: 12px; padding-right: 0; }.law-choice-bubble small { font-size: 10px; line-height: 1.2; }.law-choice-bubble svg { right: 10px; bottom: 9px; width: 13px; }.law-story-panel { display: block; padding: 22px 18px; }.law-scene-heading { gap: 10px; }.law-scene-marker { flex-basis: 28px; height: 28px; }.law-scene-heading h2 { font-size: 20px; }.law-narration { margin-left: 38px; font-size: 12px; }.law-story-actions { min-width: 0; margin: 18px 0 0 38px; align-items: flex-start; }.law-action-hint { max-width: none; text-align: left; }.law-progress { display: block; padding-bottom: 30px; }.law-progress > div { margin-top: 11px; }.law-verdict { grid-template-columns: 1fr; gap: 22px; padding-block: 27px; }.law-verdict h2 { font-size: 29px; }.law-verdict-concepts { border-left: 0; padding-left: 0; }.law-other-fields { padding-top: 29px; }.law-other-fields > div { grid-template-columns: 1fr; }.law-other-fields a { padding: 14px; } }
 @media (prefers-reduced-motion: reduce) { .law-page *, .law-page *::before, .law-page *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+/* The four law stories share the medicine lab's single-scene composition. */
+.law-page * { box-sizing: border-box; }
+.law-header { height: 66px; max-width: none; padding: 0 clamp(20px, 4vw, 64px); background: #fffdf8; }
+.law-brand { font-size: 19px; font-weight: 850; letter-spacing: -.065em; text-transform: lowercase; }
+.law-brand span { margin: 0; color: var(--law-accent); }
+.law-back { color: var(--law-muted); font-size: 12px; font-weight: 800; }
+.law-main { width: min(1420px, calc(100% - 80px)); max-width: none; padding: 34px 0 42px; }
+.law-intro { margin-bottom: 23px; }
+.law-intro-kicker { margin: 0; color: var(--law-accent-dark); font-size: 10px; font-weight: 900; letter-spacing: .17em; }
+.law-intro-kicker span { margin: 0 7px; color: var(--law-muted); }
+.law-intro h1 { max-width: none; margin: 6px 0 5px; font-family: var(--font-sans), sans-serif; font-size: clamp(32px, 3.4vw, 50px); font-weight: 850; line-height: 1.05; letter-spacing: -.065em; }
+.law-subtitle { max-width: 90ch; margin: 0; color: var(--law-muted); font-size: 13px; font-weight: 500; line-height: 1.5; }
+.law-subtitle strong { color: var(--law-ink); font-weight: 800; }
+.law-experience { border-radius: 17px; border-color: rgb(38 59 62 / 23%); box-shadow: 0 25px 55px rgb(50 56 45 / 14%), 0 3px 8px rgb(50 56 45 / 5%); }
+.law-experience-top { height: 42px; }
+.law-experience-top > span:first-child { display: flex; align-items: center; gap: 7px; }
+.law-experience-top b { margin: 0 3px; opacity: .65; }
+.law-experience-top .law-live-dot { display: inline-block; flex: none; background: #d7f2b5; box-shadow: 0 0 0 4px rgb(215 242 181 / 18%); animation: law-live-pulse 2s ease-in-out infinite; }
+.law-scene-frame { position: relative; }
+.law-stage { height: min(66vw, 650px); min-height: 540px; }
+.law-stage-place { bottom: auto; top: 20px; }
+.law-choice-orbit { bottom: 190px; }
+.law-choice-bubble, .law-stage--cinematic .law-choice-bubble { top: 18%; width: min(29%, 285px); }
+.law-choice-bubble--left { left: 5%; }
+.law-choice-bubble--right { right: 5%; }
+.law-story-panel { position: absolute; z-index: 12; left: 3%; right: 3%; bottom: 3%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 22px; min-height: 169px; max-height: 45%; overflow: auto; padding: 18px 24px; border: 1px solid rgb(255 248 229 / 45%); border-radius: 11px; background: color-mix(in srgb, var(--law-stage-dark) 94%, transparent); color: #fffaf0; box-shadow: 0 17px 34px rgb(20 31 32 / 38%); backdrop-filter: blur(12px); }
+.law-story-main { max-width: none; min-width: 0; }
+.law-scene-heading { align-items: center; gap: 10px; }
+.law-scene-marker { flex: none; background: #f7e5cd; }
+.law-scene-label { margin: 0; color: #fff3d8; font-size: 11px; }
+.law-scene-heading small { display: block; margin-top: 3px; color: #d6e2d9; font-size: 9px; }
+.law-story-main h2 { margin: 10px 0 0; font-family: var(--font-sans), sans-serif; font-size: clamp(13px, 1.3vw, 17px); font-weight: 650; line-height: 1.5; letter-spacing: 0; }
+.law-type-caret { display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px; background: #ffd19c; animation: law-live-pulse .7s step-end infinite; }
+.law-narration { margin: 6px 0 0; max-width: 90ch; color: #e1e9df; font-size: 11px; line-height: 1.5; }
+.law-story-actions { min-width: 160px; gap: 8px; }
+.law-continue { min-height: 38px; border-radius: 7px; background: #fff4e7; color: var(--law-stage-dark); font-size: 11px; }
+.law-continue:hover { background: #fff; color: var(--law-accent-dark); }
+.law-step-back { color: #f4e1ce; }
+.law-step-back:hover { color: #fff; }
+.law-action-hint { color: #e1e9df; font-size: 10px; }
+.law-game-bottom { height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 24px; border-top: 1px solid rgb(38 59 62 / 14%); background: #fffaf1; color: var(--law-muted); font-size: 9px; font-weight: 850; letter-spacing: .1em; }
+.law-game-bottom > div { display: flex; gap: 5px; }
+.law-game-bottom i { width: 26px; height: 4px; border-radius: 9px; background: #ddd5c6; }
+.law-game-bottom i.is-active { background: var(--law-accent); }
+.law-other-fields { padding-top: 15px; }
+.law-other-fields > div { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.law-other-fields a { min-height: 67px; gap: 10px; padding: 10px 14px; border-radius: 10px; background: #fffdf8; color: var(--law-muted); }
+.law-other-fields a:hover { transform: translateY(-3px); border-color: var(--law-accent); }
+.law-other-fields a.is-active { border-color: var(--law-accent-dark); background: var(--law-accent-dark); color: #fff; box-shadow: 0 8px 18px rgb(38 59 62 / 18%); }
+.law-other-fields a.is-active svg { color: #fff; }
+.law-module-number { flex: none; color: var(--law-accent); font-size: 11px; font-weight: 900; }
+.law-other-fields a.is-active .law-module-number { color: #f2d3ad; }
+.law-module-name { display: grid; gap: 3px; min-width: 0; font-size: 12px; font-weight: 900; line-height: 1.2; }
+.law-module-name small { color: var(--law-muted); font-size: 8px; font-weight: 850; letter-spacing: .12em; }
+.law-other-fields a.is-active small { color: #f3dfcb; }
+.law-other-fields svg { margin-left: auto; }
+.law-verdict { position: absolute; z-index: 20; top: 50%; left: 50%; display: block; width: min(530px, 90%); max-height: calc(100% - 36px); overflow: auto; margin: 0; padding: 27px 30px; transform: translate(-50%, -50%); animation: law-verdict-arrive .4s cubic-bezier(.16, 1, .3, 1) both; border: 1px solid #fff; border-radius: 15px; background: #fffdf8; box-shadow: 0 0 0 100vmax rgb(23 35 36 / 58%), 0 22px 50px rgb(23 35 36 / 45%); }
+.law-verdict h2 { margin: 8px 0; font-family: var(--font-sans), sans-serif; font-size: clamp(24px, 3vw, 34px); font-weight: 850; letter-spacing: -.05em; }
+.law-verdict p { margin: 0; max-width: none; }
+.law-verdict-concepts { margin: 17px 0; padding: 15px; border: 0; border-radius: 9px; background: var(--law-paper); }
+.law-verdict-concepts h3 { margin-bottom: 7px; }
+.law-verdict-replay { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 10px 14px; border: 0; border-radius: 7px; background: var(--law-accent-dark); color: #fff; font-size: 11px; font-weight: 850; cursor: pointer; }
+.law-verdict-replay:hover { background: var(--law-stage-dark); }
+@keyframes law-verdict-arrive { from { opacity: 0; transform: translate(-50%, calc(-50% + 9px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
+.law-disclaimer { margin-top: 14px; text-align: center; }
+@keyframes law-live-pulse { 50% { opacity: .45; } }
+@media (max-width: 900px) {
+  .law-main { width: min(calc(100% - 32px), 760px); padding-top: 25px; }
+  .law-stage { height: 570px; min-height: 570px; }
+  .law-other-fields > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .law-header { height: 58px; padding: 0 18px; }
+  .law-brand { font-size: 17px; }
+  .law-back { font-size: 11px; gap: 6px; }
+  .law-back svg { width: 15px; height: 15px; }
+  .law-main { width: calc(100% - 20px); padding-top: 23px; }
+  .law-intro { padding: 0 7px; margin-bottom: 17px; }
+  .law-intro h1 { font-size: clamp(30px, 8vw, 36px); }
+  .law-subtitle { font-size: 12px; }
+  .law-experience-top { height: 36px; padding: 0 10px; font-size: 8px; }
+  .law-stage { height: 610px; min-height: 610px; }
+  .law-stage-place { top: 12px; bottom: auto; }
+  .law-choice-orbit { inset: 0 0 235px; display: flex; align-items: flex-end; gap: 7px; padding: 0 8px; }
+  .law-choice-bubble, .law-stage--cinematic .law-choice-bubble { position: relative; inset: auto; flex: 1; width: auto; min-width: 0; min-height: 126px; padding: 11px; }
+  .law-story-panel { left: 2%; right: 2%; bottom: 1.5%; display: block; max-height: 220px; min-height: 205px; padding: 11px 14px; }
+  .law-scene-heading { gap: 8px; }
+  .law-scene-marker { width: 28px; height: 28px; }
+  .law-story-main h2 { font-size: 12px; line-height: 1.45; }
+  .law-narration { margin: 5px 0 0; font-size: 10px; line-height: 1.35; }
+  .law-story-actions { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end; align-items: center; margin: 8px 0 0; min-width: 0; }
+  .law-action-hint { max-width: none; text-align: left; margin-right: auto; }
+  .law-continue { min-height: 34px; padding: 7px 10px; font-size: 10px; }
+  .law-step-back { font-size: 10px; }
+  .law-game-bottom { padding: 0 9px; font-size: 7px; }
+  .law-game-bottom > span:first-child { max-width: 35%; }
+  .law-game-bottom > span:last-child { text-align: right; }
+  .law-game-bottom i { width: 11px; }
+  .law-other-fields > div { display: flex; overflow-x: auto; gap: 7px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+  .law-other-fields a { flex: 0 0 168px; min-height: 58px; scroll-snap-align: start; padding: 9px; gap: 6px; }
+  .law-module-name { font-size: 10px; }
+  .law-module-name small { font-size: 7px; }
+  .law-module-number { font-size: 9px; }
+  .law-other-fields svg { width: 13px; }
+  .law-verdict { width: 92%; padding: 19px; }
+  .law-verdict h2 { font-size: 27px; }
+  .law-verdict-concepts { margin: 12px 0; padding: 11px; }
+}
