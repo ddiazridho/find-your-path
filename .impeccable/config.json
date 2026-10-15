@@ -53,6 +53,15 @@
         ],
         "createdAt": "2026-10-14T23:16:21.265Z",
         "reason": "Agent: inset shading on illustrated staff torso and arms matches Emergency figures; it is not a card accent border"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "app/quiz/quiz.css"
+        ],
+        "createdAt": "2026-10-13T06:58:44.728Z",
+        "reason": "User explicitly requested blue-to-purple gradient emphasis on Minatmu in the quiz."
       }
     ]
   }
