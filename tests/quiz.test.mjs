@@ -9,10 +9,9 @@ load.extensions[".ts"] = (module, filename) => {
   module._compile(output.outputText, filename);
 };
 const { questions, dimensions, ESSAY_MAX_LENGTH } = load("../app/quiz/questions.ts");
-const { calculateResults, isComplete, isValidAnswer, recommendMajors, majorProfiles } = load("../app/quiz/scoring.ts");
-const { majors } = load("../app/majors.ts");
+const { calculateResults, isComplete, isValidAnswer } = load("../app/quiz/scoring.ts");
 const { readSession, saveSession, emptySession, STORAGE_KEY } = load("../app/quiz/storage.ts");
-const { analyzeEssayAlignment, emptyEssayAnalysis, isEssayAnalysis } = load("../app/quiz/essay-analysis.ts");
+const { analyzeEssayAlignment, isEssayAnalysis } = load("../app/quiz/essay-analysis.ts");
 const { POST } = load("../app/quiz/analyze/route.ts");
 const answersFor = (rating = 3, correct = true) => Object.fromEntries(questions.map(q => [q.id, q.type === "rating" ? rating : q.type === "essay" ? "Saya suka belajar dan mencoba hal baru." : q.type === "situational" ? "A" : correct ? q.correct : q.options.find(o => o.id !== q.correct).id]));
 
@@ -54,7 +53,7 @@ test("validation rejects missing, malformed, fractional, out-of-range inputs and
     else assert.throws(() => calculateResults(missing));
   }
 });
-test("normalization supports all ties; essays never change minat or recommendations", () => {
+test("normalization supports all ties; essays never change RIASEC scores", () => {
   for (const [rating, expected] of [[1, 0], [2, 25], [3, 50], [4, 75], [5, 100]]) {
     const result = calculateResults(answersFor(rating));
     assert.deepEqual(Object.values(result.profile), Array(6).fill(expected));
@@ -67,15 +66,13 @@ test("normalization supports all ties; essays never change minat or recommendati
   const changedEssay = calculateResults({ ...answersFor(), q28: "Saya suka seni dan menulis." });
   assert.deepEqual(changedEssay, calculateResults(answersFor()));
 });
-test("situational supports reasons without inventing a combined weight or changing interest scores", () => {
+test("situational results stay separate from interest scores", () => {
   const a = answersFor(), b = { ...a };
   questions.filter(q => q.type === "situational").forEach((q, i) => { b[q.id] = q.options[i].id; });
   const first = calculateResults(a), balanced = calculateResults(b);
   assert.equal(first.situational.R, 100); assert.equal(first.situationalCounts.R, 6); assert.equal(first.situational.A, 0);
   assert.deepEqual(first.profile, balanced.profile);
-  assert.deepEqual(first.recommendations.map(r => r.major.id), balanced.recommendations.map(r => r.major.id));
   for (const n of Object.values(balanced.situational)) assert.ok(Math.abs(n - 100 / 6) < 1e-9);
-  assert.ok(first.recommendations.some(r => r.supporting.includes("R")));
 });
 test("reasoning keys remain valid but correct/incorrect responses never alter results or expose grading", () => {
   const correct = calculateResults(answersFor(4, true)), wrong = calculateResults(answersFor(4, false));
@@ -83,23 +80,19 @@ test("reasoning keys remain valid but correct/incorrect responses never alter re
   assert.equal(correct.reasoning, undefined); assert.equal(correct.reflections, undefined);
   assert.equal(isComplete(answersFor(4, false)), true);
 });
-test("recommendations deterministic, transparent equal means, reasons and skills; incomplete metadata skipped", () => {
-  const answers = answersFor(1);
-  for (const q of questions.filter(q => q.type === "rating" && ["I", "S"].includes(q.riasec))) answers[q.id] = 5;
-  const result = calculateResults(answers);
-  assert.deepEqual(result, calculateResults({ ...answers }));
-  assert.equal(result.recommendations.length, 3);
-  for (const r of result.recommendations) {
-    assert.ok(majors.some(m => m.id === r.major.id)); assert.ok(r.reasons.length > 0); assert.ok(r.metadata.skills.length > 0);
-    assert.equal(r.score, r.metadata.riasec.reduce((sum, id) => sum + result.profile[id], 0) / r.metadata.riasec.length);
-  }
-  const tied = calculateResults(answersFor()).recommendations.map(r => r.major.id);
-  assert.deepEqual(tied, [...tied].sort());
-  assert.deepEqual(recommendMajors(result.profile, result.situational, majors, {}), []);
-  for (const missing of [null, {}, { ...majorProfiles.law, riasec: [] }, { ...majorProfiles.law, riasec: ["Z"] }, { ...majorProfiles.law, skills: [] }, { ...majorProfiles.law, href: "//evil.test" }]) assert.deepEqual(recommendMajors(result.profile, result.situational, [majors[1]], { law: missing }), []);
-  assert.equal(recommendMajors(result.profile, result.situational, [...majors, ...majors]).length, 3);
-  const large = Array.from({ length: 7 }, (_, i) => ({ ...majors[0], id: `major-${i}` }));
-  assert.equal(recommendMajors(result.profile, result.situational, large, Object.fromEntries(large.map(m => [m.id, majorProfiles.law]))).length, 5);
+test("AI recommendations accept majors outside the catalog and reject invalid lists", () => {
+  const recommendations = [
+    { name: "Desain Komunikasi Visual", primaryRiasec: "A", studyOverview: "Mempelajari komunikasi visual, tipografi, dan desain untuk berbagai media." },
+    { name: "Arsitektur", primaryRiasec: "R", studyOverview: "Mempelajari perancangan ruang, struktur bangunan, dan lingkungan binaan." },
+    { name: "Psikologi", primaryRiasec: "S", studyOverview: "Mempelajari perilaku manusia, proses berpikir, dan metode penelitian." },
+  ];
+  const base = { dominantReasoning: "Minatmu tersebar merata.", alignment: "tidak_cukup_bukti", reasoning: "Belum ada esai.", usedQuestionIds: [], ignoredQuestionIds: [], recommendations };
+  assert.equal(isEssayAnalysis(base, {}), true);
+  assert.equal(isEssayAnalysis({ ...base, recommendations: recommendations.slice(0, 2) }, {}), false);
+  assert.equal(isEssayAnalysis({ ...base, recommendations: [...recommendations, recommendations[0]] }, {}), false);
+  assert.equal(isEssayAnalysis({ ...base, recommendations: [{ ...recommendations[0], name: " arsitektur " }, ...recommendations.slice(1)] }, {}), false);
+  assert.equal(isEssayAnalysis({ ...base, recommendations: [{ ...recommendations[0], primaryRiasec: "Z" }, ...recommendations.slice(1)] }, {}), false);
+  assert.equal(isEssayAnalysis({ ...base, recommendations: [{ ...recommendations[0], studyOverview: "" }, ...recommendations.slice(1)] }, {}), false);
 });
 test("storage: refresh, navigation, corruption, recomputation, reset, blocked storage", () => {
   const entries = new Map();
@@ -141,40 +134,58 @@ test("v3 migration keeps first26 but does not reinterpret former rating answers 
     assert.ok(migrated.warning);
   }
 });
-test("essay analysis handles no answers locally and validates structured output", async () => {
+test("AI explains dominant RIASEC and handles empty or irrelevant essays separately", async () => {
   const answers = Object.fromEntries(Object.entries(answersFor()).filter(([id]) => !["q27", "q28", "q29", "q30"].includes(id)));
   const result = calculateResults(answers);
-  const empty = await analyzeEssayAlignment(answers, result, () => { throw new Error("should not fetch"); });
-  assert.deepEqual(empty, emptyEssayAnalysis());
-  assert.equal(isEssayAnalysis(empty, answers), true);
+  const dominantReasoning = "Semua tipe minatmu memiliki skor yang sama, sehingga belum terlihat satu tipe yang paling menonjol.";
   const filled = { ...answers, q27: "Saya suka membuat ilustrasi." };
-  const expected = { alignment: "berbeda", reasoning: "Kamu menyukai ilustrasi, sementara skor Artistic belum menonjol. Coba eksplorasi lagi.", usedQuestionIds: ["q27"], ignoredQuestionIds: [] };
+  const recommendations = [{ name: "Desain Komunikasi Visual", primaryRiasec: "A", studyOverview: "Mempelajari komunikasi visual, tipografi, dan desain untuk berbagai media." }, { name: "Arsitektur", primaryRiasec: "R", studyOverview: "Mempelajari perancangan ruang, struktur bangunan, dan lingkungan binaan." }, { name: "Psikologi", primaryRiasec: "S", studyOverview: "Mempelajari perilaku manusia, proses berpikir, dan metode penelitian." }];
+  const expected = { dominantReasoning, alignment: "berbeda", reasoning: "Kamu menyukai ilustrasi, sementara skor Artistic belum menonjol. Coba eksplorasi lagi.", usedQuestionIds: ["q27"], ignoredQuestionIds: [], recommendations };
+  const noEssay = { dominantReasoning, alignment: "tidak_cukup_bukti", reasoning: "Belum ada jawaban esai untuk dibandingkan dengan profil minatmu.", usedQuestionIds: [], ignoredQuestionIds: [], recommendations };
   const originalKey = process.env.OPENAI_API_KEY;
   process.env.OPENAI_API_KEY = "test-only";
   try {
+    const empty = await analyzeEssayAlignment(answers, result, async (_url, options) => {
+      const payload = JSON.parse(options.body);
+      assert.deepEqual(JSON.parse(payload.input).essays, []);
+      assert.equal(JSON.parse(payload.input).ratings.length, 12);
+      return { ok: true, json: async () => ({ status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(noEssay) }] }] }) };
+    });
+    assert.deepEqual(empty, noEssay);
+    assert.equal(isEssayAnalysis(empty, answers), true);
     const received = await analyzeEssayAlignment(filled, result, async (_url, options) => {
       assert.equal(options.headers.Authorization, "Bearer test-only");
       const payload = JSON.parse(options.body);
       assert.equal(payload.store, false);
       assert.equal(payload.input.includes("Saya suka membuat ilustrasi."), true);
-      assert.equal(payload.instructions.includes("Abaikan jawaban kosong"), true);
+      assert.equal(payload.instructions.includes("Abaikan jawaban esai kosong"), true);
+      assert.equal(payload.instructions.includes("berdasarkan HANYA enam interestPercent"), true);
+      assert.equal(payload.instructions.includes("tepat tiga jurusan"), true);
+      assert.equal(payload.text.format.schema.required.includes("recommendations"), true);
+      assert.equal(payload.text.format.schema.properties.recommendations.items.required.includes("studyOverview"), true);
       return { ok: true, json: async () => ({ status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(expected) }] }] }) };
     });
     assert.deepEqual(received, expected);
     assert.equal(isEssayAnalysis({ ...expected, usedQuestionIds: ["q30"] }, filled), false);
+    assert.equal(isEssayAnalysis({ ...expected, alignment: "tidak_cukup_bukti", reasoning: "Jawaban esai belum relevan untuk dibandingkan.", usedQuestionIds: [], ignoredQuestionIds: ["q27"] }, filled), true);
   } finally { if (originalKey === undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY = originalKey; }
 });
-test("analysis route rejects incomplete input and never calls OpenAI for blank essays", async () => {
+test("analysis route rejects incomplete input and sends blank essays only as an empty list to AI", async () => {
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = () => { throw new Error("should not fetch"); };
+  const originalKey = process.env.OPENAI_API_KEY;
+  process.env.OPENAI_API_KEY = "test-only";
+  globalThis.fetch = async (_url, options) => {
+    assert.deepEqual(JSON.parse(JSON.parse(options.body).input).essays, []);
+    return { ok: true, json: async () => ({ status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify({ dominantReasoning: "Belum ada tipe yang menonjol.", alignment: "tidak_cukup_bukti", reasoning: "Belum ada esai untuk dibandingkan.", usedQuestionIds: [], ignoredQuestionIds: [], recommendations: [{ name: "Arsitektur", primaryRiasec: "R", studyOverview: "Mempelajari perancangan ruang, struktur bangunan, dan lingkungan binaan." }, { name: "Psikologi", primaryRiasec: "S", studyOverview: "Mempelajari perilaku manusia, proses berpikir, dan metode penelitian." }, { name: "Statistika", primaryRiasec: "I", studyOverview: "Mempelajari analisis data, peluang, dan penerapan metode statistik." }] }) }] }] }) };
+  };
   try {
     const incomplete = await POST(new Request("http://localhost/quiz/analyze", { method: "POST", body: JSON.stringify({ answers: {} }) }));
     assert.equal(incomplete.status, 400);
     const answers = Object.fromEntries(Object.entries(answersFor()).filter(([id]) => !["q27", "q28", "q29", "q30"].includes(id)));
     const response = await POST(new Request("http://localhost/quiz/analyze", { method: "POST", body: JSON.stringify({ answers }) }));
     assert.equal(response.status, 200);
-    assert.deepEqual((await response.json()).analysis, emptyEssayAnalysis());
-  } finally { globalThis.fetch = originalFetch; }
+    assert.equal((await response.json()).analysis.dominantReasoning, "Belum ada tipe yang menonjol.");
+  } finally { globalThis.fetch = originalFetch; if (originalKey === undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY = originalKey; }
 });
 test("v2 essays are restored, drafts persist, and results are not duplicated in storage", () => {
   const answers = answersFor();

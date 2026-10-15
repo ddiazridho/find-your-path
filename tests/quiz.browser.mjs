@@ -13,7 +13,7 @@ await page.route('**/quiz/analyze', async route => {
   const body = route.request().postDataJSON();
   analysisPayloads.push(body.answers);
   const ids = ['q27', 'q28', 'q29', 'q30'].filter(id => typeof body.answers[id] === 'string' && body.answers[id].trim());
-  await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ analysis: { alignment: 'sebagian', reasoning: 'Refleksimu tentang belajar dan membantu teman sejalan dengan beberapa minatmu. Masih ada bidang lain yang bisa kamu coba.', usedQuestionIds: ids, ignoredQuestionIds: [] } }) });
+  await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ analysis: { dominantReasoning: 'Skor keenam tipe minat sama tinggi, sehingga belum ada satu tipe yang paling menonjol.', alignment: ids.length ? 'sebagian' : 'tidak_cukup_bukti', reasoning: ids.length ? 'Refleksimu tentang belajar dan membantu teman sejalan dengan beberapa minatmu. Masih ada bidang lain yang bisa kamu coba.' : 'Belum ada esai untuk dibandingkan dengan profil minatmu.', usedQuestionIds: ids, ignoredQuestionIds: [], recommendations: [{ name: 'Desain Komunikasi Visual', primaryRiasec: 'A', studyOverview: 'Mempelajari komunikasi visual, tipografi, dan desain untuk berbagai media.' }, { name: 'Arsitektur', primaryRiasec: 'R', studyOverview: 'Mempelajari perancangan ruang, struktur bangunan, dan lingkungan binaan.' }, { name: 'Psikologi', primaryRiasec: 'S', studyOverview: 'Mempelajari perilaku manusia, proses berpikir, dan metode penelitian.' }] } }) });
 });
 const errors = [];
 page.on('pageerror', e => errors.push(e.message));
@@ -91,30 +91,39 @@ try {
   assert.equal(await page.getByRole('textbox').inputValue(), 'Saya ingin mempertimbangkan minat dan biaya kuliah.');
   await page.getByRole('button', { name: 'Submit Asesmen', exact: true }).evaluate(button => { button.click(); button.click(); });
   await page.waitForURL('**/quiz/results');
-  await page.getByRole('heading', { name: 'Profil RIASEC' }).waitFor();
+  await page.getByRole('heading', { name: 'Ringkasan Minatmu' }).waitFor();
   await page.getByRole('heading', { name: 'Refleksi esaimu' }).waitFor();
+  await page.getByRole('heading', { name: 'Membaca pola minatmu' }).waitFor();
+  await page.getByText('Skor keenam tipe minat sama tinggi, sehingga belum ada satu tipe yang paling menonjol.').waitFor();
   await page.getByText('Refleksimu tentang belajar dan membantu teman sejalan dengan beberapa minatmu. Masih ada bidang lain yang bisa kamu coba.').waitFor();
+  assert.equal(await page.getByText('Jawaban dihasilkan oleh AI, jawaban yang kurang relevan diabaikan dalam ringkasan.').count(), 1);
+  assert.equal(await page.getByText(/jawaban yang belum relevan atau belum jelas tidak dipakai/).count(), 0);
   assert.equal(analysisRequests, 1, JSON.stringify(analysisPayloads));
   // Next Cache Components can retain inactive routes in hidden Activity trees.
   await page.waitForFunction(() => [...document.querySelectorAll('main')].filter(el => el.getClientRects().length > 0).length === 1, null, { timeout: 10000 });
   assert.equal(dialogs.length, 0, 'no submit confirmation');
+  await page.getByRole('heading', { name: 'Rekomendasi jurusan' }).waitFor();
   assert.equal(await page.locator('.recommended-major').count(), 3);
+  for (const name of ['Desain Komunikasi Visual', 'Arsitektur', 'Psikologi']) await page.locator('.recommendations-section').getByRole('heading', { name }).waitFor();
+  assert.equal(await page.locator('.recommendation-copy').getByText('Yang dipelajari').count(), 3);
+  await page.getByText('Mempelajari komunikasi visual, tipografi, dan desain untuk berbagai media.').waitFor();
+  assert.equal(await page.locator('.recommendations-section').getByRole('link').count(), 0);
+  assert.equal(await page.locator('.recommendations-section').getByText(/Coba Simulasi|Lihat Detail|Alasan rekomendasi/).count(), 0);
   assert.equal(await page.locator('.interest-bars [role=meter]').count(), 6);
   assert.equal(await page.locator('table,textarea,details,.review-list,.reflection-answer').count(), 0);
   const content = await page.locator('main.quiz-results').innerText();
   for (const forbidden of ['Penalaran', 'Numerik', 'Logika', 'Verbal', 'Spasial', 'Rumus:', 'Jawaban benar']) assert.equal(content.includes(forbidden), false, `${forbidden} must not appear on results`);
-  assert.ok(content.includes('Keenam tipe memiliki nilai yang sama'));
   for (const size of sizes) {
     await page.setViewportSize(size); await checkSurface(`results ${size.width}`);
     if (size.width === 390 || size.width === 1366) await page.screenshot({ path: `.impeccable/review/${size.width === 390 ? 'mobile' : 'desktop'}-results.png`, fullPage: true });
     else await page.screenshot({ path: `.impeccable/review/results-${size.width}.png`, fullPage: true });
   }
-  await page.reload(); await page.getByRole('heading', { name: 'Profil RIASEC' }).waitFor();
+  await page.reload(); await page.getByRole('heading', { name: 'Ringkasan Minatmu' }).waitFor();
   assert.equal(analysisRequests, 1, 'cached interpretation survives refresh');
   assert.equal(await page.locator('.recommended-major').count(), 3);
   await page.goto(`${base}/quiz`);
   await page.waitForURL('**/quiz/results');
-  await page.getByRole('heading', { name: 'Profil RIASEC' }).waitFor();
+  await page.getByRole('heading', { name: 'Ringkasan Minatmu' }).waitFor();
   // Retake immediately resets the assessment without a browser confirmation.
   await page.getByRole('button', { name: 'Ulangi Kuis' }).click();
   await page.waitForURL('**/quiz');
@@ -138,8 +147,7 @@ try {
   await page.getByText('Belum cukup bahan').waitFor();
   assert.equal(await page.evaluate(() => localStorage.getItem('find-your-path:quiz:v3')), null);
   assert.equal(await page.evaluate(() => localStorage.getItem('find-your-path:quiz:v4').includes('old private essay')), false);
-  await page.locator('main.quiz-results').getByText('Minat dominanmu: Realistic · Praktis.', { exact: true }).waitFor();
-  await page.locator('main.quiz-results').getByText('Kamu tertarik pada kegiatan praktis, menggunakan alat, dan membuat sesuatu yang bisa digunakan.', { exact: true }).waitFor();
+  await page.locator('main.quiz-results').getByText('Skor keenam tipe minat sama tinggi, sehingga belum ada satu tipe yang paling menonjol.', { exact: true }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
   await checkSurface('dominant profile');
   await page.screenshot({ path: '.impeccable/review/dominant-mobile-results.png', fullPage: true });

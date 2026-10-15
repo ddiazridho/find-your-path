@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { QuizResults } from "../components";
 import { questions } from "../questions";
-import { emptyEssayAnalysis, isEssayAnalysis, submittedEssays } from "../essay-analysis";
+import { isEssayAnalysis } from "../essay-analysis";
 import { emptySession } from "../storage";
 import { updateSession, useQuiz } from "../use-quiz";
 import type { EssayAnalysis, QuizAnswers } from "../types";
@@ -37,10 +37,6 @@ export default function ResultsPage() {
   useEffect(() => {
     if (session?.phase !== "complete" || !answers || savedAnalysis) return;
     let active = true;
-    if (!submittedEssays(answers).length) {
-      updateSession({ ...session, essayAnalysis: emptyEssayAnalysis() });
-      return;
-    }
     requestAnalysis(answers).then(analysis => {
       if (active) updateSession({ ...session, essayAnalysis: analysis });
     }).catch(() => {
@@ -51,7 +47,7 @@ export default function ResultsPage() {
   if (!state) return <main className="quiz-intro" role="status">Menyiapkan hasilmu...</main>;
   return <>{state.warning && <p className="quiz-warning" role="status">{state.warning}</p>}{state.session.phase !== "complete" || !state.session.result
     ? <main className="quiz-intro quiz-empty"><h1>Lengkapi asesmenmu dulu</h1><p>Hasil muncul setelah semua soal pilihan dijawab dan kamu menekan Submit Asesmen.</p><Link href="/quiz" className="button quiz-primary">Mulai atau Lanjutkan Asesmen</Link></main>
-    : <QuizResults result={state.session.result} analysis={state.session.essayAnalysis} analysisLoading={!state.session.essayAnalysis && !analysisError && submittedEssays(state.session.answers).length > 0} analysisError={analysisError} onRetry={() => { setAnalysisError(false); setRetry(value => value + 1); }} onRetake={() => {
+    : <QuizResults result={state.session.result} analysis={state.session.essayAnalysis} analysisLoading={!state.session.essayAnalysis && !analysisError} analysisError={analysisError} onRetry={() => { setAnalysisError(false); setRetry(value => value + 1); }} onRetake={() => {
       pendingAnalyses.clear(); updateSession(emptySession()); router.replace("/quiz");
     }} />}</>;
 }

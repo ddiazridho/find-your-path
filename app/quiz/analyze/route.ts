@@ -28,6 +28,6 @@ export async function POST(request: Request) {
     const analysis = await analyzeEssayAlignment(answers, result);
     return Response.json({ analysis }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return Response.json({ error: "Analisis esai belum tersedia. Coba lagi nanti." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    return Response.json({ error: "Analisis hasil belum tersedia. Coba lagi nanti." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 }
