@@ -15,10 +15,10 @@ export default function MajorPreview({ preview, onNavigate }: { preview: Preview
     </div>;
   }
 
-  return <SimulationPreview simulations={preview.simulations} />;
+  return <SimulationPreview simulations={preview.simulations} onNavigate={onNavigate} />;
 }
 
-function SimulationPreview({ simulations }: { simulations: Simulation[] }) {
+function SimulationPreview({ simulations, onNavigate }: { simulations: Simulation[]; onNavigate: () => void }) {
   const [track, setTrack] = useState(simulations[0]?.id ?? "");
   const selected = simulations.find(simulation => simulation.id === track);
   if (!selected) return null;
@@ -41,7 +41,7 @@ function SimulationPreview({ simulations }: { simulations: Simulation[] }) {
       {/* eslint-disable-next-line @next/next/no-img-element -- Local SVG previews keep their existing responsive CSS sizing. */}
       <img src={selected.image} alt={selected.alt} className="simulation-preview-img" />
     </div>
-    <Link href={selected.href} className="button button-primary simulation-action">
+    <Link href={selected.href} className="button button-primary simulation-action" onClick={onNavigate}>
       Try Simulation<Icon name="arrow" />
     </Link>
   </div>;

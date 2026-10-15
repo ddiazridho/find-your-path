@@ -62,6 +62,11 @@ fs.mkdirSync(output, { recursive: true });
       await page.locator('#simulation-track-select').selectOption(track);
       assert.equal(await page.getByRole('link', { name: 'Try Simulation' }).getAttribute('href'), `/computer-science/${track}`);
     }
+    await page.setViewportSize({ width: 390, height: 320 });
+    await page.getByRole('link', { name: 'Try Simulation' }).click();
+    await page.waitForURL('**/computer-science/multimedia');
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.getByLabel('Dialogue 2 of 3').waitFor();
 
     await begin('software');
     const editor = page.getByRole('textbox', { name: 'HTML code editor' });
