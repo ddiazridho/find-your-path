@@ -18,7 +18,7 @@ import {
   Info,
   Check
 } from "lucide-react";
-import { sounds } from "./sound-effects";
+import { sounds } from "../lib/sound-effects";
 
 interface BugChallenge {
   id: string;

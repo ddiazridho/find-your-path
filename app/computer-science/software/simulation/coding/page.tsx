@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import CodingSimulation from "../../../../components/software-room/CodingSimulation";
+import CodingSimulation from "../../components/CodingSimulation";
 
 export const metadata: Metadata = {
   title: "Coding & Bug Fix Simulation — Computer Science (Software Track)",

@@ -20,7 +20,7 @@ import {
   Copy,
   Check
 } from "lucide-react";
-import { sounds } from "./sound-effects";
+import { sounds } from "../lib/sound-effects";
 
 interface TableData {
   name: string;

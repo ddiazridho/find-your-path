@@ -20,7 +20,7 @@ import {
   RefreshCw,
   Lightbulb
 } from "lucide-react";
-import { sounds } from "./sound-effects";
+import { sounds } from "../lib/sound-effects";
 
 interface DecisionStep {
   id: string;
