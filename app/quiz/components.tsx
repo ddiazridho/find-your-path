@@ -4,7 +4,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, X, Check, Telescope, Sparkles, CircleHelp, Clock3, ListChecks, Repeat2, Play, Code2, Scale, Stethoscope, Braces, Database, HeartPulse } from "lucide-react";
 import Icon from "../components/ui-icon";
 import { dimensions, questions, ratingLabels, sectionLabel, ESSAY_MAX_LENGTH } from "./questions";
-import type { InterestProfile, MajorRecommendation, QuizAnswer, QuizQuestion as Question, QuizResult, Riasec } from "./types";
+import type { EssayAnalysis, InterestProfile, MajorRecommendation, QuizAnswer, QuizQuestion as Question, QuizResult, Riasec } from "./types";
 
 export function QuizHeader() {
   return <header className="site-header"><div className="container header-inner">
@@ -23,7 +23,7 @@ export function QuizIntroduction({ onStart, resume, onClear }: { onStart: () => 
     <button className="button quiz-primary" onClick={onStart}>{resume ? "Lanjutkan Asesmen" : "Mulai Asesmen"}<ArrowRight size={19} /></button>
     <Link className="quiz-subtle-link" href="/#explore">Lihat jurusan dulu</Link>
     {resume && <><p className="quiz-resume">Progres terakhir tersimpan di perangkat ini.</p><button className="quiz-subtle-link" onClick={onClear}>Hapus jawaban dan mulai baru</button></>}
-    <details className="assessment-instructions"><summary><ListChecks size={17} aria-hidden="true" />Petunjuk dan privasi jawaban</summary><div><p>12 soal minat, 6 situasional, 8 penalaran, dan 4 esai refleksi. Kerjakan sendiri; pada bagian penalaran, pilih jawaban yang benar. Esai tidak diberi skor atau dianalisis otomatis. Setelah selesai, tekan Submit Asesmen untuk membuka hasil.</p><p>Jawaban, termasuk esai, tersimpan di browser ini tanpa dikirim ke server. Pengguna lain pada browser yang sama dapat mengaksesnya. Hindari informasi pribadi sensitif. Kamu bisa menghapus data kapan saja.</p></div></details>
+    <details className="assessment-instructions"><summary><ListChecks size={17} aria-hidden="true" />Petunjuk dan privasi jawaban</summary><div><p>12 soal minat, 6 situasional, 8 penalaran, dan 4 esai refleksi. Kerjakan sendiri; pada bagian penalaran, pilih jawaban yang benar. Esai boleh dikosongkan. Setelah selesai, tekan Submit Asesmen untuk membuka hasil.</p><p>Jawaban tersimpan di browser ini. Saat hasil dibuka, jawaban dikirim ke server untuk menghitung ulang profil; esai yang diisi dikirim ke OpenAI untuk dibuat ringkasan keselarasan. Hindari informasi pribadi sensitif. Pengguna lain pada browser yang sama dapat mengakses jawaban dan ringkasan. Kamu bisa menghapusnya dengan mengulang kuis.</p></div></details>
     <p className="quiz-fine-print assessment-disclaimer">Belum tervalidasi secara psikometrik. Hasil adalah panduan eksplorasi, bukan penentu jurusan atau jaminan kesuksesan.</p>
   </main>;
 }
@@ -47,8 +47,8 @@ export function QuizQuestion({ question, value, onChange }: { question: Question
     window.scrollTo({ top: 0, behavior: "instant" });
     heading.current?.focus({ preventScroll: true });
   }, [question.id]);
-  const instruction = question.type === "rating" ? "Pilih 1 = sangat tidak tertarik hingga 5 = sangat tertarik. Tidak ada jawaban benar atau salah." : question.type === "situational" ? "Pilih tindakan yang paling menggambarkan responsmu. Tidak ada jawaban benar atau salah." : question.type === "essay" ? "Tulis refleksi singkat dengan kata-katamu sendiri. Tidak dinilai benar atau salah. Jika belum tahu, ceritakan hal yang masih ingin kamu cari tahu. Hindari informasi pribadi sensitif." : "Pilih satu jawaban yang benar. Kerjakan sendiri, tanpa batas waktu.";
-  return <section className="quiz-question" aria-labelledby="question-title"><h1 id="question-title" ref={heading} tabIndex={-1}>{question.title}</h1><p id="question-instruction" className="quiz-description">{instruction}</p>{question.type === "rating" ? <RatingScale question={question} value={value} onChange={onChange} /> : question.type === "essay" ? <div className="quiz-essay"><label htmlFor={question.id}>Jawaban refleksimu</label><textarea id={question.id} value={typeof value === "string" ? value : ""} maxLength={ESSAY_MAX_LENGTH} rows={6} aria-describedby="question-instruction essay-count" onChange={e => onChange(e.target.value)} /><p id="essay-count">{typeof value === "string" ? value.length : 0}/{ESSAY_MAX_LENGTH} karakter. Isi jawaban selain spasi untuk menyelesaikan soal ini.</p></div> : <SingleChoiceOptions question={question} value={value} onChange={onChange} />}</section>;
+  const instruction = question.type === "rating" ? "Pilih 1 = sangat tidak tertarik hingga 5 = sangat tertarik. Tidak ada jawaban benar atau salah." : question.type === "situational" ? "Pilih tindakan yang paling menggambarkan responsmu. Tidak ada jawaban benar atau salah." : question.type === "essay" ? "Tulis refleksi singkat dengan kata-katamu sendiri, atau biarkan kosong. Jawabanmu membantu AI membandingkan refleksi dengan profil RIASEC, tanpa mengubah skor. Hindari informasi pribadi sensitif." : "Pilih satu jawaban yang benar. Kerjakan sendiri, tanpa batas waktu.";
+  return <section className="quiz-question" aria-labelledby="question-title"><h1 id="question-title" ref={heading} tabIndex={-1}>{question.title}</h1><p id="question-instruction" className="quiz-description">{instruction}</p>{question.type === "rating" ? <RatingScale question={question} value={value} onChange={onChange} /> : question.type === "essay" ? <div className="quiz-essay"><label htmlFor={question.id}>Jawaban refleksimu (opsional)</label><textarea id={question.id} value={typeof value === "string" ? value : ""} maxLength={ESSAY_MAX_LENGTH} rows={6} aria-describedby="question-instruction essay-count" onChange={e => onChange(e.target.value)} /><p id="essay-count">{typeof value === "string" ? value.length : 0}/{ESSAY_MAX_LENGTH} karakter. Boleh dikosongkan.</p></div> : <SingleChoiceOptions question={question} value={value} onChange={onChange} />}</section>;
 }
 export function QuizNavigation({ index, answered, busy, onBack, onNext }: { index: number; answered: boolean; busy: boolean; onBack: () => void; onNext: () => void }) {
   return <footer className="quiz-navigation"><div><button className="button quiz-secondary" disabled={busy} onClick={onBack}><ArrowLeft size={17} />Sebelumnya</button>
@@ -91,7 +91,7 @@ function RecommendedMajorCard({ recommendation, profile, index }: { recommendati
     </div>
   </article>;
 }
-export function QuizResults({ result, onRetake }: { result: QuizResult; onRetake: () => void }) {
+export function QuizResults({ result, analysis, analysisLoading, analysisError, onRetry, onRetake }: { result: QuizResult; analysis?: EssayAnalysis; analysisLoading: boolean; analysisError: boolean; onRetry: () => void; onRetake: () => void }) {
   const allTied = result.dominant.length === dimensions.length;
   return <main className="quiz-results"><section className="results-hero">
     <h1>Kenali minatmu,<br />temukan arah eksplorasimu.</h1>
@@ -102,6 +102,10 @@ export function QuizResults({ result, onRetake }: { result: QuizResult; onRetake
       {!allTied && result.dominant.map(id => <p key={id}>{descriptions[id]}</p>)}
       <p className="quiz-fine-print">Grafik menunjukkan tingkat ketertarikan, bukan ukuran kemampuan. Minat bisa berkembang seiring pengalaman baru.</p>
     </div><section className="interest-summary" aria-labelledby="summary-title"><h3 id="summary-title">Ringkasan Minatmu</h3><ProfileBars profile={result.profile} /></section>
+  </section><section className="essay-analysis" aria-labelledby="essay-analysis-title" aria-live="polite">
+    <div><h2 id="essay-analysis-title">Refleksi esaimu</h2><p>Bagaimana ceritamu berkaitan dengan profil minat RIASEC.</p></div>
+    <div className="essay-analysis-body">{analysis ? <><strong>{({ sejalan: "Sejalan dengan profil", sebagian: "Sebagian sejalan", berbeda: "Menunjukkan arah lain", tidak_cukup_bukti: "Belum cukup bahan" })[analysis.alignment]}</strong><p>{analysis.reasoning}</p>{analysis.ignoredQuestionIds.length > 0 && <small>{analysis.ignoredQuestionIds.length} jawaban yang belum relevan atau belum jelas tidak dipakai dalam ringkasan ini.</small>}</> : analysisLoading ? <p role="status">Sedang membaca refleksimu…</p> : analysisError ? <><p>Ringkasan esai belum berhasil dibuat. Profil dan rekomendasi RIASEC tetap tersedia.</p><button className="button quiz-secondary" onClick={onRetry}>Coba analisis lagi</button></> : null}</div>
+    <p className="quiz-fine-print">Ringkasan AI ini untuk refleksi, bukan penilaian kemampuan atau penentu jurusan. Skor dan urutan rekomendasi tidak berubah.</p>
   </section><section className="recommendations-section" aria-labelledby="recommendations-title">
     <h2 id="recommendations-title">Jurusan untuk dieksplorasi</h2>
     <p>Berikut pilihan dari katalog kami yang bisa kamu kenali lebih jauh.</p>

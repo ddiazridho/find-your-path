@@ -36,9 +36,9 @@ export default function QuizFlow() {
     if (index < questions.length - 1) {
       updateSession({ ...session, index: index + 1 }); return;
     }
-    const missing = questions.findIndex(q => !isValidAnswer(q, answers[q.id]));
+    const missing = questions.findIndex(q => q.type !== "essay" && !isValidAnswer(q, answers[q.id]));
     if (missing !== -1) {
-      const missingNumbers = questions.flatMap((q, i) => isValidAnswer(q, answers[q.id]) ? [] : [i + 1]);
+      const missingNumbers = questions.flatMap((q, i) => q.type === "essay" || isValidAnswer(q, answers[q.id]) ? [] : [i + 1]);
       setError(`Soal ${missingNumbers.join(", ")} belum dijawab. Lengkapi soal yang ditampilkan, lalu submit kembali.`);
       updateSession({ ...session, index: missing }); return;
     }

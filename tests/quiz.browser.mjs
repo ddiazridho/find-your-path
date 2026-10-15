@@ -6,6 +6,15 @@ const require = createRequire(import.meta.url);
 const browser = await chromium.launch({ channel: process.env.QUIZ_BROWSER_CHANNEL ?? (process.platform === 'win32' ? 'msedge' : undefined), headless: true });
 const context = await browser.newContext({ viewport: { width: 1366, height: 900 } });
 const page = await context.newPage();
+let analysisRequests = 0;
+const analysisPayloads = [];
+await page.route('**/quiz/analyze', async route => {
+  analysisRequests++;
+  const body = route.request().postDataJSON();
+  analysisPayloads.push(body.answers);
+  const ids = ['q27', 'q28', 'q29', 'q30'].filter(id => typeof body.answers[id] === 'string' && body.answers[id].trim());
+  await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ analysis: { alignment: 'sebagian', reasoning: 'Refleksimu tentang belajar dan membantu teman sejalan dengan beberapa minatmu. Masih ada bidang lain yang bisa kamu coba.', usedQuestionIds: ids, ignoredQuestionIds: [] } }) });
+});
 const errors = [];
 page.on('pageerror', e => errors.push(e.message));
 page.on('websocket', socket => socket.on('socketerror', error => errors.push(`WebSocket: ${error}`)));
@@ -66,7 +75,7 @@ try {
     }
     await page.getByRole('button', { name: i === 29 ? 'Submit Asesmen' : 'Selanjutnya' }).click();
   }
-  await page.getByRole('alert').filter({ hasText: 'Soal 1, 30 belum dijawab' }).waitFor();
+  await page.getByRole('alert').filter({ hasText: 'Soal 1 belum dijawab' }).waitFor();
   await page.getByRole('heading', { name: 'Saya tertarik merakit atau memperbaiki perangkat elektronik.' }).waitFor();
   assert.equal(page.url().endsWith('/quiz'), true);
   for (let i = 0; i < 29; i++) {
@@ -83,6 +92,9 @@ try {
   await page.getByRole('button', { name: 'Submit Asesmen', exact: true }).evaluate(button => { button.click(); button.click(); });
   await page.waitForURL('**/quiz/results');
   await page.getByRole('heading', { name: 'Profil RIASEC' }).waitFor();
+  await page.getByRole('heading', { name: 'Refleksi esaimu' }).waitFor();
+  await page.getByText('Refleksimu tentang belajar dan membantu teman sejalan dengan beberapa minatmu. Masih ada bidang lain yang bisa kamu coba.').waitFor();
+  assert.equal(analysisRequests, 1, JSON.stringify(analysisPayloads));
   // Next Cache Components can retain inactive routes in hidden Activity trees.
   await page.waitForFunction(() => [...document.querySelectorAll('main')].filter(el => el.getClientRects().length > 0).length === 1, null, { timeout: 10000 });
   assert.equal(dialogs.length, 0, 'no submit confirmation');
@@ -90,7 +102,7 @@ try {
   assert.equal(await page.locator('.interest-bars [role=meter]').count(), 6);
   assert.equal(await page.locator('table,textarea,details,.review-list,.reflection-answer').count(), 0);
   const content = await page.locator('main.quiz-results').innerText();
-  for (const forbidden of ['Penalaran', 'Numerik', 'Logika', 'Verbal', 'Spasial', 'Rumus:', 'Refleksimu', 'Jawaban benar']) assert.equal(content.includes(forbidden), false, `${forbidden} must not appear on results`);
+  for (const forbidden of ['Penalaran', 'Numerik', 'Logika', 'Verbal', 'Spasial', 'Rumus:', 'Jawaban benar']) assert.equal(content.includes(forbidden), false, `${forbidden} must not appear on results`);
   assert.ok(content.includes('Keenam tipe memiliki nilai yang sama'));
   for (const size of sizes) {
     await page.setViewportSize(size); await checkSurface(`results ${size.width}`);
@@ -98,6 +110,7 @@ try {
     else await page.screenshot({ path: `.impeccable/review/results-${size.width}.png`, fullPage: true });
   }
   await page.reload(); await page.getByRole('heading', { name: 'Profil RIASEC' }).waitFor();
+  assert.equal(analysisRequests, 1, 'cached interpretation survives refresh');
   assert.equal(await page.locator('.recommended-major').count(), 3);
   await page.goto(`${base}/quiz`);
   await page.waitForURL('**/quiz/results');
@@ -121,15 +134,10 @@ try {
     localStorage.setItem('find-your-path:quiz:v3', JSON.stringify({ version: 3, phase: 'complete', index: 29, answers }));
   });
   await page.reload();
-  await page.getByRole('heading', { name: 'Mata pelajaran atau aktivitas apa yang paling kamu sukai? Jelaskan alasannya.' }).waitFor();
-  assert.equal(await page.getByRole('textbox').count(), 1);
+  await page.waitForURL('**/quiz/results');
+  await page.getByText('Belum cukup bahan').waitFor();
   assert.equal(await page.evaluate(() => localStorage.getItem('find-your-path:quiz:v3')), null);
   assert.equal(await page.evaluate(() => localStorage.getItem('find-your-path:quiz:v4').includes('old private essay')), false);
-  for (let i = 26; i < 30; i++) {
-    await page.getByRole('textbox').fill('Saya suka mencoba kegiatan baru.');
-    await page.getByRole('button', { name: i === 29 ? 'Submit Asesmen' : 'Selanjutnya', exact: true }).click();
-  }
-  await page.waitForURL('**/quiz/results');
   await page.locator('main.quiz-results').getByText('Minat dominanmu: Realistic · Praktis.', { exact: true }).waitFor();
   await page.locator('main.quiz-results').getByText('Kamu tertarik pada kegiatan praktis, menggunakan alat, dan membuat sesuatu yang bisa digunakan.', { exact: true }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });

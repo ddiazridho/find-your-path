@@ -12,6 +12,8 @@ const { questions, dimensions, ESSAY_MAX_LENGTH } = load("../app/quiz/questions.
 const { calculateResults, isComplete, isValidAnswer, recommendMajors, majorProfiles } = load("../app/quiz/scoring.ts");
 const { majors } = load("../app/majors.ts");
 const { readSession, saveSession, emptySession, STORAGE_KEY } = load("../app/quiz/storage.ts");
+const { analyzeEssayAlignment, emptyEssayAnalysis, isEssayAnalysis } = load("../app/quiz/essay-analysis.ts");
+const { POST } = load("../app/quiz/analyze/route.ts");
 const answersFor = (rating = 3, correct = true) => Object.fromEntries(questions.map(q => [q.id, q.type === "rating" ? rating : q.type === "essay" ? "Saya suka belajar dan mencoba hal baru." : q.type === "situational" ? "A" : correct ? q.correct : q.options.find(o => o.id !== q.correct).id]));
 
 test("blueprint: 30 unique IDs, 12 rating/6 situational/8 reasoning/4 essays, balanced RIASEC counts and unchanged keys", () => {
@@ -46,7 +48,10 @@ test("validation rejects missing, malformed, fractional, out-of-range inputs and
       assert.equal(isValidAnswer(q, "a".repeat(ESSAY_MAX_LENGTH)), true);
     }
     else for (const invalid of [1, "Z", "a"]) assert.equal(isValidAnswer(q, invalid), false);
-    const missing = answersFor(); delete missing[q.id]; assert.equal(isComplete(missing), false); assert.throws(() => calculateResults(missing));
+    const missing = answersFor(); delete missing[q.id];
+    assert.equal(isComplete(missing), q.type === "essay");
+    if (q.type === "essay") assert.deepEqual(calculateResults(missing), calculateResults(answersFor()));
+    else assert.throws(() => calculateResults(missing));
   }
 });
 test("normalization supports all ties; essays never change minat or recommendations", () => {
@@ -128,13 +133,48 @@ test("v3 migration keeps first26 but does not reinterpret former rating answers 
     const entries = new Map([["find-your-path:quiz:v3", JSON.stringify({ version: 3, phase, index: 29, answers: oldAnswers })]]);
     globalThis.localStorage = { getItem: key => entries.get(key) ?? null, setItem: (key, value) => entries.set(key, value), removeItem: key => entries.delete(key) };
     const migrated = readSession();
-    assert.equal(migrated.session.version, 4); assert.equal(migrated.session.index, 26);
+    assert.equal(migrated.session.version, 4); assert.equal(migrated.session.index, 29);
     assert.equal(Object.keys(migrated.session.answers).length, 26);
-    assert.equal(migrated.session.answers.q27, undefined); assert.equal(migrated.session.result, undefined);
-    assert.equal(migrated.session.phase, phase === "intro" ? "intro" : "active");
+    assert.equal(migrated.session.answers.q27, undefined); assert.equal(migrated.session.result !== undefined, phase === "complete");
+    assert.equal(migrated.session.phase, phase);
     assert.equal(entries.has("find-your-path:quiz:v3"), false);
     assert.ok(migrated.warning);
   }
+});
+test("essay analysis handles no answers locally and validates structured output", async () => {
+  const answers = Object.fromEntries(Object.entries(answersFor()).filter(([id]) => !["q27", "q28", "q29", "q30"].includes(id)));
+  const result = calculateResults(answers);
+  const empty = await analyzeEssayAlignment(answers, result, () => { throw new Error("should not fetch"); });
+  assert.deepEqual(empty, emptyEssayAnalysis());
+  assert.equal(isEssayAnalysis(empty, answers), true);
+  const filled = { ...answers, q27: "Saya suka membuat ilustrasi." };
+  const expected = { alignment: "berbeda", reasoning: "Kamu menyukai ilustrasi, sementara skor Artistic belum menonjol. Coba eksplorasi lagi.", usedQuestionIds: ["q27"], ignoredQuestionIds: [] };
+  const originalKey = process.env.OPENAI_API_KEY;
+  process.env.OPENAI_API_KEY = "test-only";
+  try {
+    const received = await analyzeEssayAlignment(filled, result, async (_url, options) => {
+      assert.equal(options.headers.Authorization, "Bearer test-only");
+      const payload = JSON.parse(options.body);
+      assert.equal(payload.store, false);
+      assert.equal(payload.input.includes("Saya suka membuat ilustrasi."), true);
+      assert.equal(payload.instructions.includes("Abaikan jawaban kosong"), true);
+      return { ok: true, json: async () => ({ status: "completed", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(expected) }] }] }) };
+    });
+    assert.deepEqual(received, expected);
+    assert.equal(isEssayAnalysis({ ...expected, usedQuestionIds: ["q30"] }, filled), false);
+  } finally { if (originalKey === undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY = originalKey; }
+});
+test("analysis route rejects incomplete input and never calls OpenAI for blank essays", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = () => { throw new Error("should not fetch"); };
+  try {
+    const incomplete = await POST(new Request("http://localhost/quiz/analyze", { method: "POST", body: JSON.stringify({ answers: {} }) }));
+    assert.equal(incomplete.status, 400);
+    const answers = Object.fromEntries(Object.entries(answersFor()).filter(([id]) => !["q27", "q28", "q29", "q30"].includes(id)));
+    const response = await POST(new Request("http://localhost/quiz/analyze", { method: "POST", body: JSON.stringify({ answers }) }));
+    assert.equal(response.status, 200);
+    assert.deepEqual((await response.json()).analysis, emptyEssayAnalysis());
+  } finally { globalThis.fetch = originalFetch; }
 });
 test("v2 essays are restored, drafts persist, and results are not duplicated in storage", () => {
   const answers = answersFor();

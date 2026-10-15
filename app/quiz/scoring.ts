@@ -12,7 +12,7 @@ export function isValidAnswer(q: QuizQuestion, answer: unknown): boolean {
   if (q.type === "essay") return typeof answer === "string" && answer.trim().length > 0 && answer.length <= ESSAY_MAX_LENGTH;
   return typeof answer === "string" && q.options.some(o => o.id === answer);
 }
-export function isComplete(answers: QuizAnswers): boolean { return questions.every(q => isValidAnswer(q, answers[q.id])); }
+export function isComplete(answers: QuizAnswers): boolean { return questions.every(q => q.type === "essay" || isValidAnswer(q, answers[q.id])); }
 const blankProfile = (): InterestProfile => ({ R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 });
 export function recommendMajors(profile: InterestProfile, situational: InterestProfile, catalog: Major[] = majors, metadata: Record<string, MajorMetadata> = majorProfiles): MajorRecommendation[] {
   const recommendations: MajorRecommendation[] = [];
@@ -31,7 +31,7 @@ export function recommendMajors(profile: InterestProfile, situational: InterestP
   return recommendations.sort((a, b) => b.score - a.score || a.major.id.localeCompare(b.major.id)).slice(0, 5);
 }
 export function calculateResults(answers: QuizAnswers): QuizResult {
-  if (!isComplete(answers)) throw new Error("Lengkapi semua 30 jawaban sebelum melihat hasil.");
+  if (!isComplete(answers)) throw new Error("Lengkapi semua soal pilihan sebelum melihat hasil.");
   const profile = blankProfile(), situationalCounts = blankProfile(), situational = blankProfile();
   for (const q of questions) {
     const answer = answers[q.id];

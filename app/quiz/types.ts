@@ -17,4 +17,10 @@ export type QuizResult = {
   situational: InterestProfile; situationalCounts: InterestProfile;
   recommendations: MajorRecommendation[];
 };
-export type QuizSession = { version: 4; phase: "intro" | "active" | "complete"; index: number; answers: QuizAnswers; result?: QuizResult };
+export type EssayAnalysis = {
+  alignment: "sejalan" | "sebagian" | "berbeda" | "tidak_cukup_bukti";
+  reasoning: string;
+  usedQuestionIds: string[];
+  ignoredQuestionIds: string[];
+};
+export type QuizSession = { version: 4; phase: "intro" | "active" | "complete"; index: number; answers: QuizAnswers; result?: QuizResult; essayAnalysis?: EssayAnalysis };
