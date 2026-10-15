@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import DioramaCanvas from "../../components/software-room/DioramaCanvas";
+import LearningLab from "../components/LearningLab";
 
 export const metadata: Metadata = {
   title: "Computer Science: Software Track — Find Your Path",
-  description: "Step into an interactive 3D isometric office room. Explore core roles of a Software Engineer through hands-on coding, algorithm logic, and SQL query simulations.",
+  description: "Join a classroom lesson and build your first website with guided HTML and CSS challenges and a live preview.",
 };
 
 export default function SoftwareTrackPage() {
-  return <DioramaCanvas initialModal="none" />;
+  return <LearningLab track="software" />;
 }

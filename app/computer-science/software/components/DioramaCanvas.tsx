@@ -19,7 +19,7 @@ import {
   X,
   ExternalLink
 } from "lucide-react";
-import { sounds } from "./sound-effects";
+import { sounds } from "../lib/sound-effects";
 import CodingSimulation from "./CodingSimulation";
 import LogicFlowSimulation from "./LogicFlowSimulation";
 import DatabaseSimulation from "./DatabaseSimulation";
