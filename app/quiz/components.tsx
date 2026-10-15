@@ -1,58 +1,112 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ArrowRight, X, Clock3, ListChecks, Check, Code2, ChartNoAxesCombined, Palette, Users, BriefcaseBusiness, CircuitBoard, Compass, Sparkles } from "lucide-react";
+import { useEffect, useRef, type CSSProperties } from "react";
+import { ArrowLeft, ArrowRight, X, Check, Telescope, Sparkles, CircleHelp, Clock3, ListChecks, Repeat2, Play, Code2, Scale, Stethoscope, Braces, Database, HeartPulse } from "lucide-react";
 import Icon from "../components/ui-icon";
-import { dimensions, questions, ratingLabels } from "./questions";
-import type { InterestProfile as Profile, MajorRecommendation, QuizAnswer, QuizQuestion as Question, QuizResult } from "./types";
+import { dimensions, questions, ratingLabels, sectionLabel, ESSAY_MAX_LENGTH } from "./questions";
+import type { InterestProfile, MajorRecommendation, QuizAnswer, QuizQuestion as Question, QuizResult, Riasec } from "./types";
 
-const dimensionIcons = { technology: Code2, analytical: ChartNoAxesCombined, creative: Palette, social: Users, business: BriefcaseBusiness, engineering: CircuitBoard };
 export function QuizHeader() {
-  return <header className="site-header"><div className="container header-inner"><Link href="/" className="brand" aria-label="Find Your Path, beranda"><span className="brand-symbol"><Icon name="compass" /></span><span>find your path<span className="brand-period">.</span></span></Link><nav aria-label="Navigasi utama"><Link href="/#explore" className="nav-active">Jelajahi Jurusan</Link></nav><span className="header-note">Mulai dari rasa penasaran<Icon name="spark" /></span></div></header>;
+  return <header className="site-header"><div className="container header-inner">
+    <Link href="/" className="brand" aria-label="Find Your Path, beranda"><span className="brand-symbol"><Icon name="compass" /></span><span>find your path<span className="brand-period">.</span></span></Link>
+    <nav aria-label="Navigasi utama"><Link href="/#explore">Jelajahi Jurusan</Link></nav>
+    <span className="header-note">Mulai dari rasa penasaran<Icon name="spark" /></span>
+  </div></header>;
 }
-export function QuizIllustration({ complete = false }: { complete?: boolean }) {
-  return <div className="quiz-illustration" aria-hidden="true"><div className="quiz-orbit" /><div className="quiz-note note-code"><Code2 size={35} /><span>Coba hal baru.</span></div><div className="quiz-note note-art"><Palette size={35} /><span>Ikuti idemu.</span></div><div className="quiz-compass">{complete ? <Check size={64} strokeWidth={1.5} /> : <Compass size={72} strokeWidth={1.25} />}</div><Sparkles className="quiz-spark" size={28} /><div className="quiz-illustration-caption">Langkah kecil, banyak kemungkinan.</div></div>;
+export function QuizIllustration() {
+  return <div className="assessment-illustration" aria-hidden="true"><div className="assessment-telescope"><Telescope size={88} strokeWidth={1.8} /></div><Sparkles className="assessment-spark" size={38} strokeWidth={1.8} /><CircleHelp className="assessment-help" size={36} strokeWidth={1.8} /></div>;
 }
-export function QuizIntroduction({ onStart, resume }: { onStart: () => void; resume: boolean }) {
-  return <main className="quiz-intro quiz-enter"><QuizIllustration /><h1>Yuk, Kenalan Sama <span className="quiz-gradient-text">Minatmu!</span></h1><p>Jawab beberapa pertanyaan santai. Nggak ada jawaban benar atau salah, kok!</p><div className="quiz-badges"><span><Clock3 size={17} />±3 menit</span><span><ListChecks size={17} />{questions.length} pertanyaan</span></div><button className="button quiz-primary" onClick={onStart}>Mulai Kuis <ArrowRight size={19} /></button>{resume && <p className="quiz-resume">Jawaban sebelumnya tersimpan. Kamu akan melanjutkan dari pertanyaan terakhir.</p>}<Link className="quiz-subtle-link" href="/#explore">Lihat jurusan dulu</Link></main>;
+export function QuizIntroduction({ onStart, resume, onClear }: { onStart: () => void; resume: boolean; onClear: () => void }) {
+  return <main className="quiz-intro assessment-welcome"><QuizIllustration /><h1>Yuk, Kenalan Sama <span>Minatmu!</span></h1>
+    <p className="assessment-lead">Temukan aktivitas yang menarik buatmu lewat pertanyaan minat, pilihan kegiatan, penalaran, dan refleksi singkat.</p>
+    <div className="assessment-badges"><span><Clock3 size={20} aria-hidden="true" />Tanpa batas waktu</span><span><CircleHelp size={20} aria-hidden="true" />{questions.length} pertanyaan</span></div>
+    <button className="button quiz-primary" onClick={onStart}>{resume ? "Lanjutkan Asesmen" : "Mulai Asesmen"}<ArrowRight size={19} /></button>
+    <Link className="quiz-subtle-link" href="/#explore">Lihat jurusan dulu</Link>
+    {resume && <><p className="quiz-resume">Progres terakhir tersimpan di perangkat ini.</p><button className="quiz-subtle-link" onClick={onClear}>Hapus jawaban dan mulai baru</button></>}
+    <details className="assessment-instructions"><summary><ListChecks size={17} aria-hidden="true" />Petunjuk dan privasi jawaban</summary><div><p>12 soal minat, 6 situasional, 8 penalaran, dan 4 esai refleksi. Kerjakan sendiri; pada bagian penalaran, pilih jawaban yang benar. Esai tidak diberi skor atau dianalisis otomatis. Setelah selesai, tekan Submit Asesmen untuk membuka hasil.</p><p>Jawaban, termasuk esai, tersimpan di browser ini tanpa dikirim ke server. Pengguna lain pada browser yang sama dapat mengaksesnya. Hindari informasi pribadi sensitif. Kamu bisa menghapus data kapan saja.</p></div></details>
+    <p className="quiz-fine-print assessment-disclaimer">Belum tervalidasi secara psikometrik. Hasil adalah panduan eksplorasi, bukan penentu jurusan atau jaminan kesuksesan.</p>
+  </main>;
 }
 export function QuizProgress({ index, answered, onBack, onClose }: { index: number; answered: number; onBack: () => void; onClose: () => void }) {
   const percent = Math.round(answered / questions.length * 100);
-  return <div className="quiz-progress"><div className="quiz-progress-top"><button className="quiz-icon-button" onClick={onBack} aria-label={index ? "Pertanyaan sebelumnya" : "Kembali ke pengantar"}><ArrowLeft size={20} /></button><span>Pertanyaan <strong>{index + 1}</strong> dari {questions.length}</span><button className="quiz-icon-button" onClick={onClose} aria-label="Tutup kuis"><X size={20} /></button></div><div className="quiz-progress-line"><div className="quiz-bar" role="progressbar" aria-label="Pertanyaan terjawab" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${percent}%` }} /></div><span>{percent}% selesai</span></div></div>;
+  return <div className="quiz-progress"><div className="quiz-progress-top">
+    <button className="quiz-icon-button" onClick={onBack} aria-label={index ? "Pertanyaan sebelumnya" : "Kembali ke pengantar"}><ArrowLeft size={20} /></button>
+    <span>{sectionLabel(questions[index])} · <strong>{index + 1}</strong> / {questions.length}</span>
+    <button className="quiz-icon-button" onClick={onClose} aria-label="Simpan progres dan kembali ke pengantar"><X size={20} /></button>
+  </div><div className="quiz-progress-line"><div className="quiz-bar" role="progressbar" aria-label="Pertanyaan terjawab" aria-valuenow={answered} aria-valuemin={0} aria-valuemax={30} aria-valuetext={`${answered} dari 30 soal dijawab`}><span style={{ width: `${percent}%` }} /></div><span>{answered}/30 dijawab</span></div></div>;
 }
-export function RatingScale({ question, value, onChange }: { question: Question; value?: QuizAnswer; onChange: (value: QuizAnswer) => void }) {
-  return <fieldset className="quiz-options"><legend className="sr-only">{question.title}</legend><div className="rating-grid">{ratingLabels.map((label, index) => <label key={label} className={`rating-card ${value === index + 1 ? "is-selected" : ""}`}><input type="radio" name={question.id} value={index + 1} checked={value === index + 1} onChange={() => onChange(index + 1)} /><span className="rating-number">{index + 1}</span><span>{label}</span><Check className="answer-check" size={17} aria-hidden="true" /></label>)}</div><div className="rating-endpoints" aria-hidden="true"><span>Kurang suka</span><span>Suka banget</span></div></fieldset>;
+export function RatingScale({ question, value, onChange }: { question: Question; value?: QuizAnswer; onChange: (v: QuizAnswer) => void }) {
+  return <fieldset className="quiz-options" aria-describedby="question-instruction"><legend className="sr-only">{question.title}</legend><div className="rating-grid">{ratingLabels.map((label, i) => <label key={label} className={`rating-card ${value === i + 1 ? "is-selected" : ""}`}><input type="radio" name={question.id} value={i + 1} checked={value === i + 1} onChange={() => onChange(i + 1)} /><span className="rating-number">{i + 1}</span><span>{label}</span><Check className="answer-check" size={17} aria-hidden="true" /></label>)}</div></fieldset>;
 }
-export function SingleChoiceOptions({ question, value, onChange }: { question: Extract<Question, { type: "choice" }>; value?: QuizAnswer; onChange: (value: QuizAnswer) => void }) {
-  return <fieldset className="quiz-options choice-grid"><legend className="sr-only">{question.title}</legend>{question.options.map(option => { const OptionIcon = dimensionIcons[option.icon]; return <label key={option.id} className={`choice-card ${value === option.id ? "is-selected" : ""}`}><input type="radio" name={question.id} value={option.id} checked={value === option.id} onChange={() => onChange(option.id)} /><span className="choice-icon"><OptionIcon size={24} /></span><span>{option.label}</span><span className="choice-dot">{value === option.id && <Check size={14} />}</span></label>; })}</fieldset>;
+export function SingleChoiceOptions({ question, value, onChange }: { question: Extract<Question, { type: "situational" | "reasoning" }>; value?: QuizAnswer; onChange: (v: QuizAnswer) => void }) {
+  return <fieldset className="quiz-options choice-grid" aria-describedby="question-instruction"><legend className="sr-only">{question.title}</legend>{question.options.map(o => <label key={o.id} className={`choice-card ${value === o.id ? "is-selected" : ""}`}><input type="radio" name={question.id} value={o.id} checked={value === o.id} onChange={() => onChange(o.id)} /><span className="choice-icon" aria-hidden="true">{o.id}</span><span>{o.label}</span><span className="choice-dot" aria-hidden="true">{value === o.id && <Check size={14} />}</span></label>)}</fieldset>;
 }
-export function QuizQuestion({ question, index, value, onChange }: { question: Question; index: number; value?: QuizAnswer; onChange: (value: QuizAnswer) => void }) {
+export function QuizQuestion({ question, value, onChange }: { question: Question; value?: QuizAnswer; onChange: (v: QuizAnswer) => void }) {
   const heading = useRef<HTMLHeadingElement>(null);
-  const reduced = useReducedMotion();
-  useEffect(() => { heading.current?.focus({ preventScroll: true }); }, [question.id]);
-  return <motion.section key={question.id} initial={{ opacity: reduced ? 1 : 0, y: reduced ? 0 : 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .22 }} className="quiz-question" aria-labelledby="question-title"><p className="quiz-question-label">PERTANYAAN {String(index + 1).padStart(2, "0")}</p><h1 id="question-title" ref={heading} tabIndex={-1}>{question.title}</h1><p className="quiz-description">{question.description}</p>{question.type === "rating" ? <RatingScale question={question} value={value} onChange={onChange} /> : <SingleChoiceOptions question={question} value={value} onChange={onChange} />}</motion.section>;
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    heading.current?.focus({ preventScroll: true });
+  }, [question.id]);
+  const instruction = question.type === "rating" ? "Pilih 1 = sangat tidak tertarik hingga 5 = sangat tertarik. Tidak ada jawaban benar atau salah." : question.type === "situational" ? "Pilih tindakan yang paling menggambarkan responsmu. Tidak ada jawaban benar atau salah." : question.type === "essay" ? "Tulis refleksi singkat dengan kata-katamu sendiri. Tidak dinilai benar atau salah. Jika belum tahu, ceritakan hal yang masih ingin kamu cari tahu. Hindari informasi pribadi sensitif." : "Pilih satu jawaban yang benar. Kerjakan sendiri, tanpa batas waktu.";
+  return <section className="quiz-question" aria-labelledby="question-title"><h1 id="question-title" ref={heading} tabIndex={-1}>{question.title}</h1><p id="question-instruction" className="quiz-description">{instruction}</p>{question.type === "rating" ? <RatingScale question={question} value={value} onChange={onChange} /> : question.type === "essay" ? <div className="quiz-essay"><label htmlFor={question.id}>Jawaban refleksimu</label><textarea id={question.id} value={typeof value === "string" ? value : ""} maxLength={ESSAY_MAX_LENGTH} rows={6} aria-describedby="question-instruction essay-count" onChange={e => onChange(e.target.value)} /><p id="essay-count">{typeof value === "string" ? value.length : 0}/{ESSAY_MAX_LENGTH} karakter. Isi jawaban selain spasi untuk menyelesaikan soal ini.</p></div> : <SingleChoiceOptions question={question} value={value} onChange={onChange} />}</section>;
 }
 export function QuizNavigation({ index, answered, busy, onBack, onNext }: { index: number; answered: boolean; busy: boolean; onBack: () => void; onNext: () => void }) {
-  return <footer className="quiz-navigation"><div><button className="button quiz-secondary" disabled={index === 0 || busy} onClick={onBack}><ArrowLeft size={17} />Sebelumnya</button><p aria-live="polite">{answered ? "Jawaban tersimpan. Lanjut kalau sudah siap!" : "Pilih satu jawaban yang paling sesuai denganmu."}</p><button className="button quiz-primary" disabled={!answered || busy} onClick={onNext} aria-busy={busy}>{busy ? "Memproses..." : index === questions.length - 1 ? "Kirim Jawaban" : "Selanjutnya"}<ArrowRight size={17} /></button></div></footer>;
+  return <footer className="quiz-navigation"><div><button className="button quiz-secondary" disabled={busy} onClick={onBack}><ArrowLeft size={17} />Sebelumnya</button>
+    <p aria-live="polite">{busy ? "Menyiapkan hasilmu…" : answered ? "Jawaban diisi. Kamu bisa lanjut atau mengubahnya." : "Isi jawaban, atau lanjut untuk mengisinya nanti."}</p>
+    <button className="button quiz-primary" disabled={busy} aria-busy={busy} onClick={onNext}>{busy ? "Memproses…" : index === 29 ? "Submit Asesmen" : "Selanjutnya"}<ArrowRight size={17} /></button>
+  </div></footer>;
 }
-const statuses = ["Sedang membaca jawabanmu...", "Menganalisis minat dan ketertarikanmu...", "Mencari jurusan yang sesuai...", "Rekomendasimu hampir siap!"];
-export function QuizSubmitting() {
-  const [step, setStep] = useState(0);
-  useEffect(() => { const timer = setInterval(() => setStep(value => Math.min(value + 1, statuses.length - 1)), 350); return () => clearInterval(timer); }, []);
-  return <main className="quiz-submitting quiz-enter" aria-busy="true"><QuizIllustration /><h1>Sedikit lagi, ketemu arahnya!</h1><p role="status" aria-live="polite">{statuses[step]}</p><div className="quiz-bar analysis-bar" role="progressbar" aria-label="Menganalisis jawaban"><span style={{ width: `${(step + 1) * 25}%` }} /></div></main>;
+const descriptions: Record<Riasec, string> = {
+  R: "Kamu tertarik pada kegiatan praktis, menggunakan alat, dan membuat sesuatu yang bisa digunakan.",
+  I: "Kamu tertarik menyelidiki pertanyaan, mencari bukti, dan memahami cara kerja sesuatu.",
+  A: "Kamu tertarik mengekspresikan gagasan melalui karya, desain, dan pendekatan kreatif.",
+  S: "Kamu tertarik membantu, mengajar, dan mendampingi orang lain.",
+  E: "Kamu tertarik memimpin, menyampaikan ide, dan menggerakkan orang menuju tujuan bersama.",
+  C: "Kamu tertarik mengatur informasi, mengikuti proses yang terstruktur, dan menjaga ketelitian.",
+};
+const typeName = (id: Riasec) => dimensions.find(d => d.id === id)!.label;
+function ProfileBars({ profile }: { profile: InterestProfile }) {
+  return <div className="interest-bars">{dimensions.map(({ id, label }, index) => <div className={`interest-dimension interest-${id.toLowerCase()}`} key={id} style={{ "--bar-order": index } as CSSProperties}><div className="interest-label"><span>{id} · {label}</span><strong>{new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(profile[id])}%</strong></div><div className="quiz-bar" role="meter" aria-label={`Minat ${label}`} aria-valuenow={profile[id]} aria-valuetext={`${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(profile[id])}% minat`} aria-valuemin={0} aria-valuemax={100}><span className="interest-fill" style={{ width: `${profile[id]}%` }} /></div></div>)}</div>;
 }
-export function InterestProfile({ profile }: { profile: Profile }) {
-  const top = [...dimensions].sort((a, b) => profile[b.id] - profile[a.id]).slice(0, 2);
-  const high = profile[top[0].id] > 0;
-  return <section className="interest-profile" aria-labelledby="profile-title"><div><h2 id="profile-title">Ini Gambaran Minatmu</h2><p>{high ? `Jawabanmu menunjukkan ketertarikan yang lebih menonjol pada ${top.map(item => item.label.toLowerCase()).join(" dan ")}. Kamu bisa mulai mengeksplorasi kegiatan di bidang ini.` : "Belum ada bidang yang menonjol dari jawabanmu. Coba jelajahi beberapa kegiatan untuk mengenal hal yang kamu sukai."}</p><p className="quiz-fine-print">Skor menggambarkan minat dari jawabanmu saat ini, bukan ukuran kemampuan atau prediksi keberhasilan.</p></div><div className="interest-bars">{dimensions.map(({ id, label }) => { const DimensionIcon = dimensionIcons[id]; return <div key={id}><div className="interest-label"><span><DimensionIcon size={17} />{label}</span><strong>{profile[id]}%</strong></div><div className="quiz-bar" role="progressbar" aria-label={label} aria-valuenow={profile[id]} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${profile[id]}%` }} /></div></div>; })}</div></section>;
-}
-export function RecommendedMajorCard({ recommendation, index }: { recommendation: MajorRecommendation; index: number }) {
-  const { major, name, description, score, href, reasons } = recommendation;
-  const MainIcon = dimensionIcons[reasons[0]];
-  const labels = reasons.map(id => dimensions.find(item => item.id === id)!.label);
-  return <article className={`recommended-major tone-${major.color} quiz-enter`} style={{ animationDelay: `${index * 70}ms` }}><div className="recommendation-art" aria-hidden="true"><MainIcon size={55} strokeWidth={1.25} /><span>{String(index + 1).padStart(2, "0")}</span></div><div className="recommendation-body"><span className="match-label">≈{score}% kesesuaian minat</span><h3>{name}</h3><p>{description}</p><p className="recommendation-reason">{score > 0 ? `Bidang ini memberi ruang untuk mengeksplorasi ${labels.join(" dan ").toLowerCase()}, sesuai pola jawabanmu.` : "Bidang ini belum banyak selaras dengan jawabanmu, tetapi tetap terbuka untuk kamu coba."}</p><div className="skill-list">{labels.map(label => <span key={label}>{label}</span>)}</div><Link href={href} className="button quiz-secondary">Coba Simulasi <ArrowRight size={17} /></Link>{major.id !== "computer-science" && <small>Pilihan jurusan tersedia; simulasinya masih dalam pengembangan.</small>}</div></article>;
+function RecommendedMajorCard({ recommendation, profile, index }: { recommendation: MajorRecommendation; profile: InterestProfile; index: number }) {
+  const { major, metadata, reasons, supporting, score } = recommendation;
+  const highest = Math.max(...reasons.map(id => profile[id]));
+  const relevant = reasons.filter(id => profile[id] === highest);
+  const art = major.id === "computer-science" ? { icon: Code2, accent: Braces, detail: Database, label: "Teknologi" } : major.id === "law" ? { icon: Scale, accent: ListChecks, detail: CircleHelp, label: "Ilmu sosial" } : { icon: Stethoscope, accent: HeartPulse, detail: HeartPulse, label: "Kesehatan" };
+  const MainIcon = art.icon, AccentIcon = art.accent, DetailIcon = art.detail;
+  const simulation = major.id === "computer-science";
+  const displayScore = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(score);
+  return <article className={`recommended-major recommendation-row tone-${major.color}`} aria-labelledby={`major-${major.id}`}>
+    <div className="recommendation-visual" aria-hidden="true"><span className="recommendation-rank">{index + 1}</span><span className="recommendation-orb" /><span className="recommendation-mini mini-top"><AccentIcon size={22} /></span><span className="recommendation-main-icon"><MainIcon size={48} strokeWidth={1.7} /></span><span className="recommendation-mini mini-bottom"><DetailIcon size={22} /></span></div>
+    <div className="recommendation-body">
+      <div className="recommendation-tags"><span>{art.label}</span><span>Keselarasan minat {displayScore}%</span></div>
+      <h3 id={`major-${major.id}`}>{metadata.name}</h3><p className="recommendation-description">{metadata.description}</p>
+      <div className="quiz-bar recommendation-score" role="meter" aria-label={`Keselarasan minat ${metadata.name}`} aria-valuenow={score} aria-valuetext={`${displayScore}% keselarasan minat`} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${score}%` }} /></div>
+      <div className="recommendation-reason"><p><strong>Kenapa direkomendasikan? </strong>{highest > 0 ? `Minat ${relevant.map(typeName).join(" dan ")} berkaitan dengan kegiatan yang bisa kamu eksplorasi di ${metadata.name}.` : "Jurusan ini bisa menjadi pembanding saat kamu mencari aktivitas yang menarik bagimu; minat terkait belum menonjol."}{supporting.length > 0 && ` Pilihan situasionalmu juga mendukung minat ${typeName(supporting[0])}.`}</p></div>
+      <div className="recommendation-actions">
+        {simulation && <Link href={metadata.href} className="button quiz-primary"><Play size={18} aria-hidden="true" />Coba Simulasi</Link>}
+        <Link href={`/?major=${encodeURIComponent(major.id)}#explore`} className="button quiz-secondary">Lihat Detail<ArrowRight size={18} aria-hidden="true" /></Link>
+        <span className="simulation-availability">{simulation ? "Simulasi tersedia untuk dicoba" : "Simulasi masih dalam pengembangan"}</span>
+      </div>
+    </div>
+  </article>;
 }
 export function QuizResults({ result, onRetake }: { result: QuizResult; onRetake: () => void }) {
-  return <main className="quiz-results"><section className="results-hero quiz-enter"><QuizIllustration complete /><span className="completion-badge"><Check size={16} />10 dari 10 pertanyaan selesai</span><h1>Yeay! Kita Berhasil Mengenal <span className="quiz-gradient-text">Minatmu!</span></h1><p>Berdasarkan jawabanmu, ini beberapa bidang dan jurusan yang mungkin cocok buat kamu eksplorasi lebih lanjut.</p></section><div className="results-content"><InterestProfile profile={result.profile} /><section aria-labelledby="recommendations-title" className="recommendations-section"><h2 id="recommendations-title">Jurusan yang Mungkin Cocok Buat Kamu</h2><p>Ini beberapa rekomendasi berdasarkan minatmu. Tapi ingat, kamu tetap bebas mencoba jurusan lainnya!</p><p className="quiz-fine-print">Persentase adalah perkiraan kesesuaian minat, bukan penilaian ilmiah. Nilai tiap bidang dirata-ratakan dari jawaban, lalu dicocokkan dengan bobot minat masing-masing jurusan. Saat ini katalog memuat tiga jurusan.</p><div className="recommendation-grid">{result.recommendations.map((item, index) => <RecommendedMajorCard key={item.major.id} recommendation={item} index={index} />)}</div></section><section className="quiz-explore-more"><Compass size={36} /><h2>Masih Penasaran dengan Jurusan Lain?</h2><p>Hasil kuis ini cuma panduan awal. Kamu tetap bisa menjelajahi semua jurusan dan mencoba simulasinya!</p><div><Link href="/#explore" className="button quiz-primary">Eksplor Semua Jurusan <ArrowRight size={17} /></Link><button className="button quiz-secondary" onClick={onRetake}>Ulangi Kuis</button></div></section></div></main>;
+  const allTied = result.dominant.length === dimensions.length;
+  return <main className="quiz-results"><section className="results-hero">
+    <h1>Kenali minatmu,<br />temukan arah eksplorasimu.</h1>
+    <p>Ini gambaran ketertarikanmu saat ini. Gunakan untuk mulai mengeksplorasi, bukan menetapkan satu pilihan yang pasti benar.</p>
+  </section><div className="results-content"><section className="interest-profile" aria-labelledby="profile-title">
+    <div className="profile-description"><h2 id="profile-title">Profil RIASEC</h2>
+      <p>{allTied ? "Keenam tipe memiliki nilai yang sama. Belum ada satu kecenderungan yang lebih menonjol." : `${result.dominant.length > 1 ? "Minat dominanmu memiliki nilai seri" : "Minat dominanmu"}: ${result.dominant.map(typeName).join("; ")}.`}</p>
+      {!allTied && result.dominant.map(id => <p key={id}>{descriptions[id]}</p>)}
+      <p className="quiz-fine-print">Grafik menunjukkan tingkat ketertarikan, bukan ukuran kemampuan. Minat bisa berkembang seiring pengalaman baru.</p>
+    </div><section className="interest-summary" aria-labelledby="summary-title"><h3 id="summary-title">Ringkasan Minatmu</h3><ProfileBars profile={result.profile} /></section>
+  </section><section className="recommendations-section" aria-labelledby="recommendations-title">
+    <h2 id="recommendations-title">Jurusan untuk dieksplorasi</h2>
+    <p>Berikut pilihan dari katalog kami yang bisa kamu kenali lebih jauh.</p>
+    <div className="recommendation-grid">{result.recommendations.map((item, index) => <RecommendedMajorCard key={item.major.id} recommendation={item} profile={result.profile} index={index} />)}</div>
+    {result.recommendations.length === 0 && <p>Rekomendasi belum tersedia. Kamu tetap bisa menjelajahi katalog secara mandiri.</p>}
+    <p className="quiz-fine-print">Persentase menunjukkan keselarasan minat, bukan peluang keberhasilan. Katalog saat ini memuat tiga jurusan dan belum mencakup semua bidang minat. Hasil belum tervalidasi secara psikometrik dan tidak menjamin kesuksesan. Pertimbangkan juga kurikulum, biaya, pengalaman langsung, dan diskusi dengan guru BK.</p>
+  </section><div className="quiz-actions result-actions"><Link href="/#explore" className="button quiz-primary">Eksplore Semua Jurusan<ArrowRight size={17} /></Link><button className="button quiz-secondary" onClick={onRetake}><Repeat2 size={18} aria-hidden="true" />Ulangi Kuis</button></div></div></main>;
 }

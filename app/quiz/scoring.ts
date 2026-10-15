@@ -1,44 +1,51 @@
-import { majors } from "../majors";
-import { dimensions, questions } from "./questions";
-import type { DimensionWeights, InterestProfile, QuizAnswers, QuizQuestion, QuizResult } from "./types";
-
-// Metadata extends the catalog; recommendations never introduce disconnected majors.
-export const majorProfiles: Record<string, { name: string; description: string; href: string; weights: DimensionWeights }> = {
-  "computer-science": { name: "Teknik Informatika", description: "Eksplorasi cara membuat program, mengolah data, dan menyelesaikan masalah dengan teknologi.", href: "/computer-science/software", weights: { technology: .4, analytical: .35, creative: .15, engineering: .1 } },
-  law: { name: "Hukum", description: "Eksplorasi aturan, argumen, dan persoalan masyarakat dari berbagai sudut pandang.", href: "/?major=law#explore", weights: { social: .45, analytical: .4, business: .15 } },
-  medicine: { name: "Kedokteran", description: "Eksplorasi kesehatan manusia, analisis kasus, dan cara membantu orang melalui ilmu kesehatan.", href: "/?major=medicine#explore", weights: { social: .45, analytical: .35, engineering: .2 } },
+import { majors, type Major } from "../majors";
+import { dimensions, questions, ESSAY_MAX_LENGTH } from "./questions";
+import type { InterestProfile, MajorMetadata, MajorRecommendation, QuizAnswers, QuizQuestion, QuizResult } from "./types";
+// Editorial hypotheses, not validated occupational profiles. Equal weight per listed type.
+export const majorProfiles: Record<string, MajorMetadata> = {
+  "computer-science": { name: "Teknik Informatika", description: "Mempelajari komputasi, pemrograman, dan pemecahan masalah melalui teknologi.", href: "/computer-science/software", riasec: ["I", "R", "C"], skills: ["Pemecahan masalah", "Pemrograman", "Pengelolaan data"] },
+  law: { name: "Hukum", description: "Mempelajari aturan, argumentasi, dan persoalan keadilan dalam masyarakat.", href: "/?major=law#explore", riasec: ["E", "S", "I"], skills: ["Argumentasi berbasis bukti", "Membaca kritis", "Komunikasi"] },
+  medicine: { name: "Kedokteran", description: "Mempelajari kesehatan manusia dan pelayanan pasien melalui ilmu kedokteran.", href: "/?major=medicine#explore", riasec: ["I", "S", "R"], skills: ["Penalaran ilmiah", "Empati", "Ketelitian"] },
 };
-export function isValidAnswer(question: QuizQuestion, answer: unknown): boolean {
-  return question.type === "rating" ? typeof answer === "number" && Number.isInteger(answer) && answer >= 1 && answer <= 5 : question.options.some(option => option.id === answer);
+export function isValidAnswer(q: QuizQuestion, answer: unknown): boolean {
+  if (q.type === "rating") return typeof answer === "number" && Number.isInteger(answer) && answer >= 1 && answer <= 5;
+  if (q.type === "essay") return typeof answer === "string" && answer.trim().length > 0 && answer.length <= ESSAY_MAX_LENGTH;
+  return typeof answer === "string" && q.options.some(o => o.id === answer);
 }
-export function isComplete(answers: QuizAnswers): boolean {
-  return questions.every(question => isValidAnswer(question, answers[question.id]));
+export function isComplete(answers: QuizAnswers): boolean { return questions.every(q => isValidAnswer(q, answers[q.id])); }
+const blankProfile = (): InterestProfile => ({ R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 });
+export function recommendMajors(profile: InterestProfile, situational: InterestProfile, catalog: Major[] = majors, metadata: Record<string, MajorMetadata> = majorProfiles): MajorRecommendation[] {
+  const recommendations: MajorRecommendation[] = [];
+  const seen = new Set<string>();
+  for (const major of catalog) {
+    if (seen.has(major.id)) continue;
+    seen.add(major.id);
+    const entry = metadata[major.id];
+    if (!entry || !entry.name || !entry.description || !entry.href?.startsWith("/") || entry.href.startsWith("//") || !Array.isArray(entry.riasec) || !Array.isArray(entry.skills) || !entry.skills.length) continue;
+    const types = dimensions.filter(({ id }) => entry.riasec.includes(id)).map(({ id }) => id);
+    if (!types.length) continue;
+    const score = types.reduce((sum, id) => sum + profile[id], 0) / types.length;
+    const reasons = [...types].sort((a, b) => profile[b] - profile[a] || a.localeCompare(b));
+    recommendations.push({ major, metadata: { ...entry, riasec: types }, score, reasons, supporting: reasons.filter(id => situational[id] > 0) });
+  }
+  return recommendations.sort((a, b) => b.score - a.score || a.major.id.localeCompare(b.major.id)).slice(0, 5);
 }
 export function calculateResults(answers: QuizAnswers): QuizResult {
-  if (!isComplete(answers)) throw new Error("Jawab semua pertanyaan dulu, ya.");
-  const profile = {} as InterestProfile;
-  for (const { id } of dimensions) {
-    let sum = 0, total = 0;
-    for (const question of questions) {
-      if (question.type === "rating") {
-        const weight = question.weights[id] ?? 0;
-        sum += ((Number(answers[question.id]) - 1) / 4) * 100 * weight;
-        total += weight;
-      } else {
-        const selected = question.options.find(option => option.id === answers[question.id])!;
-        sum += selected.weights[id] ?? 0;
-        total += 1;
-      }
-    }
-    profile[id] = Math.round(sum / total);
+  if (!isComplete(answers)) throw new Error("Lengkapi semua 30 jawaban sebelum melihat hasil.");
+  const profile = blankProfile(), situationalCounts = blankProfile(), situational = blankProfile();
+  for (const q of questions) {
+    const answer = answers[q.id];
+    if (q.type === "rating") profile[q.riasec] += Number(answer) - 1;
+    else if (q.type === "situational") situationalCounts[q.options.find(o => o.id === answer)!.riasec]++;
+
   }
-  const recommendations = majors.filter(major => majorProfiles[major.id]).map(major => {
-    const metadata = majorProfiles[major.id];
-    const relevant = dimensions.filter(({ id }) => (metadata.weights[id] ?? 0) > 0);
-    const total = relevant.reduce((sum, { id }) => sum + metadata.weights[id]!, 0);
-    const score = Math.round(relevant.reduce((sum, { id }) => sum + profile[id] * metadata.weights[id]!, 0) / total);
-    const reasons = relevant.sort((a, b) => profile[b.id] * metadata.weights[b.id]! - profile[a.id] * metadata.weights[a.id]!).slice(0, 2).map(({ id }) => id);
-    return { major, name: metadata.name, description: metadata.description, href: metadata.href, score, reasons };
-  }).sort((a, b) => b.score - a.score || a.major.id.localeCompare(b.major.id));
-  return { profile, recommendations: recommendations.slice(0, 5) };
+  for (const { id } of dimensions) {
+    profile[id] = profile[id] / (questions.filter(q => q.type === "rating" && q.riasec === id).length * 4) * 100;
+    situational[id] = situationalCounts[id] / questions.filter(q => q.type === "situational" && q.options.some(o => o.riasec === id)).length * 100;
+  }
+  const highest = Math.max(...Object.values(profile));
+  const dominant = dimensions.filter(({ id }) => profile[id] === highest).map(({ id }) => id);
+  // Reasoning answers are validated but not graded or used in matching:
+  // no defensible mapping to major metadata exists in this catalog.
+  return { profile, dominant, situational, situationalCounts, recommendations: recommendMajors(profile, situational) };
 }

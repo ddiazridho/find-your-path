@@ -1,15 +1,20 @@
 import type { Major } from "../majors";
-
-export type InterestDimension = "technology" | "analytical" | "creative" | "social" | "business" | "engineering";
-export type InterestProfile = Record<InterestDimension, number>;
-export type DimensionWeights = Partial<InterestProfile>;
+export type Riasec = "R" | "I" | "A" | "S" | "E" | "C";
+export type InterestProfile = Record<Riasec, number>;
+export type ReasoningDomain = "numeric" | "logic" | "verbal" | "spatial";
 export type QuizAnswer = number | string;
 export type QuizAnswers = Record<string, QuizAnswer>;
-export type QuizOption = { id: string; label: string; icon: InterestDimension; weights: DimensionWeights };
-export type QuizQuestion = { id: string; title: string; description: string } & (
-  { type: "rating"; weights: DimensionWeights } |
-  { type: "choice"; options: QuizOption[] }
+export type QuizQuestion = { id: string; title: string } & (
+  { type: "rating"; riasec: Riasec } |
+  { type: "situational"; options: { id: string; label: string; riasec: Riasec }[] } |
+  { type: "reasoning"; domain: ReasoningDomain; options: { id: string; label: string }[]; correct: string; explanation: string } |
+  { type: "essay" }
 );
-export type MajorRecommendation = { major: Major; name: string; description: string; href: string; score: number; reasons: InterestDimension[] };
-export type QuizResult = { profile: InterestProfile; recommendations: MajorRecommendation[] };
-export type QuizSession = { version: 1; phase: "intro" | "active" | "complete"; index: number; answers: QuizAnswers; result?: QuizResult };
+export type MajorMetadata = { name: string; description: string; href: string; riasec: Riasec[]; skills: string[] };
+export type MajorRecommendation = { major: Major; metadata: MajorMetadata; score: number; reasons: Riasec[]; supporting: Riasec[] };
+export type QuizResult = {
+  profile: InterestProfile; dominant: Riasec[];
+  situational: InterestProfile; situationalCounts: InterestProfile;
+  recommendations: MajorRecommendation[];
+};
+export type QuizSession = { version: 4; phase: "intro" | "active" | "complete"; index: number; answers: QuizAnswers; result?: QuizResult };

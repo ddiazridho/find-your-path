@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "errors": [],
+  "viewports": [
+    {
+      "width": 320,
+      "height": 740
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 1366,
+      "height": 900
+    }
+  ],
+  "flow": "intro -> 30 questions -> submit -> RIASEC and majors"
+}

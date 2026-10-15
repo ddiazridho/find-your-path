@@ -12,7 +12,10 @@ const serverSnapshot = () => null;
 function publish(next: Snapshot) { snapshot = next; listeners.forEach(listener => listener()); }
 export function updateSession(session: QuizSession) {
   const saved = saveSession(session);
-  publish({ session, warning: saved ? "" : "Jawabanmu tetap tersimpan selama sesi ini. Penyimpanan perangkat tidak tersedia; jangan muat ulang halaman dulu, ya." });
+  const clearing = session.phase === "intro" && Object.keys(session.answers).length === 0;
+  publish({ session, warning: saved ? "" : clearing
+    ? "Data di browser belum berhasil dihapus. Hapus data situs melalui pengaturan browser sebelum meninggalkan perangkat bersama."
+    : "Jawabanmu tetap tersimpan selama sesi ini. Penyimpanan perangkat tidak tersedia; jangan muat ulang halaman dulu, ya." });
 }
 export function useQuiz() {
   const value = useSyncExternalStore(subscribe, getSnapshot, serverSnapshot);
