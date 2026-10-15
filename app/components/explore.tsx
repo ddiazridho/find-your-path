@@ -66,7 +66,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="closing-section container"><span className="closing-symbol"><Icon name="compass" /></span><div><h2>You’re exploring, not committing.</h2><p>Follow your curiosity. Try something unexpected. Your path can change as you do.</p></div><a href="#explore" className="closing-link">Find your first spark<Icon name="arrow" /></a></section>
     </main>
     <footer className="site-footer container"><a href="#" className="footer-brand">find your path.</a><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
-    <dialog ref={dialog} className={`preview-dialog ${selected?.preview.kind === "fields" ? "law-preview-dialog" : selected?.preview.kind === "simulation" ? "simulation-preview-dialog" : ""}`} aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
+    <dialog ref={dialog} className={`preview-dialog ${selected ? "major-preview-dialog" : ""}`} aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
       <button className="dialog-close" aria-label="Close preview" onClick={closeDialog} autoFocus><Icon name="close" /></button>
       {selected ? <div className="dialog-content">
         <h2 id="dialog-title">{selected.name}</h2>
