@@ -32,8 +32,7 @@ fs.mkdirSync(output, { recursive: true });
   async function begin(track) {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(`${base}/computer-science/${track}`);
-    await page.locator('.lab-scene img').waitFor();
-    await page.locator('.lab-scene img').evaluate(async image => { if (!image.complete) await new Promise(resolve => image.addEventListener('load', resolve, { once: true })); });
+    await page.locator('.cs-room-art').waitFor();
     await screenshot(`${track}-classroom`);
     await page.getByRole('button', { name: 'Continue', exact: true }).click();
     await page.getByRole('button', { name: 'Continue', exact: true }).click();

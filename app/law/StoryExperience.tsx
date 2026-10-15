@@ -1,0 +1,102 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, MessageCircle, RotateCcw, Scale } from "lucide-react";
+import type { LawStory, StoryChoice } from "./stories";
+import { lawFields } from "./stories";
+import CinematicWorld from "./CinematicWorld";
+import "./law.css";
+
+function Character({ side, name }: { side: "left" | "right"; name: string }) {
+  return <div className={`law-character law-character--${side}`} aria-hidden="true">
+    <div className="law-character-shadow" />
+    <div className="law-character-body"><span className="law-character-head" /><span className="law-character-torso" /><span className="law-character-arm law-character-arm--left" /><span className="law-character-arm law-character-arm--right" /><span className="law-character-leg law-character-leg--left" /><span className="law-character-leg law-character-leg--right" /></div>
+    <span className="law-character-name">{name.split(" · ")[0]}</span>
+  </div>;
+}
+
+function Stage({ story, sceneId, choices, onChoose }: { story: LawStory; sceneId: string; choices?: StoryChoice[]; onChoose: (choice: StoryChoice) => void }) {
+  const scene = story.scenes[sceneId];
+  return <div className={`law-stage law-stage--${story.field} law-stage--visual-${scene.visual} ${story.field !== "civil" ? "law-stage--cinematic" : ""} ${scene.ending ? "law-stage--ending" : ""}`} role="group" aria-label={`Illustrated scene: ${scene.place}`}>
+    {story.field === "civil" ? <><div className="law-stage-light" />
+    <div className="law-stage-wall">
+      <span className="law-wall-panel law-wall-panel--left" /><span className="law-wall-panel law-wall-panel--right" />
+      <div className="law-stage-sign"><Scale size={21} strokeWidth={1.5} /><span>WILLOW COURT</span></div>
+      <div className="law-stage-window"><span /><span /><span /></div>
+      <div className="law-stage-clock"><span /></div>
+      <div className="law-setting-detail" aria-hidden="true"><span /><span /><span /><span /></div>
+    </div>
+    <div className="law-stage-floor"><span className="law-floor-line law-floor-line--one" /><span className="law-floor-line law-floor-line--two" /></div>
+    <div className="law-prop law-prop--left"><span className="law-prop-top" /><span className="law-prop-body" /></div>
+    <div className="law-prop law-prop--right"><span className="law-prop-top" /><span className="law-prop-body" /></div>
+    <div className="law-stage-object"><span className="law-object-paper law-object-paper--one" /><span className="law-object-paper law-object-paper--two" /></div>
+    <Character side="left" name={story.cast[0]} /><Character side="right" name={story.cast[1]} />
+    {scene.artifact && <div className="law-scene-artifact law-scene-artifact--civil"><span>{scene.artifact.label}</span><strong>{scene.artifact.text}</strong></div>}
+    </> : <CinematicWorld field={story.field} scene={scene} />}
+    <div className="law-stage-place"><span className="law-live-dot" />{scene.place}</div>
+    {choices && <div className="law-choice-orbit" aria-label="Choose what happens next">
+      {choices.map((choice, index) => <button key={choice.next} className={`law-choice-bubble law-choice-bubble--${index === 0 ? "left" : "right"}`} onClick={() => onChoose(choice)}>
+        <span className="law-choice-number">YOUR MOVE</span>
+        <strong>{choice.label}</strong>
+        <small>{choice.hint}</small>
+        <ArrowRight size={17} aria-hidden="true" />
+      </button>)}
+    </div>}
+  </div>;
+}
+
+export default function StoryExperience({ story }: { story: LawStory }) {
+  const [history, setHistory] = useState<string[]>(["start"]);
+  const sceneId = history[history.length - 1];
+  const scene = story.scenes[sceneId];
+  const decisions = history.slice(0, -1).flatMap((id, index) => {
+    const previous = story.scenes[id];
+    const choice = previous.choices?.find(item => item.next === history[index + 1]);
+    return choice ? [choice.label] : [];
+  });
+  const enter = (next: string) => setHistory(previous => [...previous, next]);
+  const nextScene = scene.next;
+  const otherFields = lawFields.filter(item => item.field !== story.field);
+
+  return <div className={`law-page law-page--${story.field}`}>
+    <header className="law-header">
+      <Link href="/" className="law-back"><ArrowLeft size={17} /> Explore majors</Link>
+      <span className="law-brand"><Scale size={18} /> FIND YOUR PATH <span>/</span> LAW</span>
+      <span className="law-header-note">An interactive casebook</span>
+    </header>
+
+    <main className="law-main">
+      <div className="law-intro">
+        <div><h1>{story.title}<span className="law-title-period">.</span></h1><p className="law-subtitle">{story.subtitle}</p><p className="law-scope">{story.scope}</p></div>
+        <p className="law-premise">{story.premise}</p>
+      </div>
+
+      <section className="law-experience" aria-labelledby="scene-heading">
+        <div className="law-experience-top"><span>THE CASE · {scene.chapter.toUpperCase()}</span><span>{scene.ending ? "CASE CLOSED" : "YOUR DECISIONS SHAPE THE STORY"}</span></div>
+        <Stage key={`${story.field}-${sceneId}`} story={story} sceneId={sceneId} choices={scene.choices} onChoose={choice => enter(choice.next)} />
+        <div className="law-story-panel" key={sceneId} aria-live="polite">
+          <div className="law-story-main">
+            <div className="law-scene-heading"><span className="law-scene-marker"><MessageCircle size={17} /></span><div><span className="law-scene-label">{scene.speaker} says</span><h2 id="scene-heading">“{scene.dialogue}”</h2></div></div>
+            <p className="law-narration">{scene.narration}</p>
+          </div>
+          <div className="law-story-actions">
+            {nextScene && <button className="law-continue" onClick={() => enter(nextScene)}>Continue story <ArrowRight size={18} /></button>}
+            {scene.choices && <p className="law-action-hint">Choose a bubble in the scene to decide what happens next.</p>}
+            {scene.ending && <button className="law-continue" onClick={() => setHistory(["start"])}><RotateCcw size={17} /> Replay this case</button>}
+            {history.length > 1 && <button className="law-step-back" onClick={() => setHistory(previous => previous.slice(0, -1))}><ArrowLeft size={15} /> Previous scene</button>}
+          </div>
+        </div>
+      </section>
+
+      <div className="law-progress" aria-label="Your decisions"><span>YOUR PATH</span><div>{decisions.length ? decisions.map((decision, index) => <span key={`${decision}-${index}`}>{decision}</span>) : <em>Your decisions will appear here.</em>}</div></div>
+      {scene.ending && <section className="law-verdict" aria-label="Ending summary" key={`${sceneId}-ending`}>
+        <div className="law-verdict-heading"><span>YOUR OUTCOME</span><h2>{scene.ending.title}</h2><p>{scene.ending.outcome}</p></div>
+        <div className="law-verdict-concepts"><h3>What this case reveals</h3><ul>{scene.ending.concepts.map(concept => <li key={concept}>{concept}</li>)}</ul></div>
+      </section>}
+
+      <nav className="law-other-fields" aria-label="Explore other law fields"><h2>Another side of the law</h2><div>{otherFields.map(item => <Link key={item.href} href={item.href}><span>{item.title}</span><ArrowRight size={17} /></Link>)}</div></nav>
+      <p className="law-disclaimer">A fictional story set in Meridian. Legal ideas are simplified for exploration, not legal advice.</p>
+    </main>
+  </div>;
+}

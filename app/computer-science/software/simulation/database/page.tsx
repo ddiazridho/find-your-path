@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import DatabaseSimulation from "../../../../components/software-room/DatabaseSimulation";
+import DatabaseSimulation from "../../components/DatabaseSimulation";
 
 export const metadata: Metadata = {
   title: "Database & SQL Query Simulation — Computer Science (Software Track)",

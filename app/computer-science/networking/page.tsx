@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LearningLab from "../../components/learning-lab/LearningLab";
+import LearningLab from "../components/LearningLab";
 
 export const metadata: Metadata = {
   title: "Networking Classroom — Find Your Path",

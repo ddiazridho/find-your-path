@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LogicFlowSimulation from "../../../../components/software-room/LogicFlowSimulation";
+import LogicFlowSimulation from "../../components/LogicFlowSimulation";
 
 export const metadata: Metadata = {
   title: "Logic & Flowchart Simulation — Computer Science (Software Track)",

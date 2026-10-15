@@ -343,3 +343,18 @@ h2 { font-size: 28px; font-weight: 800; line-height: 1.3; letter-spacing: -.035e
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+.law-card-preview { position: relative; height: 100%; overflow: hidden; color: #684c3d; }
+.law-card-arch { position: absolute; left: 11%; right: 11%; top: 11%; height: 145px; display: flex; justify-content: space-around; border-top: 14px solid #9f745b; border-bottom: 12px solid #9f745b; background: #ebd6bc; box-shadow: 7px 10px 0 rgb(106 78 62 / 11%); }
+.law-card-arch span { width: 15%; height: 100%; background: #b78b6b; border-inline: 4px solid #9f745b; }
+.law-card-caption { position: absolute; top: 34%; left: 18%; right: 18%; padding: 11px; background: #fff8ed; box-shadow: 0 8px 16px rgb(80 52 39 / 14%); font-size: 13px; font-weight: 800; letter-spacing: .04em; line-height: 1.35; transform: rotate(-3deg); }
+.law-card-caption em { font-style: normal; color: #ab6044; }
+.law-card-figures { position: absolute; bottom: -6px; right: 15%; display: flex; align-items: end; gap: 14px; }
+.law-card-figures span { position: relative; display: block; width: 19px; height: 45px; border-radius: 8px 8px 2px 2px; background: #435b5a; box-shadow: 5px 4px 0 rgb(87 65 49 / 12%); }
+.law-card-figures span::before { content: ''; position: absolute; width: 15px; height: 15px; top: -12px; left: 2px; border-radius: 50%; background: #bd8668; }
+.law-card-figures span:last-child { height: 37px; background: #a95d45; }
+.law-field-picker { margin-top: 19px; border-top: 1px solid var(--color-line); padding-top: 16px; }
+.law-preview-dialog { overflow-y: auto; }
+.law-field-picker-intro { color: var(--color-muted); font-size: 12px; line-height: 1.6; margin-bottom: 12px; }
+.law-field-link { display: flex; justify-content: space-between; align-items: center; gap: 13px; padding: 12px 13px; margin-top: 7px; border: 1px solid #e0e5dc; border-radius: 8px; background: #fbfcf8; transition: background .2s, border-color .2s; }
+.law-field-link:hover { background: #f2f5ed; border-color: #9eb19c; }
+.law-field-link span { min-width: 0; }.law-field-link strong, .law-field-link small { display: block; }.law-field-link strong { font-size: 12px; }.law-field-link small { margin-top: 3px; color: var(--color-muted); font-size: 10px; line-height: 1.4; }.law-field-link .icon { width: 17px; height: 17px; flex: none; color: var(--color-primary); }

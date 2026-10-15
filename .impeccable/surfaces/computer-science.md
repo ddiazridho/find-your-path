@@ -1,29 +1,31 @@
-# Computer Science simulations
+﻿# Computer Science simulations
 
-Audience: students exploring four Computer Science fields. Mode: Operate. All visible copy is English. User-pinned references: `app/computer-science/simulation-style-reference.jpeg` for scene style and `networking-simulation-reference.png` for networking workspace organization.
+Audience: students exploring four Computer Science fields. Mode: Operate. The current user brief pins Medicine as the visual and interaction reference and Law as an architectural reference, superseding the earlier classroom/sidebar composition.
 
 ## Direction contract
 
-THESIS: enter a believable classroom, hear the day's brief, then learn by making something in a real interactive workspace.
+THESIS: meet a real instructor in an illustrated lab, then learn by making; the room, narration, dialogue, and controls belong to one simulation frame.
 
-OWN-WORLD: inherit Manrope, studio green, warm paper, pastel fills, soft corners and fine borders. High-angle, warmly lit classroom and laboratory illustrations follow the supplied scene reference. Dark code and topology areas distinguish technical work from the light teaching guide.
+OWN-WORLD: inherit Medicine's sage rooms, teal frame bars, dark readable dialogue, cream controls, and flat illustrated characters. Retain Manrope and Geist Mono for code. Authored SVG keeps the cast lightweight and adaptable.
 
-STORY: a lecturer or lab assistant introduces one small project. Students perform each step, review their work, and unlock the next. Earlier instructions remain accessible. Completion reflects validated work.
+STORY: each instructor presents the existing three-part project brief. The student enters a workbench, reviews real work, and unlocks each next step. Feedback changes the instructor's expression; editing still invalidates review and completion.
 
-FIRST VIEWPORT: a compact track header above a large classroom scene, with a readable dialogue panel alongside and one start action. The workspace places the guide left, the main editor or workbench center, and preview or status right; small screens stack these areas without hiding controls.
+FIRST VIEWPORT: a compact track header and project title above one wide frame. The room and instructor occupy its upper region; narration, full dialogue, and Continue share its lower region. Mobile stacks content inside the same border.
 
-FORM: user-specified classrooms and three-panel tools; code-led extension of the established system. No concept seed applies to this pinned layout. Signature interaction: visibly transform the student's actions into a website, illuminated LED, traveling network packet, or promotion poster.
+FORM: code-led adaptation of the user-pinned Medicine frame; no concept seed applies. During exercises, tools precede an instructor guide and review controls within the frame. The signature interaction remains the working website, lit LED, successful packet, or downloadable poster.
 
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.
 
-## Shipped implementation
+## Architecture
 
-The four routes `/computer-science/software`, `/computer-science/embedded-system`, `/computer-science/networking`, and `/computer-science/multimedia` share `app/components/learning-lab`. English instructor dialogue leads into guided, reviewed steps. Software combines an HTML/CSS editor with a sandboxed live preview; Embedded System models component placement, terminal wiring, and a hold-to-light LED button; Networking models device links, IP configuration, ping errors, and animated packets; Multimedia supports drag/drop or button placement, keyboard positioning, image adjustment sliders, and poster download. Completion is validated locally; changing reviewed work invalidates completion. Legacy Software subroutes remain present. No backend, real network traffic, or AI insights are supplied.
+Department-owned shared frame, scene, instructor, and guide live in app/computer-science/components. Lessons, field metadata, and workspaces are colocated per field; computer-science.css owns scoped styles. Legacy Software exercises live in software/components with audio utilities in software/lib. Existing routes remain intact. Medicine and Law are not modified.
 
-The extension preserves the incumbent Manrope/Geist Mono pairing, studio-green actions, warm paper, fine borders, and softly rounded panels. Larger lesson copy, a three-column desktop workbench, stacked small-screen controls, and dark technical work areas serve this surface rather than redefining the global design system. Visible focus, labeled controls, live feedback, alternative placement controls, and reduced-motion handling are implemented.
+## Validation
 
-Verification reported by the implementation pass: production build, TypeScript, target ESLint, and `scripts/test-learning-labs.cjs` passed. Browser coverage includes all four complete lessons, keyboard operation, review invalidation, downloads, LED errors, and ping errors. Twelve desktop/mobile captures are retained in `.impeccable/review/computer-science`.
+Production build and TypeScript checks pass. ESLint passes for the redesigned sources and browser scripts; department-wide lint retains the pre-existing `react-hooks/set-state-in-effect` finding in unchanged legacy `software/components/CodingSimulation.tsx:216`.
 
-Shipping scene assets are `public/simulations/scenes/classroom.png` and `electronics-lab.png`. Both contain embedded generation prompts; the provenance scan found two rasters and zero missing prompts. Exact prompt text is also retained under `.impeccable/assets/`.
+Both `scripts/test-learning-labs.cjs` and `scripts/test-cs-frame.cjs` pass. Checks cover all four projects, review gates and completion invalidation, dialogue keyboard navigation, focus, restart/cancel, instructor expressions, reduced motion, frame containment and overflow at 1440/390/320px, and legacy/Medicine/Law route smoke checks. Production captures in `.impeccable/review/computer-science` record 1440/390px introductions and desktop/mobile active workspaces. Finish reviewers recommend shipping with no material blockers; long mobile workspaces are optional layout polish.
 
-Existing documentation drift: root `DESIGN.md` still describes tasks globally as decorative previews and records exploration-specific sizes and patterns. Its palette and reusable visual rules remain incumbent authority. This ordinary extension preserves `DESIGN.md` and `.impeccable/design.json`; their stale product claims are reported rather than promoted into new rules or repaired here.
+Content comparison confirms four lessons unchanged except added setting metadata, five legacy files unchanged except relative imports, and no Medicine/Law modifications. The extension inherits Medicine's frame language and the existing field-owned department structure. All new illustration is code-native SVG; no new raster assets or dependencies were added.
+
+Root `DESIGN.md`, `.impeccable/design.json`, and `PRODUCT.md` remain unchanged. Pre-existing drift remains: the root design documentation primarily describes homepage primitives and decorative previews rather than every working department simulation. This task records its surface-specific extension here without replacing the global design system. See `app/computer-science/README.md` for responsibilities, preserved routes, and reproducible checks.
