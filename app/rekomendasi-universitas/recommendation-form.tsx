@@ -106,7 +106,7 @@ export default function RecommendationForm() {
         <aside className="recommend-side">
           <h2 id="form-title">Beri kami sedikit gambaran.</h2>
           <p>Jawabanmu membantu menyaring program universitas dan menentukan hal apa yang perlu dipertimbangkan lebih dulu.</p>
-          <div className="recommend-side-note"><Sparkles size={18} /><div><strong>Tidak perlu yakin 100%.</strong><span>Tulis apa yang kamu tahu sekarang. Kamu bisa mengubah pilihanmu kapan saja.</span></div></div>
+          <div className="recommend-side-note"><div><strong>Tidak perlu yakin 100%.</strong><span>Tulis apa yang kamu tahu sekarang. Kamu bisa mengubah pilihanmu kapan saja.</span></div></div>
         </aside>
 
         <form className="recommend-form" aria-label="Pertimbangan rekomendasi universitas" onSubmit={submit}>
