@@ -14,7 +14,7 @@ export default function MajorPreviewDialog({ dialog, selected, closeDialog }: {
       <button className="dialog-close" aria-label="Close preview" onClick={closeDialog} autoFocus><Icon name="close" /></button>
       {selected ? <div className="dialog-content">
         <h2 id="dialog-title">{selected.name}</h2>
-        <span className="major-category">{selected.category} · {selected.minutes} minute preview</span>
+        <span className="major-category">{selected.category}{selected.preview.kind !== "coming-soon" && <> · {selected.minutes} minute preview</>}</span>
         <p>{selected.description}</p>
         <SkillList skills={selected.skills} />
         <MajorPreview key={selected.id} preview={selected.preview} onNavigate={closeDialog} />

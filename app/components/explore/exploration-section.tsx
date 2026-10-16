@@ -14,9 +14,17 @@ export default function ExplorationSection({ filtered, query, setQuery, category
 }) {
   return (
     <section className="exploration-section" id="explore" aria-labelledby="explore-title"><div className="container">
-        <div className="section-heading"><div><h2 id="explore-title">Big possibilities. Small first steps.</h2><p>Pick a major. Step into its world. See how it feels.</p></div><SearchField query={query} onQueryChange={setQuery} /></div>
+        <div className="section-heading">
+          <div>
+            <h2 id="explore-title">Big possibilities. Small first steps.</h2>
+            <p>Pick a major. Step into its world. See how it feels.</p>
+          </div>
+          <SearchField query={query} onQueryChange={setQuery} />
+        </div>
         <CategoryFilters category={category} onCategoryChange={setCategory} count={filtered.length} />
-        <div className="major-grid">{filtered.map(major => <MajorCard key={major.id} major={major} onSelect={openMajor} />)}</div>
+        <div className="major-grid">
+          {filtered.map(major => <MajorCard key={major.id} major={major} onSelect={openMajor} />)}
+        </div>
         {filtered.length === 0 && <EmptyState onReset={() => { setQuery(""); setCategory("All majors"); }} />}
         <p className="preview-note">Try guided simulations in Computer Science, Law, and Medicine. Personal insights are coming next.</p>
       </div></section>

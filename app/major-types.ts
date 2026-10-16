@@ -30,5 +30,6 @@ export type FieldLink = {
 };
 
 export type MajorPreview =
+  | { kind: "coming-soon"; message: string }
   | { kind: "simulation"; simulations: Simulation[] }
   | { kind: "fields"; label: string; intro: string; fields: readonly FieldLink[] };

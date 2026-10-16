@@ -5,6 +5,9 @@ import type { MajorPreview as Preview } from "../major-types";
 import Icon from "./ui-icon";
 
 export default function MajorPreview({ preview, onNavigate }: { preview: Preview; onNavigate: () => void }) {
+  if (preview.kind === "coming-soon") {
+    return <p className="preview-note" role="status">{preview.message}</p>;
+  }
   const fields = preview.kind === "fields"
     ? preview.fields.map(field => ({ href: field.href, name: `${field.title}${field.subtitle ? `: ${field.subtitle}` : ""}` }))
     : preview.simulations.map(simulation => ({ href: simulation.href, name: simulation.name }));
