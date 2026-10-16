@@ -31,7 +31,6 @@ export default function Explore({ majors }: { majors: Major[] }) {
   }
   return <>
     <main>
-      <div className="hero-divider" aria-hidden="true" />
       <Hero />
       <div className="section-divider section-divider-sky" aria-hidden="true" />
       <ExplorationSection filtered={filtered} query={query} setQuery={setQuery} category={category} setCategory={setCategory} openMajor={openMajor} />

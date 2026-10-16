@@ -1,0 +1,16 @@
+.page-content {
+  background: var(--color-sky);
+}
+
+:root .page-content .legacy-simulation > section[aria-label="Simulation tools"] {
+  background: var(--color-sky);
+  border-bottom: 0;
+}
+
+.recommend-intro-divider {
+  background: var(--color-section);
+}
+
+.recommend-intro-divider::before {
+  background: var(--color-sky);
+}

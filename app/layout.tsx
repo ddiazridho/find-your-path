@@ -4,6 +4,7 @@ import Navbar from "./components/explore/navbar";
 import Footer from "./components/explore/footer";
 import "./globals.css";
 import "./simulation-theme.css";
+import "./page-theme.css";
 
 const geistSans = Manrope({
   variable: "--font-sans",
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body><Navbar />{children}<Footer /></body>
+      <body><Navbar /><div className="page-content"><div className="hero-divider" aria-hidden="true" />{children}</div><Footer /></body>
     </html>
   );
 }

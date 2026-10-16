@@ -1,14 +1,23 @@
 .fyp-footer {
+  --footer-divider-color: var(--color-sky);
   background: var(--color-section);
 }
 
-.fyp-footer-university,
-.fyp-footer-university-divider {
+.fyp-footer-home {
+  --footer-divider-color: var(--color-paper);
+}
+
+.fyp-footer-university {
+  --footer-divider-color: var(--color-section);
   background: var(--color-paper);
 }
 
-.fyp-footer-university-divider::before {
-  background: var(--color-section);
+.fyp-footer-divider {
+  background: inherit;
+}
+
+.fyp-footer-divider::before {
+  background: var(--footer-divider-color);
 }
 
 .fyp-footer .site-footer {
