@@ -34,7 +34,7 @@ Empat esai memakai pertanyaan asli. Jawaban opsional, maksimal 2.000 karakter. E
 
 ## UI hasil
 
-Pengantar mengikuti referensi teleskop/heading/badges/CTA sambil mempertahankan tema default. Badge menampilkan 30 soal dan tanpa batas waktu. Petunjuk dan privasi tersedia dalam disclosure native, dengan batas validasi instrumen tetap terlihat.
+Pengantar mengikuti referensi teleskop/heading/badges/CTA sambil mempertahankan tema default. Badge menampilkan 30 soal dan tanpa batas waktu. Petunjuk dan privasi tersedia dalam disclosure native.
 
 Hasil menampilkan enam bar minat, dua kartu alasan AI berdampingan pada layar lebar (bertumpuk di ponsel), serta kartu rekomendasi jurusan yang ringkas. Kartu alasan pertama menjelaskan minat dominan berdasarkan rating; kartu kedua menjelaskan keselarasan esai dan status sejalan/sebagian/berbeda/bukti belum cukup. Ada keterangan statis bahwa esai yang diisi diproses AI dan jawaban yang kurang relevan diabaikan. Saat API gagal, profil tetap tampil; alasan dan rekomendasi menyediakan tombol coba lagi. Skor ditampilkan sebagai persentase minat, bukan peluang sukses. Tidak ada skor penalaran, benar/salah, diagram situasional, atau formula teknis pada UI.
 
@@ -59,6 +59,6 @@ Build pertama dapat membutuhkan Google Fonts sesuai konfigurasi font yang sudah 
 
 ## Ringkasan skor visual
 
-Bar keenam tipe berada pada panel “Ringkasan Minatmu” dua kolom pada desktop/tablet, satu kolom pada ponsel. Skor minat ditampilkan sebagai persentase dengan maksimum satu desimal; rumus dan nilai internal tidak berubah. Persentase bukan peluang sukses dan tidak harus berjumlah 100 antar tipe.
+Bar keenam tipe berada pada panel “Ringkasan Hasil RIASEC” dua kolom pada desktop/tablet, satu kolom pada ponsel. Skor minat ditampilkan sebagai persentase dengan maksimum satu desimal; rumus dan nilai internal tidak berubah. Persentase bukan peluang sukses dan tidak harus berjumlah 100 antar tipe.
 
 Enam bar memiliki warna lokal yang berbeda serta label/nilai eksplisit, sehingga informasi tidak hanya dibedakan lewat warna. CSS `interest-fill-in` mengisi bar dari nol menggunakan transform scaleX selama 1.100ms dengan jeda berurutan 70ms setiap tipe ketika panel dimuat. ARIA meter tetap menyebutkan target akhir. `prefers-reduced-motion` menonaktifkan animasi dan langsung menampilkan nilai penuh. Tidak ada state atau perhitungan skor tambahan untuk animasi.

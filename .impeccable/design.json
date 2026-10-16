@@ -301,7 +301,7 @@
       "kind": "button",
       "refersTo": "button-primary",
       "description": "Main exploration action, with deep green hover and visible keyboard focus.",
-      "html": "<button class=\"ds-primary\">Explore the possibilities<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "html": "<button class=\"ds-primary\">Know your path<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
       "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:20px;min-height:48px;padding:14px 21px;border:1px solid transparent;border-radius:var(--radius-sm);font:700 12px var(--font-sans),sans-serif;cursor:pointer;transition:background .2s,box-shadow .2s;background:var(--color-primary);color:var(--color-surface)}.ds-primary:hover{background:var(--color-primary-hover);box-shadow:0 5px 12px rgb(32 59 49 / 12%)}.ds-primary:disabled{opacity:.55;cursor:not-allowed}.ds-primary:focus-visible,.ds-text:focus-visible{outline:3px solid #428764;outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
     },
     {

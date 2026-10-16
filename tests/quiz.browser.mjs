@@ -152,7 +152,7 @@ try {
   await checkSurface('dominant profile');
   await page.screenshot({ path: '.impeccable/review/dominant-mobile-results.png', fullPage: true });
   await page.setViewportSize({ width: 1366, height: 900 });
-  await page.goto(base); await page.getByRole('link', { name: 'Explore the possibilities' }).waitFor();
+  await page.goto(base); await page.getByRole('link', { name: 'Know your path' }).waitFor();
   await page.goto(`${base}/computer-science/software`); await page.getByText('Software Track Interactive Room', { exact: true }).waitFor();
   const unavailable = await browser.newContext();
   await unavailable.addInitScript(() => { Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('Storage disabled', 'SecurityError'); } }); });

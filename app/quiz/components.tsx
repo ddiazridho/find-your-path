@@ -9,22 +9,19 @@ import type { AiMajorRecommendation, EssayAnalysis, InterestProfile, QuizAnswer,
 export function QuizHeader() {
   return <header className="site-header"><div className="container header-inner">
     <Link href="/" className="brand" aria-label="Find Your Path, beranda"><span className="brand-symbol"><Icon name="compass" /></span><span>find your path<span className="brand-period">.</span></span></Link>
-    <nav aria-label="Navigasi utama"><Link href="/#explore">Jelajahi Jurusan</Link></nav>
-    <span className="header-note">Mulai dari rasa penasaran<Icon name="spark" /></span>
   </div></header>;
 }
 export function QuizIllustration() {
   return <div className="assessment-illustration" aria-hidden="true"><div className="assessment-telescope"><Telescope size={88} strokeWidth={1.8} /></div><Sparkles className="assessment-spark" size={38} strokeWidth={1.8} /><CircleHelp className="assessment-help" size={36} strokeWidth={1.8} /></div>;
 }
 export function QuizIntroduction({ onStart, resume, onClear }: { onStart: () => void; resume: boolean; onClear: () => void }) {
-  return <main className="quiz-intro assessment-welcome"><QuizIllustration /><h1>Yuk, Kenalan Sama <span>Minatmu!</span></h1>
+  return <main className="quiz-intro assessment-welcome"><Link className="assessment-back" href="/"><ArrowLeft size={16} aria-hidden="true" /> Kembali ke beranda</Link><QuizIllustration /><h1>Yuk, Kenalan Sama <span>Minatmu!</span></h1>
     <p className="assessment-lead">Temukan aktivitas yang menarik buatmu lewat pertanyaan minat, pilihan kegiatan, penalaran, dan refleksi singkat.</p>
     <div className="assessment-badges"><span><Clock3 size={20} aria-hidden="true" />Tanpa batas waktu</span><span><CircleHelp size={20} aria-hidden="true" />{questions.length} pertanyaan</span></div>
     <button className="button quiz-primary" onClick={onStart}>{resume ? "Lanjutkan Asesmen" : "Mulai Asesmen"}<ArrowRight size={19} /></button>
     <Link className="quiz-subtle-link" href="/#explore">Lihat jurusan dulu</Link>
     {resume && <><p className="quiz-resume">Progres terakhir tersimpan di perangkat ini.</p><button className="quiz-subtle-link" onClick={onClear}>Hapus jawaban dan mulai baru</button></>}
-    <details className="assessment-instructions"><summary><ListChecks size={17} aria-hidden="true" />Petunjuk dan privasi jawaban</summary><div><p>12 soal minat, 6 situasional, 8 penalaran, dan 4 esai refleksi. Kerjakan sendiri; pada bagian penalaran, pilih jawaban yang benar. Esai boleh dikosongkan. Setelah selesai, tekan Submit Asesmen untuk membuka hasil.</p><p>Jawaban tersimpan di browser ini. Saat hasil dibuka, jawaban dikirim ke server untuk menghitung ulang profil; profil minat, jawaban rating, dan esai yang diisi dikirim ke OpenAI untuk penjelasan hasil dan rekomendasi jurusan. Hindari informasi pribadi sensitif. Pengguna lain pada browser yang sama dapat mengakses jawaban dan ringkasan. Kamu bisa menghapusnya dengan mengulang kuis.</p></div></details>
-    <p className="quiz-fine-print assessment-disclaimer">Belum tervalidasi secara psikometrik. Hasil adalah panduan eksplorasi, bukan penentu jurusan atau jaminan kesuksesan.</p>
+    <details className="assessment-instructions"><summary><ListChecks size={17} aria-hidden="true" />Petunjuk dan privasi jawaban</summary><div><p>Ada 30 soal: 12 tentang minat, 6 pilihan situasi, 8 penalaran, dan 4 refleksi singkat. Jawab sesuai dirimu; soal refleksi boleh dilewati. Kamu bisa kembali dan mengubah jawaban sebelum mengirim asesmen.</p><p>Jawaban tersimpan di perangkat ini dan digunakan untuk menyusun hasil serta rekomendasi. Hindari menulis informasi pribadi sensitif. Jika memakai perangkat bersama, hapus jawaban melalui pilihan mulai ulang.</p></div></details>
   </main>;
 }
 export function QuizProgress({ index, answered, onBack, onClose }: { index: number; answered: number; onBack: () => void; onClose: () => void }) {
@@ -69,13 +66,14 @@ function RecommendedMajorCard({ recommendation, rank }: { recommendation: AiMajo
 }
 export function QuizResults({ result, analysis, analysisLoading, analysisError, onRetry, onRetake }: { result: QuizResult; analysis?: EssayAnalysis; analysisLoading: boolean; analysisError: boolean; onRetry: () => void; onRetake: () => void }) {
   const allTied = result.dominant.length === dimensions.length;
+  const dominantLabel = result.dominant.map(id => dimensions.find(dimension => dimension.id === id)?.label.split(" · ")[0] ?? id).join(" & ");
   return <main className="quiz-results"><section className="results-hero">
     <h1>Kenali minatmu,<br />temukan arah eksplorasimu.</h1>
     <p>Ini gambaran ketertarikanmu saat ini. Gunakan untuk mulai mengeksplorasi, bukan menetapkan satu pilihan yang pasti benar.</p>
   </section><div className="results-content"><section className="interest-profile" aria-label="Profil RIASEC">
-    <section className="interest-summary" aria-labelledby="summary-title"><h3 id="summary-title">Ringkasan Minatmu</h3><ProfileBars profile={result.profile} /></section>
+    <section className="interest-summary" aria-labelledby="summary-title"><h3 id="summary-title">Ringkasan Hasil RIASEC</h3><ProfileBars profile={result.profile} /></section>
     <div className="insight-grid" aria-live="polite">
-      <article className="insight-card insight-dominant" aria-labelledby="dominant-insight-title"><h3 id="dominant-insight-title">{allTied ? "Membaca pola minatmu" : "Mengapa minat ini menonjol?"}</h3>
+      <article className="insight-card insight-dominant" aria-labelledby="dominant-insight-title"><h3 id="dominant-insight-title">{allTied ? "Semua tipe RIASEC seimbang" : dominantLabel}</h3>
         {analysis ? <p>{analysis.dominantReasoning}</p> : analysisLoading ? <p role="status">AI sedang membaca pola jawaban minatmu…</p> : analysisError ? <p>Penjelasan AI belum berhasil dibuat. Skor RIASEC di atas tetap tersedia.</p> : null}
       </article>
       <article className="insight-card insight-essay" aria-labelledby="essay-analysis-title"><h3 id="essay-analysis-title">Refleksi esaimu</h3>

@@ -33,14 +33,12 @@ export default function Explore({ majors }: { majors: Major[] }) {
   return <>
     <header className="site-header"><div className="container header-inner">
       <a href="#" className="brand" aria-label="Find Your Path home"><span className="brand-symbol"><Icon name="compass" /></span><span>find your path<span className="brand-period">.</span></span></a>
-      <nav aria-label="Main navigation"><a href="#" className="nav-active" aria-current="page">Find Your Path</a></nav>
-      <span className="header-note">A little curiosity goes a long way<Icon name="spark" /></span>
     </div></header>
     <main>
       <section className="hero container" aria-labelledby="hero-title">
         <div className="hero-copy"><h1 id="hero-title">Your future.<br />Yours to <span className="explore-word">explore<svg viewBox="0 0 310 16" fill="none" aria-hidden="true"><path d="M3 12C83 1 199 1 306 9" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg></span>.</h1>
           <p>You don’t have to have it all figured out.<br className="desktop-break" /> Try real-world challenges, discover what clicks,<br className="desktop-break" /> and find a major that feels like you.</p>
-          <div className="hero-actions"><Link className="button button-primary" href="/quiz">Explore the possibilities<Icon name="arrow" /></Link><Link className="button button-text" href="/rekomendasi-universitas">Find University<Icon name="arrow" /></Link></div>
+          <div className="hero-actions"><Link className="button button-primary" href="/quiz">Know your path<Icon name="arrow" /></Link><Link className="button button-text" href="/rekomendasi-universitas">Find University<Icon name="arrow" /></Link></div>
           <div className="hero-reassurance"><span><Icon name="check" />No right or wrong answers</span><span><Icon name="check" />Go at your own pace</span></div>
         </div>
         <div className="possibility-board" aria-label="Explore by doing: build, create, and understand">
@@ -48,7 +46,6 @@ export default function Explore({ majors }: { majors: Major[] }) {
           <div className="board-card board-build"><div className="board-code"><span>&lt;curiosity&gt;</span><br />&nbsp; build something<br />&nbsp; that matters.<br /><span>&lt;/curiosity&gt;</span></div><div className="board-card-bottom">Think it. Build it.<Icon name="arrow" /></div></div>
           <div className="board-card board-create"><div className="board-big-type">What<br /><em>if?</em><Icon name="spark" /></div><div className="board-card-bottom">See things differently.<Icon name="arrow" /></div></div>
           <div className="board-card board-human"><div className="board-human-title">A little empathy.<br />A whole new perspective.</div><div className="board-card-bottom">Understand someone.<Icon name="arrow" /></div></div>
-          <span className="board-sticker"><Icon name="spark" />There’s more than one way to be you.</span>
         </div>
       </section>
       <section className="exploration-section" id="explore" aria-labelledby="explore-title"><div className="container">
@@ -61,7 +58,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
         {filtered.length === 0 && <div className="empty-state"><Icon name="search" /><h3>No majors found yet</h3><p>Try a different keyword or explore all the fields.</p><button className="button button-primary" onClick={() => { setQuery(""); setCategory("All majors"); }}>Show all majors<Icon name="arrow" /></button></div>}
         <p className="preview-note">Try guided simulations in Computer Science, Law, and Medicine. Personal insights are coming next.</p>
       </div></section>
-      <section className="closing-section container"><span className="closing-symbol"><Icon name="compass" /></span><div><h2>You’re exploring, not committing.</h2><p>Follow your curiosity. Try something unexpected. Your path can change as you do.</p></div><a href="#explore" className="closing-link">Find your first spark<Icon name="arrow" /></a></section>
+      <section className="closing-section container"><span className="closing-symbol"><Icon name="compass" /></span><div><h2>You’re exploring, not committing.</h2><p>Follow your curiosity. Try something unexpected. Your path can change as you do.</p></div></section>
     </main>
     <footer className="site-footer container"><a href="#" className="footer-brand">find your path.</a><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
     <dialog ref={dialog} className="preview-dialog major-preview-dialog" aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
