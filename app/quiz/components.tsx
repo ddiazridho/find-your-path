@@ -2,15 +2,9 @@
 import Link from "next/link";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, X, Check, Telescope, Sparkles, CircleHelp, Clock3, ListChecks, Repeat2, Wrench, FlaskConical, Palette, HandHeart, Megaphone } from "lucide-react";
-import Icon from "../components/ui-icon";
 import { dimensions, questions, ratingLabels, sectionLabel, ESSAY_MAX_LENGTH } from "./questions";
 import type { AiMajorRecommendation, EssayAnalysis, InterestProfile, QuizAnswer, QuizQuestion as Question, QuizResult } from "./types";
 
-export function QuizHeader() {
-  return <header className="site-header"><div className="container header-inner">
-    <Link href="/" className="brand" aria-label="Find Your Path, beranda"><span className="brand-symbol"><Icon name="compass" /></span><span>find your path<span className="brand-period">.</span></span></Link>
-  </div></header>;
-}
 export function QuizIllustration() {
   return <div className="assessment-illustration" aria-hidden="true"><div className="assessment-telescope"><Telescope size={88} strokeWidth={1.8} /></div><Sparkles className="assessment-spark" size={38} strokeWidth={1.8} /><CircleHelp className="assessment-help" size={36} strokeWidth={1.8} /></div>;
 }
@@ -21,7 +15,6 @@ export function QuizIntroduction({ onStart, resume, onClear }: { onStart: () => 
     <button className="button quiz-primary" onClick={onStart}>{resume ? "Lanjutkan Asesmen" : "Mulai Asesmen"}<ArrowRight size={19} /></button>
     <Link className="quiz-subtle-link" href="/#explore">Lihat jurusan dulu</Link>
     {resume && <><p className="quiz-resume">Progres terakhir tersimpan di perangkat ini.</p><button className="quiz-subtle-link" onClick={onClear}>Hapus jawaban dan mulai baru</button></>}
-    <details className="assessment-instructions"><summary><ListChecks size={17} aria-hidden="true" />Petunjuk dan privasi jawaban</summary><div><p>Ada 30 soal: 12 tentang minat, 6 pilihan situasi, 8 penalaran, dan 4 refleksi singkat. Jawab sesuai dirimu; soal refleksi boleh dilewati. Kamu bisa kembali dan mengubah jawaban sebelum mengirim asesmen.</p><p>Jawaban tersimpan di perangkat ini dan digunakan untuk menyusun hasil serta rekomendasi. Hindari menulis informasi pribadi sensitif. Jika memakai perangkat bersama, hapus jawaban melalui pilihan mulai ulang.</p></div></details>
   </main>;
 }
 export function QuizProgress({ index, answered, onBack, onClose }: { index: number; answered: number; onBack: () => void; onClose: () => void }) {
