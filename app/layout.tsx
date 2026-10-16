@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./simulation-theme.css";
 
 const geistSans = Manrope({
   variable: "--font-sans",

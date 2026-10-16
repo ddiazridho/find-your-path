@@ -15,4 +15,6 @@ Primary buttons and category filters use pill shapes and purple selected states.
 The homepage header includes the compass, navigation, and primary quiz action. Mobile retains the brand and quiz action. Quiz answers use purple selection and pastel surfaces. University form fields use neutral borders and purple focus. Simulation environments retain colors that explain their scenes and states.
 
 ## Interaction
+Simulation interface colors are shared in `app/simulation-theme.css`, imported by the root layout. Scope text, background, and button colors to named panels and controls. Preserve illustrated rooms, characters, props, charts, SVG fills, animation keyframes, and scene palette variables. Legacy Software screens opt in through `legacy-simulation`; their animated flow is excluded with `simulation-artwork`. Do not use unscoped descendant recoloring on simulation scenes.
+
 Preserve routes, product copy, search, filters, native dialog behavior, Escape dismissal, scroll locking, labels, visible keyboard focus, and reduced-motion support. Theme selection, caret, focus outlines, and scrollbars consistently. Color must not be the only indicator of selection or status. Do not invent assessment claims or outcomes.

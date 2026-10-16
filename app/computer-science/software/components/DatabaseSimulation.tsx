@@ -231,7 +231,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
   const resultColumns = queryResults.length > 0 ? Object.keys(queryResults[0]) : [];
 
   return (
-    <div className="w-full min-h-screen bg-[#07131e] text-slate-100 font-sans flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="legacy-simulation w-full min-h-screen bg-[#07131e] text-slate-100 font-sans flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Top Floating Glass Navigation */}
       <header className="sticky top-0 z-40 bg-[#0c1f33]/90 backdrop-blur-md border-b border-cyan-900/40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">

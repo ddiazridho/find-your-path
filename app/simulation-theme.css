@@ -1,0 +1,120 @@
+/* Interface colors only. Scene palettes and animation variables stay local. */
+:root :is(.learning-lab, .eg-page, .law-page, .med-page, .legacy-simulation) {
+  background: var(--color-sky);
+  color: var(--color-ink);
+}
+
+/* Preserve inherited artwork colors when the surrounding page changes. */
+:root .learning-lab .cs-room,
+:root .eg-page :is(.eg-scene, .pd-scene),
+:root .med-page .med-environment { color: #223d3a; }
+:root .law-page .law-stage { color: #20343a; }
+
+:root :is(.learning-lab, .eg-page, .law-page, .med-page) :is(.lab-header, .eg-site-header, .law-header, .med-header) {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+:root :is(.learning-lab, .eg-page, .law-page, .med-page) :is(.lab-brand, .eg-brand, .law-brand, .med-brand) { color: var(--color-ink); }
+:root :is(.learning-lab, .eg-page, .law-page, .med-page) :is(.lab-brand, .eg-brand, .law-brand, .med-brand) > span { color: var(--color-primary); }
+
+:root .learning-lab :is(.cs-page-heading, .lab-workspace-heading, .lab-panel-heading, .lab-guide, .lab-completion),
+:root .eg-page .eg-page-intro,
+:root .law-page .law-intro,
+:root .med-page .med-heading { color: var(--color-ink); }
+
+:root .learning-lab :is(.lab-header-title span, .cs-page-heading p, .cs-page-heading > span, .lab-workspace-heading > span, .lab-panel-heading > span, .lab-panel-foot, .lab-hint p, .lab-feedback, .lab-small-note, .lab-part-item small, .lab-palette-item small, .lab-completion p, .cs-learning-note, .cs-narration, .cs-speaker small, .cs-guide-speaker small, .cs-guide-action-note, .lab-dialogue-progress small),
+:root .eg-page :is(.eg-back, .eg-page-intro > div > p:last-child, .eg-case-stamp small, .eg-disclaimer),
+:root .law-page :is(.law-back, .law-subtitle, .law-subtitle strong, .law-scope, .law-premise, .law-disclaimer),
+:root .med-page :is(.med-heading p, .med-sidebar p, .med-mobile-note) { color: var(--color-muted); }
+
+:root .learning-lab :is(.cs-simulation, .lab-panel, .cs-workbench .lab-panel, .lab-completion, .lab-restart-prompt),
+:root .eg-page :is(.eg-game, .eg-recap, .pd-recap),
+:root .law-page :is(.law-experience, .law-verdict),
+:root .med-page :is(.med-sidebar, .med-story-card, .med-activity-card, .med-recap) { background: var(--color-surface); color: var(--color-ink); }
+
+:root .learning-lab :is(.cs-frame-top, .cs-frame-bottom),
+:root .eg-page :is(.eg-game-top, .eg-game-bottom, .pd-game-footer),
+:root .law-page :is(.law-experience-top, .law-game-bottom),
+:root .med-page .med-scene-header { background: var(--color-lilac); color: #614573; }
+:root .learning-lab .cs-frame-top > span:last-child,
+:root .eg-page :is(.eg-game-top b, .eg-game-bottom b, .eg-game-bottom strong, .pd-game-footer b) { color: #614573; }
+
+/* Dialogue overlays are controls, separate from the illustrated room. */
+:root .learning-lab :is(.cs-dialogue, .cs-workspace-dialogue),
+:root .eg-page :is(.eg-dialogue, .pd-dialogue),
+:root .law-page .law-story-panel { background: var(--color-surface); color: var(--color-ink); }
+:root .learning-lab :is(.cs-dialogue-text, .cs-workspace-dialogue h3, .cs-speaker h2, .cs-guide-speaker strong),
+:root .eg-page :is(.eg-dialogue-copy p, .eg-dialogue-speaker strong, .pd-dialogue-body p, .pd-speaker strong),
+:root .law-page :is(.law-story-main h2, .law-scene-label) { color: var(--color-ink); }
+:root .learning-lab :is(.cs-dialogue .cs-narration, .cs-dialogue .lab-dialogue-progress small, .cs-workspace-dialogue .lab-hint p, .cs-workspace-dialogue .lab-feedback),
+:root .eg-page :is(.eg-dialogue-speaker small, .eg-dialogue-footer > span, .pd-speaker small, .pd-dialogue-body > div > span),
+:root .law-page :is(.law-narration, .law-action-hint, .law-scene-heading small) { color: var(--color-muted); }
+
+:root .learning-lab :is(.lab-example, .cs-workspace-dialogue .lab-example, .lab-step-dots > span, .cs-workspace-dialogue .lab-step-dots > span),
+:root .eg-page :is(.eg-case-stamp, .eg-recap-icon, .eg-recap-lesson, .pd-recap-icon, .pd-recap-score),
+:root .law-page :is(.law-verdict-concepts, .law-scene-marker),
+:root .med-page .med-demo-badge { background: var(--color-lilac); color: #614573; }
+:root .eg-page :is(.eg-chapter, .eg-page-intro h1 span, .eg-recap-label, .eg-recap-lesson strong),
+:root .law-page :is(.law-title-period, .law-intro-kicker, .law-verdict-heading > span),
+:root .med-page :is(.med-eyebrow, .med-sidebar-kicker, .med-sidebar h2 em) { color: var(--color-primary); }
+:root .eg-page :is(.eg-recap > p:not(.eg-recap-label), .eg-recap-lesson span, .pd-recap > span, .pd-recap > p),
+:root .law-page :is(.law-verdict p, .law-verdict ul) { color: var(--color-muted); }
+
+/* Explicit action selectors avoid recoloring clickable scene props. */
+:root .learning-lab :is(.lab-primary, .cs-dialogue .lab-primary, .cs-workspace-dialogue .lab-primary, .lab-ping-controls .lab-primary),
+:root .eg-page :is(.eg-dialogue-footer button, .eg-action-layer button, .eg-recap-actions button, .pd-dialogue-body button, .pd-recap-actions button, .rd-action button),
+:root .law-page :is(.law-continue, .law-verdict-replay),
+:root .med-page .med-primary { background: var(--color-primary); color: white; }
+:root .learning-lab :is(.lab-primary, .cs-dialogue .lab-primary, .cs-workspace-dialogue .lab-primary, .lab-ping-controls .lab-primary):hover:not(:disabled),
+:root .eg-page :is(.eg-dialogue-footer button, .eg-action-layer button, .eg-recap-actions button, .pd-dialogue-body button, .pd-recap-actions button, .rd-action button):hover:not(:disabled),
+:root .law-page :is(.law-continue, .law-verdict-replay):hover:not(:disabled),
+:root .med-page .med-primary:hover:not(:disabled) { background: var(--color-primary-hover); color: white; }
+
+:root .learning-lab :is(.lab-secondary, .lab-quiet, .cs-dialogue .lab-quiet, .cs-workspace-dialogue .lab-quiet, .lab-part-item, .lab-palette-item),
+:root .eg-page :is(.eg-choice-layer button, .pd-choices button, .eg-recap-actions a, .pd-recap-actions a),
+:root .law-page :is(.law-step-back, .law-choice-bubble),
+:root .med-page .med-secondary { background: var(--color-surface); color: var(--color-primary); }
+:root .learning-lab :is(.lab-secondary, .lab-quiet, .cs-dialogue .lab-quiet, .cs-workspace-dialogue .lab-quiet, .lab-part-item, .lab-palette-item):hover:not(:disabled),
+:root .eg-page :is(.eg-choice-layer button, .pd-choices button, .eg-recap-actions a, .pd-recap-actions a):hover:not(:disabled),
+:root .law-page :is(.law-step-back, .law-choice-bubble):hover:not(:disabled),
+:root .med-page .med-secondary:hover:not(:disabled) { background: var(--color-lilac); color: #614573; }
+:root .eg-page :is(.eg-choice-layer button > span, .pd-choices button > span),
+:root .law-page :is(.law-choice-number, .law-choice-bubble small, .law-choice-bubble svg) { color: #614573; }
+
+:root .learning-lab .cs-fields a,
+:root .eg-page .eg-modules a,
+:root .law-page .law-other-fields a,
+:root .med-page .med-track-nav a { background: var(--color-surface); color: var(--color-ink); }
+:root .learning-lab .cs-fields a:is(:hover, [aria-current]),
+:root .eg-page .eg-modules a:is(:hover, .is-active),
+:root .law-page .law-other-fields a:is(:hover, .is-active),
+:root .med-page .med-track-nav a:is(:hover, .is-current) { background: var(--color-lilac); color: #614573; }
+:root .eg-page :is(.eg-module-number, .eg-module-name small, .eg-modules a.is-active small, .eg-modules a.is-active .eg-module-number),
+:root .law-page :is(.law-module-number, .law-module-name small, .law-other-fields a.is-active small, .law-other-fields a.is-active .law-module-number, .law-other-fields a.is-active svg) { color: #614573; }
+
+:root .learning-lab :is(.lab-step-dots > span.is-reached, .cs-workspace-dialogue .lab-step-dots > span.is-reached),
+:root .learning-lab :is(.lab-dialogue-progress > span.is-current, .cs-dialogue-footer .lab-dialogue-progress > span.is-current, .cs-phase-progress .is-reached),
+:root .eg-page :is(.eg-game-bottom > div span.is-active, .pd-game-footer i.is-active),
+:root .law-page .law-game-bottom i.is-active { background: var(--color-primary); color: white; }
+:root .learning-lab .lab-primary:disabled { background: var(--color-section); color: var(--color-muted); }
+
+/* Legacy Software utilities: opt-in wrapper, with the animated flow excluded. */
+:root .legacy-simulation :is([class*="bg-"], [class*="text-"]):not(:where(.simulation-artwork, .simulation-artwork *)) { color: var(--color-ink); }
+:root .legacy-simulation [class*="bg-"]:not(:where(.simulation-artwork, .simulation-artwork *, button, a)) { background-color: var(--color-surface); }
+:root .legacy-simulation :is(button, a):not(:where(.simulation-artwork, .simulation-artwork *)) { background-color: var(--color-lilac); color: #614573; }
+:root .legacy-simulation :is(button, a):hover:not(:disabled):not(:where(.simulation-artwork, .simulation-artwork *)) { background-color: var(--color-primary-hover); color: white; }
+:root .legacy-simulation button:is([class*="bg-emerald-600"], [class*="bg-cyan-600"], [class*="bg-purple-600"]):not(:where(.simulation-artwork, .simulation-artwork *)) { background-color: var(--color-primary); color: white; }
+:root .legacy-simulation button:is([class*="bg-emerald-600"], [class*="bg-cyan-600"], [class*="bg-purple-600"]):hover:not(:disabled) { background-color: var(--color-primary-hover); }
+:root .legacy-simulation :is(button, a) :is(span, svg):not(:where(.simulation-artwork, .simulation-artwork *)) { color: inherit; }
+:root .legacy-simulation .simulation-artwork { color: var(--color-slate-100, #f1f5f9); }
+
+/* Editing surfaces and teaching feedback use the same readable interface palette. */
+:root .learning-lab :is(.lab-editor, .lab-editor-panel .lab-panel-heading, .lab-terminal-output) { background: var(--color-section); color: var(--color-ink); }
+:root .learning-lab :is(.lab-editor textarea, .lab-editor-panel .lab-panel-heading span, .lab-line-numbers, .lab-terminal-label) { color: var(--color-ink); }
+:root .learning-lab .lab-editor textarea { caret-color: var(--color-primary); }
+:root .learning-lab :is(.lab-feedback.is-success, .cs-workspace-dialogue .lab-feedback.is-success) { color: var(--color-green); }
+:root .learning-lab :is(.lab-feedback.has-error, .cs-workspace-dialogue .lab-feedback.has-error, .lab-terminal-output .is-error) { color: #a33445; }
+:root .learning-lab :is(.lab-ip-fields input, .lab-ping-controls select) { background: var(--color-surface); color: var(--color-ink); }
+:root .learning-lab :is(.lab-breadboard, .lab-canvas-ground, .cs-guide-portrait) { color: #223d3a; }
+:root .learning-lab .lab-topology { color: #e5efdf; }
+:root .legacy-simulation button [class*="text-"]:not(:where(.simulation-artwork, .simulation-artwork *)) { color: inherit; }

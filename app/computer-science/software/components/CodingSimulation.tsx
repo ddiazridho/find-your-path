@@ -272,7 +272,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
   const lineCount = code.split("\n").length;
 
   return (
-    <div className="w-full min-h-screen bg-[#111827] text-slate-100 font-sans flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
+    <div className="legacy-simulation w-full min-h-screen bg-[#111827] text-slate-100 font-sans flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* Top Floating / Glass Navigation Bar */}
       <header className="sticky top-0 z-40 bg-[#1e293b]/90 backdrop-blur-md border-b border-slate-700/60 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">

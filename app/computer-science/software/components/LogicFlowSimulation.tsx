@@ -156,7 +156,7 @@ export default function LogicFlowSimulation({ isModal = false, onClose }: { isMo
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#0b1329] text-slate-100 font-sans flex flex-col selection:bg-purple-500/30 selection:text-purple-200">
+    <div className="legacy-simulation w-full min-h-screen bg-[#0b1329] text-slate-100 font-sans flex flex-col selection:bg-purple-500/30 selection:text-purple-200">
       {/* Top Floating Glass Navigation */}
       <header className="sticky top-0 z-40 bg-[#0f172a]/90 backdrop-blur-md border-b border-purple-900/40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
@@ -431,7 +431,7 @@ export default function LogicFlowSimulation({ isModal = false, onClose }: { isMo
             </div>
 
             {/* Radar Simulation Canvas */}
-            <div className="relative w-full h-52 bg-[#050b1a] rounded-xl border border-slate-800 overflow-hidden">
+            <div className="simulation-artwork relative w-full h-52 bg-[#050b1a] rounded-xl border border-slate-800 overflow-hidden">
               {/* Grid Lines */}
               <div 
                 className="absolute inset-0 opacity-20 pointer-events-none" 
