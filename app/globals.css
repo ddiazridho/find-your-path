@@ -71,6 +71,14 @@ html { scroll-padding-top: calc(var(--navbar-height) + 24px); }
 .header-note .icon { color: var(--color-primary); }
 .hero-divider { position: relative; height: clamp(32px, 4vw, 64px); background: var(--color-paper); pointer-events: none; }
 .hero-divider::before { content: ''; position: absolute; inset: 0; background: var(--color-sky); clip-path: polygon(0 25%, 19% 100%, 58% 0, 78% 100%, 100% 33%, 100% 100%, 0 100%); }
+.section-divider { position: relative; height: clamp(32px, 5vw, 80px); pointer-events: none; }
+.section-divider::before { content: ''; position: absolute; inset: 0; clip-path: polygon(0 0, 100% 0, 100% 62%, 85% 0, 58% 100%, 9% 38%, 0 100%); }
+.section-divider-sky { background: var(--color-paper); }
+.section-divider-sky::before { background: var(--color-sky); }
+.section-divider-paper { background: var(--color-section); }
+.section-divider-paper::before { background: var(--color-paper); }
+.home-footer-area { background: var(--color-section); }
+.home-footer-area .site-footer { border-top: 0; }
 .hero { display: grid; grid-template-columns: 1fr; justify-items: center; gap: 36px; padding-block: 72px 48px; text-align: center; background: var(--color-sky); box-shadow: 0 0 0 100vmax var(--color-sky); clip-path: inset(0 -100vmax); }
 .hero-copy { max-width: 850px; }
 .hero-copy h1 br { display: none; }
@@ -108,7 +116,7 @@ h1 { font-size: clamp(44px, 4.5vw, 64px); line-height: 1.13; font-weight: 800; l
 .board-human .board-card-bottom { padding-top: 8px; margin-top: 7px; border-color: rgb(93 77 46 / 20%); }
 .board-sticker { position: absolute; bottom: -15px; left: 26px; font-size: 10px; display: flex; align-items: center; gap: 6px; transform: rotate(-4deg); }
 .board-sticker .icon { width: 15px; height: 15px; }
-.exploration-section { background: var(--color-paper); border-block: 1px solid var(--color-line); padding-block: 64px; }
+.exploration-section { background: var(--color-paper); padding-block: 64px; }
 .section-heading { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
 h2 { font-size: 28px; font-weight: 800; line-height: 1.3; letter-spacing: -.035em; }
 .section-heading p { font-size: 15px; line-height: 1.7; color: var(--color-muted); margin-top: 12px; }

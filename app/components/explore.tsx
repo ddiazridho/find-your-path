@@ -35,10 +35,14 @@ export default function Explore({ majors }: { majors: Major[] }) {
     <main>
       <div className="hero-divider" aria-hidden="true" />
       <Hero />
+      <div className="section-divider section-divider-sky" aria-hidden="true" />
       <ExplorationSection filtered={filtered} query={query} setQuery={setQuery} category={category} setCategory={setCategory} openMajor={openMajor} />
-      <ClosingSection />
     </main>
-    <Footer />
+    <div className="home-footer-area">
+      <div className="section-divider section-divider-paper" aria-hidden="true" />
+      <ClosingSection />
+      <Footer />
+    </div>
     <MajorPreviewDialog dialog={dialog} selected={selected} closeDialog={closeDialog} />
   </>
 }
