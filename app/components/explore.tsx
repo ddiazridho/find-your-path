@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/app/i18n/provider";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { type Category, type Major } from "../majors";
@@ -7,12 +8,13 @@ import ExplorationSection from "./explore/exploration-section";
 import MajorPreviewDialog from "./explore/major-preview-dialog";
 
 export default function Explore({ majors }: { majors: Major[] }) {
+  const { t: tx, locale: language } = useTranslation();
   const searchParams = useSearchParams();
   const [category, setCategory] = useState<Category>("All majors");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Major | null>(() => majors.find(major => major.id === searchParams.get("major")) ?? null);
   const dialog = useRef<HTMLDialogElement>(null);
-  const filtered = majors.filter(major => (category === "All majors" || major.category === category) && `${major.name} ${major.category} ${major.skills.join(" ")}`.toLowerCase().includes(query.toLowerCase().trim()));
+  const filtered = majors.filter(major => (category === "All majors" || major.category === category) && `${major.name} ${tx(major.name)} ${major.category} ${tx(major.category)} ${major.skills.join(" ")} ${major.skills.map(skill => tx(skill)).join(" ")}`.toLocaleLowerCase(language).includes(query.toLocaleLowerCase(language).trim()));
   useEffect(() => {
     if (selected) {
       dialog.current?.showModal();

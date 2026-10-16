@@ -1,0 +1,78 @@
+{
+  "/computer-science/embedded-system": {
+    "title": "Embedded System Lab — Find Your Path",
+    "description": "Assemble a button-controlled LED with a breadboard, battery, resistor, and step-by-step guidance."
+  },
+  "/computer-science/multimedia": {
+    "title": "Multimedia Design Studio — Find Your Path",
+    "description": "Create a product promotion poster and explore brightness, contrast, and saturation in a guided design studio."
+  },
+  "/computer-science/networking": {
+    "title": "Networking Classroom — Find Your Path",
+    "description": "Connect devices, assign IP addresses, and follow packets through your first virtual network."
+  },
+  "/computer-science/software": {
+    "title": "Computer Science: Software Track — Find Your Path",
+    "description": "Join a classroom lesson and build your first website with guided HTML and CSS challenges and a live preview."
+  },
+  "/computer-science/software/simulation/coding": {
+    "title": "Coding & Bug Fix Simulation — Computer Science (Software Track)",
+    "description": "Hands-on beginner-friendly coding simulator. Fix real-world bugs, test calculations, and explore software development."
+  },
+  "/computer-science/software/simulation/database": {
+    "title": "Database & SQL Query Simulation — Computer Science (Software Track)",
+    "description": "Hands-on SQL query console simulator. Query live cloud database clusters and inspect telemetry data."
+  },
+  "/computer-science/software/simulation/logic-flow": {
+    "title": "Logic & Flowchart Simulation — Computer Science (Software Track)",
+    "description": "Hands-on algorithm and system logic architecture simulator. Design decision trees and test an autonomous rover."
+  },
+  "/law/business-commercial-law": {
+    "title": "Business & Commercial Law | Find Your Path",
+    "description": "Explore business contracts and transactions through an interactive story."
+  },
+  "/law/civil-law": {
+    "title": "Civil Law | Find Your Path",
+    "description": "Explore contracts, property and civil disputes through an interactive story."
+  },
+  "/law/constitutional-administrative-law": {
+    "title": "Constitutional & Administrative Law | Find Your Path",
+    "description": "Explore government decisions and constitutional limits through an interactive story."
+  },
+  "/law/criminal-law": {
+    "title": "Criminal Law | Find Your Path",
+    "description": "Explore criminal responsibility and justice through an interactive story."
+  },
+  "/": {
+    "title": "Find Your Path",
+    "description": "Explore university majors through real-world task previews. Follow your curiosity and discover a future that feels like you."
+  },
+  "/medicine/emergency": {
+    "title": "The First Critical Minutes | Medicine Lab",
+    "description": "Step into a fictional emergency room story and discover how emergency teams observe, think, and work together."
+  },
+  "/medicine/pediatrics": {
+    "title": "The Child Who Won't Play | Medicine Lab",
+    "description": "An interactive pediatric story about listening to a child, spotting signs of dehydration, and reassuring the family."
+  },
+  "/medicine/radiology": {
+    "title": "What's Inside the Image? | Medicine Lab",
+    "description": "An interactive radiology story about checking an image, comparing clues, and communicating observations for specialist review."
+  },
+  "/medicine/surgery": {
+    "title": "Before the First Incision | Medicine Lab",
+    "description": "An interactive story about focus and patient safety before surgery begins."
+  },
+  "/quiz": {
+    "title": "Asesmen Minat RIASEC — Find Your Path",
+    "description": "30 soal minat RIASEC, situasional, penalaran, dan refleksi diri untuk eksplorasi jurusan kuliah."
+  },
+  "/rekomendasi-universitas": {
+    "title": "Rekomendasi Universitas | Find Your Path",
+    "description": "Cari pilihan universitas dan program kuliah berdasarkan minat, jenjang, budget, serta prioritasmu."
+  },
+  "/_not-found": {
+    "title": "Halaman tidak ditemukan | Find Your Path",
+    "description": "Tautan ini mungkin sudah berubah. Kembali ke beranda untuk melanjutkan eksplorasimu."
+  }
+}

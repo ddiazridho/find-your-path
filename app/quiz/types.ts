@@ -22,4 +22,4 @@ export type EssayAnalysis = {
   ignoredQuestionIds: string[];
   recommendations: AiMajorRecommendation[];
 };
-export type QuizSession = { version: 4; phase: "intro" | "active" | "complete"; index: number; answers: QuizAnswers; result?: QuizResult; essayAnalysis?: EssayAnalysis };
+export type QuizSession = { version: 4; phase: "intro" | "active" | "complete"; index: number; answers: QuizAnswers; result?: QuizResult; essayAnalysis?: EssayAnalysis; essayAnalysisLocale?: 'id' | 'en' };

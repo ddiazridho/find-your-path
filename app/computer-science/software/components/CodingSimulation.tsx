@@ -1,18 +1,19 @@
 "use client";
+import { useTranslation } from "@/app/i18n/provider";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import confetti from "canvas-confetti";
-import { 
-  Play, 
-  RotateCcw, 
-  CheckCircle2, 
-  XCircle, 
-  Lightbulb, 
-  ArrowLeft, 
-  Terminal, 
-  Sparkles, 
-  Bug, 
-  FileCode, 
+import {
+  Play,
+  RotateCcw,
+  CheckCircle2,
+  XCircle,
+  Lightbulb,
+  ArrowLeft,
+  Terminal,
+  Sparkles,
+  Bug,
+  FileCode,
   ChevronRight,
   Info,
   Check
@@ -99,10 +100,10 @@ console.log("Calculated Price: $" + result);`,
     story: "New students are getting an email that says 'Welcome to FYP, [object Object]!' instead of their actual name. Fix the property access on the student object.",
     initialCode: `function createWelcomeMessage(student) {
   // student has properties: { name: "Maya Lin", track: "Software" }
-  
+
   // ⚠️ BUG ON LINE 5: We need the student's name, not the whole object!
   const greeting = "Welcome to FYP, " + student + "! Ready to explore " + student.track + "?";
-  
+
   return greeting;
 }
 
@@ -151,7 +152,7 @@ console.log(message);`,
     story: "The store banner promises 'Free shipping on orders $50 and above!'. But when a cart is exactly $50.00, it's wrongly rejecting free shipping!",
     initialCode: `function isFreeShipping(cartTotal) {
   // Free shipping threshold is $50.00 and up.
-  
+
   // ⚠️ BUG ON LINE 5: What happens when cartTotal is EXACTLY 50?
   if (cartTotal > 50) {
     return "FREE SHIPPING GRANTED! 🚚";
@@ -200,6 +201,7 @@ console.log("Cart Result: " + status);`,
 ];
 
 export default function CodingSimulation({ isModal = false, onClose }: { isModal?: boolean; onClose?: () => void }) {
+  const { t: tx } = useTranslation();
   const [activeChallengeIndex, setActiveChallengeIndex] = useState(0);
   const challenge = CHALLENGES[activeChallengeIndex];
 
@@ -211,11 +213,13 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
   const [activeTab, setActiveTab] = useState<"code" | "insight">("code");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    setCode(challenge.initialCode);
+  function selectChallenge(index: number) {
+    if (index === activeChallengeIndex) return;
+    setActiveChallengeIndex(index);
+    setCode(CHALLENGES[index].initialCode);
     setTestResult(null);
     setHintLevel(0);
-  }, [activeChallengeIndex, challenge.initialCode]);
+  }
 
   const handleRunCode = () => {
     sounds.playPulse();
@@ -257,7 +261,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
       const start = target.selectionStart;
       const end = target.selectionEnd;
 
-      const newCode = code.substring(0, start) + "  " + code.substring(end);
+      const newCode = editorCode.substring(0, start) + "  " + editorCode.substring(end);
       setCode(newCode);
 
       setTimeout(() => {
@@ -268,12 +272,13 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
     }
   };
 
-  const lineCount = code.split("\n").length;
+  const editorCode = code === challenge.initialCode ? code.split("\n").map(line => line.replace(/\/\/.*$/, comment => tx(comment))).join("\n") : code;
+  const lineCount = editorCode.split("\n").length;
 
   return (
     <div className="legacy-simulation w-full min-h-screen bg-[#111827] text-slate-100 font-sans flex flex-col selection:bg-emerald-500/30 selection:text-emerald-200">
       {/* Top Floating / Glass Navigation Bar */}
-      <section aria-label="Simulation tools" className="bg-[#1e293b]/90 backdrop-blur-md border-b border-slate-700/60 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
+      <section aria-label={tx("Simulation tools")} className="bg-[#1e293b]/90 backdrop-blur-md border-b border-slate-700/60 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           {isModal && onClose ? (
             <button
@@ -281,7 +286,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-600/50 text-xs font-semibold transition-all shadow-sm group"
             >
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span>Back to Office</span>
+              <span>{tx("Back to Office")}</span>
             </button>
           ) : null}
 
@@ -293,10 +298,8 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
             </span>
             <div>
               <div className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                Coding & Bug Fix Station
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
-                  Interactive Sandbox
-                </span>
+                {tx("Coding & Bug Fix Station")}<span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
+                  {tx("Interactive Sandbox")}</span>
               </div>
             </div>
           </div>
@@ -310,7 +313,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
             return (
               <button
                 key={ch.id}
-                onClick={() => { sounds.playClick(); setActiveChallengeIndex(idx); }}
+                onClick={() => { sounds.playClick(); selectChallenge(idx); }}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all ${
                   isActive
                     ? "bg-emerald-600 text-white shadow-sm"
@@ -322,7 +325,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                 ) : (
                   <Bug className="w-3 h-3 text-slate-400" />
                 )}
-                <span>Bug {idx + 1}</span>
+                <span>{tx("Bug ")}{idx + 1}</span>
               </button>
             );
           })}
@@ -338,14 +341,14 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
             {CHALLENGES.map((ch, idx) => (
               <button
                 key={ch.id}
-                onClick={() => { sounds.playClick(); setActiveChallengeIndex(idx); }}
+                onClick={() => { sounds.playClick(); selectChallenge(idx); }}
                 className={`px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap border ${
                   activeChallengeIndex === idx
                     ? "bg-emerald-600 text-white border-emerald-500"
                     : "bg-slate-800/80 text-slate-300 border-slate-700"
                 }`}
               >
-                Bug {idx + 1}: {ch.title.split(" ")[0]}
+                {tx("Bug ")}{idx + 1}: {tx(ch.title.split(" ")[0])}
               </button>
             ))}
           </div>
@@ -355,28 +358,28 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
             <div className="flex items-start justify-between gap-3 mb-3">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-800/60">
-                  {challenge.subtitle}
+                  {tx(challenge.subtitle)}
                 </span>
-                <div className="!text-xl font-bold text-white mt-1.5 leading-snug">{challenge.title}</div>
+                <div className="!text-xl font-bold text-white mt-1.5 leading-snug">{tx(challenge.title)}</div>
               </div>
               <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-slate-700/70 text-slate-300 border border-slate-600/40">
-                {challenge.difficulty}
+                {tx(challenge.difficulty)}
               </span>
             </div>
 
             <p className="text-sm text-slate-300 leading-relaxed bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/50 mb-4">
-              {challenge.story}
+              {tx(challenge.story)}
             </p>
 
             {/* Test Case Target */}
             <div className="space-y-2 mb-4 text-xs font-mono">
               <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-700/60 flex items-center justify-between">
-                <span className="text-slate-400">Input Data:</span>
-                <span className="text-amber-300 font-semibold">{challenge.testInputDescription}</span>
+                <span className="text-slate-400">{tx("Input Data:")}</span>
+                <span className="text-amber-300 font-semibold">{tx(challenge.testInputDescription)}</span>
               </div>
               <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-700/60 flex items-center justify-between">
-                <span className="text-slate-400">Expected Result:</span>
-                <span className="text-emerald-400 font-semibold">{challenge.expectedOutput}</span>
+                <span className="text-slate-400">{tx("Expected Result:")}</span>
+                <span className="text-emerald-400 font-semibold">{tx(challenge.expectedOutput)}</span>
               </div>
             </div>
 
@@ -392,7 +395,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                 >
                   <Lightbulb className="w-3.5 h-3.5" />
                   <span>
-                    {hintLevel === 0 ? "Need a Hint?" : `Hint (${hintLevel}/${challenge.hints.length})`}
+                    {tx(hintLevel === 0 ? "Need a Hint?" : `Hint (${hintLevel}/${challenge.hints.length})`)}
                   </span>
                 </button>
                 {hintLevel > 0 && (
@@ -400,8 +403,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                     onClick={() => setHintLevel(0)}
                     className="text-[11px] text-slate-400 hover:text-slate-300"
                   >
-                    Hide
-                  </button>
+                    {tx("Hide")}</button>
                 )}
               </div>
 
@@ -413,7 +415,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                       className="text-xs bg-amber-500/10 border border-amber-500/20 text-amber-200 p-2.5 rounded-lg flex items-start gap-2"
                     >
                       <ChevronRight className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-                      <span>{h}</span>
+                      <span>{tx(h)}</span>
                     </div>
                   ))}
                 </div>
@@ -425,14 +427,14 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
           <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4.5 text-xs text-slate-300">
             <div className="flex items-center gap-2 font-semibold text-slate-200 mb-2">
               <Sparkles className="w-4 h-4 text-emerald-400" />
-              <span>Real-World Role Insight: Software Engineers</span>
+              <span>{tx("Real-World Role Insight: Software Engineers")}</span>
             </div>
             <p className="leading-relaxed text-slate-300">
-              {challenge.explanation}
+              {tx(challenge.explanation)}
             </p>
             <div className="mt-3 pt-2.5 border-t border-slate-700/40 flex items-center gap-2 text-[11px] text-slate-400">
               <Info className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-              <span>Pure sandbox. No test grades or evaluations — just hands-on problem solving!</span>
+              <span>{tx("Pure sandbox. No test grades or evaluations — just hands-on problem solving!")}</span>
             </div>
           </div>
         </div>
@@ -450,7 +452,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                 <div className="h-3 w-px bg-slate-600/50 mx-2" />
                 <div className="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
                   <FileCode className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>calculator.js</span>
+                  <span>{tx("calculator.js")}</span>
                 </div>
               </div>
 
@@ -458,10 +460,10 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                 <button
                   onClick={handleReset}
                   className="px-2.5 py-1 rounded bg-slate-700/60 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition-all"
-                  title="Reset code to original"
+                  title={tx("Reset code to original")}
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>Reset</span>
+                  <span>{tx("Reset")}</span>
                 </button>
                 <button
                   onClick={handleRunCode}
@@ -469,7 +471,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                   className="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold font-mono flex items-center gap-1.5 shadow-md hover:shadow-emerald-900/40 transition-all cursor-pointer"
                 >
                   <Play className={`w-3.5 h-3.5 fill-current ${isRunning ? "animate-spin" : ""}`} />
-                  <span>{isRunning ? "Running..." : "Run Code"}</span>
+                  <span>{tx(isRunning ? "Running..." : "Run Code")}</span>
                 </button>
               </div>
             </div>
@@ -486,7 +488,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
               {/* Editable Area */}
               <textarea
                 ref={textareaRef}
-                value={code}
+                value={editorCode}
                 onChange={e => setCode(e.target.value)}
                 onKeyDown={handleKeyDown}
                 spellCheck={false}
@@ -501,7 +503,7 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
             <div className="bg-[#1e293b]/70 px-4 py-2 border-b border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
                 <Terminal className="w-3.5 h-3.5 text-sky-400" />
-                <span>Execution Output / Terminal</span>
+                <span>{tx("Execution Output / Terminal")}</span>
               </div>
               {testResult && (
                 <span
@@ -514,12 +516,12 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                   {testResult.passed ? (
                     <>
                       <CheckCircle2 className="w-3 h-3" />
-                      <span>Test Passed!</span>
+                      <span>{tx("Test Passed!")}</span>
                     </>
                   ) : (
                     <>
                       <XCircle className="w-3 h-3" />
-                      <span>Bug Detected</span>
+                      <span>{tx("Bug Detected")}</span>
                     </>
                   )}
                 </span>
@@ -530,24 +532,23 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
             <div className="p-4 font-mono text-xs space-y-2 flex-1">
               {!testResult && !isRunning && (
                 <p className="text-slate-500 italic">
-                  Click &apos;Run Code&apos; to execute the script and run test validations...
-                </p>
+                  {tx("Click 'Run Code' to execute the script and run test validations...")}</p>
               )}
 
               {isRunning && (
                 <div className="flex items-center gap-2 text-emerald-400 animate-pulse">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span>Compiling &amp; executing ticketCalculator.js...</span>
+                  <span>{tx("Compiling & executing ticketCalculator.js...")}</span>
                 </div>
               )}
 
               {testResult && (
                 <div className="space-y-3">
                   <div>
-                    <span className="text-slate-500">$ node calculator.js</span>
+                    <span className="text-slate-500">{tx("$ node calculator.js")}</span>
                     <div className="mt-1 bg-black/40 p-2.5 rounded-lg border border-slate-800 text-slate-200">
                       {testResult.logs.map((log, idx) => (
-                        <div key={idx} className="text-emerald-400 font-bold">{log}</div>
+                        <div key={idx} className="text-emerald-400 font-bold">{tx(log)}</div>
                       ))}
                     </div>
                   </div>
@@ -557,20 +558,18 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                       <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                       <div>
                         <div className="font-bold text-sm text-emerald-300">
-                          Bug Squashed! Excellent Work!
-                        </div>
+                          {tx("Bug Squashed! Excellent Work!")}</div>
                         <p className="text-xs text-emerald-200/90 mt-1">
-                          The function now correctly calculates the discounted ticket total. You just fixed a real-world software logic flaw!
-                        </p>
+                          {tx("The function now correctly calculates the discounted ticket total. You just fixed a real-world software logic flaw!")}</p>
                         {activeChallengeIndex < CHALLENGES.length - 1 && (
                           <button
                             onClick={() => {
                               sounds.playClick();
-                              setActiveChallengeIndex(prev => prev + 1);
+                              selectChallenge(activeChallengeIndex + 1);
                             }}
                             className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all"
                           >
-                            <span>Next Bug Challenge</span>
+                            <span>{tx("Next Bug Challenge")}</span>
                             <ChevronRight className="w-3.5 h-3.5" />
                           </button>
                         )}
@@ -580,11 +579,10 @@ export default function CodingSimulation({ isModal = false, onClose }: { isModal
                     <div className="p-3 bg-rose-950/60 border border-rose-500/40 rounded-xl text-rose-200 flex items-start gap-2.5">
                       <XCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-bold text-sm text-rose-300">Test Case Failed</div>
-                        <p className="text-xs text-rose-200/90 mt-1">{testResult.error}</p>
+                        <div className="font-bold text-sm text-rose-300">{tx("Test Case Failed")}</div>
+                        <p className="text-xs text-rose-200/90 mt-1">{tx(testResult.error)}</p>
                         <p className="text-[11px] text-slate-400 mt-2">
-                          💡 Hint: Check the operator on line 6 or click &quot;Need a Hint?&quot; above!
-                        </p>
+                          {tx("💡 Hint: Check the operator on line 6 or click \"Need a Hint?\" above!")}</p>
                       </div>
                     </div>
                   )}

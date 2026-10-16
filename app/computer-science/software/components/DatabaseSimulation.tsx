@@ -1,19 +1,20 @@
 "use client";
+import { useTranslation } from "@/app/i18n/provider";
 
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
-import { 
-  ArrowLeft, 
-  Play, 
-  RotateCcw, 
-  Database, 
-  Table as TableIcon, 
-  Terminal, 
-  Sparkles, 
-  Server, 
-  CheckCircle2, 
-  Layers, 
-  Clock, 
+import {
+  ArrowLeft,
+  Play,
+  RotateCcw,
+  Database,
+  Table as TableIcon,
+  Terminal,
+  Sparkles,
+  Server,
+  CheckCircle2,
+  Layers,
+  Clock,
   Activity,
   HardDrive,
   Copy,
@@ -98,6 +99,7 @@ const PRESET_QUERIES = [
 ];
 
 export default function DatabaseSimulation({ isModal = false, onClose }: { isModal?: boolean; onClose?: () => void }) {
+  const { t: tx } = useTranslation();
   const [activeTable, setActiveTable] = useState<string>("servers");
   const [queryInput, setQueryInput] = useState<string>("SELECT * FROM servers;");
   const [executedQuery, setExecutedQuery] = useState<string>("SELECT * FROM servers;");
@@ -232,7 +234,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
   return (
     <div className="legacy-simulation w-full min-h-screen bg-[#07131e] text-slate-100 font-sans flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Top Floating Glass Navigation */}
-      <section aria-label="Simulation tools" className="bg-[#0c1f33]/90 backdrop-blur-md border-b border-cyan-900/40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
+      <section aria-label={tx("Simulation tools")} className="bg-[#0c1f33]/90 backdrop-blur-md border-b border-cyan-900/40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           {isModal && onClose ? (
             <button
@@ -240,7 +242,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-xs font-semibold transition-all shadow-sm group"
             >
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span>Back to Office</span>
+              <span>{tx("Back to Office")}</span>
             </button>
           ) : null}
 
@@ -252,10 +254,8 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
             </span>
             <div>
               <div className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
-                Database &amp; SQL Query Station
-                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 whitespace-nowrap">
-                  Live Cloud Telemetry Sandbox
-                </span>
+                {tx("Database & SQL Query Station")}<span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 whitespace-nowrap">
+                  {tx("Live Cloud Telemetry Sandbox")}</span>
               </div>
             </div>
           </div>
@@ -264,7 +264,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
         {/* Live Cluster Health Badge */}
         <div className="hidden sm:flex items-center gap-2 text-xs font-mono bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-800/60 text-cyan-300">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-          <span>Vantis Spark Cloud: Connected (PostgreSQL v16)</span>
+          <span>{tx("Vantis Spark Cloud: Connected (PostgreSQL v16)")}</span>
         </div>
       </section>
 
@@ -276,12 +276,10 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
             <div className="flex items-center gap-2 mb-3">
               <Database className="w-4 h-4 text-cyan-400" />
               <div className="!text-sm font-bold text-white uppercase tracking-wider">
-                Database Schema
-              </div>
+                {tx("Database Schema")}</div>
             </div>
             <p className="text-xs text-slate-400 mb-4">
-              Select a table to view its structure or run preset queries against it.
-            </p>
+              {tx("Select a table to view its structure or run preset queries against it.")}</p>
 
             {/* Table Cards */}
             <div className="space-y-2.5">
@@ -305,14 +303,13 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2 font-mono text-xs font-bold text-cyan-300">
                         <TableIcon className="w-3.5 h-3.5" />
-                        <span>{tbl.name}</span>
+                        <span>{tx(tbl.name)}</span>
                       </div>
                       <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">
-                        {tbl.rows.length} rows
-                      </span>
+                        {tbl.rows.length} {tx(" rows")}</span>
                     </div>
                     <p className="text-[11px] text-slate-400 mb-2">
-                      {tbl.description}
+                      {tx(tbl.description)}
                     </p>
 
                     {/* Column chips */}
@@ -322,7 +319,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                           key={col.name}
                           className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-900/80 text-slate-300 border border-slate-700/40"
                         >
-                          {col.name}
+                          {tx(col.name)}
                         </span>
                       ))}
                     </div>
@@ -336,11 +333,10 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
           <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-4.5 text-xs text-slate-300">
             <div className="flex items-center gap-2 font-semibold text-slate-200 mb-2">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              <span>Real-World Role: Backend &amp; Data Engineers</span>
+              <span>{tx("Real-World Role: Backend & Data Engineers")}</span>
             </div>
             <p className="leading-relaxed text-slate-400 text-[11px]">
-              Every modern application (Instagram, Spotify, Uber) relies on databases to instantly filter and deliver information to millions of users. Mastering SQL query logic is a superpower in computer science!
-            </p>
+              {tx("Every modern application (Instagram, Spotify, Uber) relies on databases to instantly filter and deliver information to millions of users. Mastering SQL query logic is a superpower in computer science!")}</p>
           </div>
         </div>
 
@@ -350,7 +346,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
           <div className="flex flex-wrap gap-2 items-center">
             <span className="text-xs text-slate-400 font-mono flex items-center gap-1 mr-1">
               <Layers className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Presets:</span>
+              <span>{tx("Presets:")}</span>
             </span>
             {PRESET_QUERIES.map(pq => (
               <button
@@ -362,7 +358,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                 }}
                 className="text-xs font-mono px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-cyan-950/60 hover:border-cyan-500/50 border border-slate-700/70 text-slate-300 hover:text-cyan-200 transition-all cursor-pointer"
               >
-                {pq.label}
+                {tx(pq.label)}
               </button>
             ))}
           </div>
@@ -372,7 +368,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
             <div className="bg-[#0f243a] px-4 py-2.5 flex items-center justify-between border-b border-cyan-950">
               <div className="flex items-center gap-2 text-xs font-mono text-cyan-300">
                 <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                <span>SQL Query Console</span>
+                <span>{tx("SQL Query Console")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -383,7 +379,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                   className="px-2.5 py-1 rounded bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-mono flex items-center gap-1.5 transition-all"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>Clear</span>
+                  <span>{tx("Clear")}</span>
                 </button>
                 <button
                   onClick={() => executeSQL(queryInput)}
@@ -391,7 +387,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                   className="px-4 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold font-mono flex items-center gap-1.5 shadow-md hover:shadow-cyan-900/40 transition-all cursor-pointer"
                 >
                   <Play className={`w-3.5 h-3.5 fill-current ${isRunning ? "animate-spin" : ""}`} />
-                  <span>{isRunning ? "Running..." : "Run Query"}</span>
+                  <span>{tx(isRunning ? "Running..." : "Run Query")}</span>
                 </button>
               </div>
             </div>
@@ -403,7 +399,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                 rows={2}
                 spellCheck={false}
                 className="w-full bg-transparent text-cyan-200 resize-none outline-none font-mono text-sm leading-6 focus:ring-0 border-none p-0 selection:bg-cyan-600/40"
-                placeholder="Type SQL query (e.g. SELECT * FROM users WHERE subscription = 'Pro';)"
+                placeholder={tx("Type SQL query (e.g. SELECT * FROM users WHERE subscription = 'Pro';)")}
               />
             </div>
           </div>
@@ -413,24 +409,24 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1.5 text-emerald-400">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Status: 200 OK</span>
+                <span>{tx("Status: 200 OK")}</span>
               </span>
               <span>·</span>
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
-                <span>Execution: {executionTime}ms</span>
+                <span>{tx("Execution: ")}{executionTime}{tx("ms")}</span>
               </span>
               <span>·</span>
-              <span>Returned {queryResults.length} records</span>
+              <span>{tx("Returned ")}{queryResults.length} {tx(" records")}</span>
             </div>
 
             <button
               onClick={handleCopy}
               className="flex items-center gap-1 text-slate-400 hover:text-cyan-300 transition-colors"
-              title="Copy JSON results"
+              title={tx("Copy JSON results")}
             >
               {hasCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{hasCopied ? "Copied" : "Copy JSON"}</span>
+              <span>{tx(hasCopied ? "Copied" : "Copy JSON")}</span>
             </button>
           </div>
 
@@ -440,17 +436,15 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
               <div className="p-6 text-rose-300 font-mono text-xs flex items-start gap-3 bg-rose-950/20">
                 <span className="text-base">❌</span>
                 <div>
-                  <div className="font-bold text-rose-200">Query Execution Error</div>
-                  <p className="mt-1">{errorMessage}</p>
+                  <div className="font-bold text-rose-200">{tx("Query Execution Error")}</div>
+                  <p className="mt-1">{tx(errorMessage)}</p>
                   <p className="mt-2 text-slate-400">
-                    💡 Example: Try clicking one of the preset query chips above to test valid syntax!
-                  </p>
+                    {tx("💡 Example: Try clicking one of the preset query chips above to test valid syntax!")}</p>
                 </div>
               </div>
             ) : queryResults.length === 0 ? (
               <div className="p-8 text-center text-slate-500 font-mono text-xs my-auto">
-                No matching rows found for condition.
-              </div>
+                {tx("No matching rows found for condition.")}</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs font-mono">
@@ -458,7 +452,7 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                     <tr>
                       {resultColumns.map(col => (
                         <th key={col} className="p-3.5 font-bold">
-                          {col}
+                          {tx(col)}
                         </th>
                       ))}
                     </tr>
@@ -486,14 +480,14 @@ export default function DatabaseSimulation({ isModal = false, onClose }: { isMod
                                       : "bg-amber-500/15 text-amber-300 border-amber-500/30"
                                   }`}
                                 >
-                                  {String(val)}
+                                  {tx(String(val))}
                                 </span>
                               </td>
                             );
                           }
                           return (
                             <td key={col} className="p-3.5 text-slate-200">
-                              {String(val)}
+                              {tx(String(val))}
                             </td>
                           );
                         })}

@@ -1,7 +1,7 @@
-import { analyzeEssayAlignment } from "../essay-analysis";
+import { analyzeEssayAlignment, isEssayAnalysis, translateEssayAnalysis } from "../essay-analysis";
 import { calculateResults, isComplete, isValidAnswer } from "../scoring";
 import { questions } from "../questions";
-import type { QuizAnswers } from "../types";
+import type { EssayAnalysis, QuizAnswers } from "../types";
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +25,13 @@ export async function POST(request: Request) {
     }
     if (!isComplete(answers)) return Response.json({ error: "Soal pilihan belum lengkap." }, { status: 400 });
     const result = calculateResults(answers);
-    const analysis = await analyzeEssayAlignment(answers, result);
+    const locale = request.headers.get('X-FYP-Language') === 'en' ? 'en' : 'id';
+    const source = 'sourceAnalysis' in body ? body.sourceAnalysis : undefined;
+    if (source !== undefined && !isEssayAnalysis(source, answers)) return Response.json({ error: "Format analisis sumber tidak valid." }, { status: 400 });
+    const analysis = source !== undefined
+      ? await translateEssayAnalysis(source as EssayAnalysis, locale)
+      : await analyzeEssayAlignment(answers, result, fetch, locale);
+    if (!isEssayAnalysis(analysis, answers)) throw new Error('Invalid localized analysis');
     return Response.json({ analysis }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     return Response.json({ error: "Analisis hasil belum tersedia. Coba lagi nanti." }, { status: 503, headers: { "Cache-Control": "no-store" } });

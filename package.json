@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "node --test tests/quiz.test.mjs",
     "test:feedback": "tsx --test tests/feedback.test.ts",
+    "test:i18n": "tsx --test tests/i18n.test.ts",
+    "test:i18n:browser": "node tests/i18n.browser.mjs",
     "typecheck": "tsc --noEmit",
     "seed:universities": "tsx scripts/seed-universities.ts",
     "test:universities": "tsx --test tests/university.test.ts",

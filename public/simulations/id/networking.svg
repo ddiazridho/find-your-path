@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180" fill="none">
+  <defs>
+    <linearGradient id="net-bg" x1="0" y1="0" x2="440" y2="180" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#14262E" />
+      <stop offset="1" stop-color="#0E1B22" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="440" height="180" rx="10" fill="url(#net-bg)"/>
+
+  <!-- Network grid lines -->
+  <line x1="90" y1="90" x2="220" y2="55" stroke="#255163" stroke-width="2" stroke-dasharray="4 3"/>
+  <line x1="90" y1="90" x2="220" y2="125" stroke="#255163" stroke-width="2"/>
+  <line x1="220" y1="55" x2="350" y2="90" stroke="#3D7E99" stroke-width="2"/>
+  <line x1="220" y1="125" x2="350" y2="90" stroke="#255163" stroke-width="2" stroke-dasharray="4 3"/>
+  <line x1="220" y1="55" x2="220" y2="125" stroke="#255163" stroke-width="1.5"/>
+
+  <!-- Moving packet pulses -->
+  <circle cx="155" cy="72" r="3.5" fill="#4DD0E1"/>
+  <circle cx="285" cy="72" r="3.5" fill="#80DEEA"/>
+  <circle cx="160" cy="110" r="3.5" fill="#4DD0E1"/>
+
+  <!-- Left Node (Client) -->
+  <circle cx="90" cy="90" r="26" fill="#183642" stroke="#2E697E" stroke-width="2"/>
+  <rect x="79" y="81" width="22" height="15" rx="3" fill="#3A829E"/>
+  <line x1="83" y1="100" x2="97" y2="100" stroke="#3A829E" stroke-width="2"/>
+  <text x="90" y="128" fill="#DCEBF0" font-family="system-ui, sans-serif" font-size="8" font-weight="700" text-anchor="middle">KLIEN</text>
+  <text x="90" y="139" fill="#75A4B7" font-family="monospace" font-size="7" text-anchor="middle">192.168.1.104</text>
+
+  <!-- Center Top Node (Gateway / Router) -->
+  <circle cx="220" cy="55" r="26" fill="#1C3D4A" stroke="#489EB8" stroke-width="2.5"/>
+  <circle cx="220" cy="55" r="16" fill="#10252D"/>
+  <path d="M 213 55 L 227 55 M 220 48 L 220 62" stroke="#4DD0E1" stroke-width="2" stroke-linecap="round"/>
+  <text x="220" y="24" fill="#DCEBF0" font-family="system-ui, sans-serif" font-size="8" font-weight="700" text-anchor="middle">GERBANG : L3</text>
+
+  <!-- Center Bottom Node (Switch / Firewall) -->
+  <circle cx="220" cy="125" r="24" fill="#183642" stroke="#2E697E" stroke-width="2"/>
+  <rect x="210" y="118" width="20" height="14" rx="2" fill="#295D70"/>
+  <circle cx="215" cy="125" r="1.5" fill="#81C784"/>
+  <circle cx="220" cy="125" r="1.5" fill="#81C784"/>
+  <circle cx="225" cy="125" r="1.5" fill="#FFB74D"/>
+  <text x="220" y="160" fill="#75A4B7" font-family="system-ui, sans-serif" font-size="8" font-weight="600" text-anchor="middle">SWITCH INTI</text>
+
+  <!-- Right Node (Server Cloud) -->
+  <circle cx="350" cy="90" r="26" fill="#183642" stroke="#2E697E" stroke-width="2"/>
+  <path d="M 342 90 A 6 6 0 0 1 354 85 A 8 8 0 0 1 362 93 A 5 5 0 0 1 359 98 L 341 98 A 5 5 0 0 1 342 90 Z" fill="#3A829E"/>
+  <text x="350" y="128" fill="#DCEBF0" font-family="system-ui, sans-serif" font-size="8" font-weight="700" text-anchor="middle">PUSAT DATA</text>
+  <text x="350" y="139" fill="#75A4B7" font-family="monospace" font-size="7" text-anchor="middle">10.0.84.1</text>
+
+  <!-- Stats badge top right -->
+  <rect x="305" y="16" width="115" height="24" rx="5" fill="#0D1E25" stroke="#224857" stroke-width="1.2"/>
+  <circle cx="317" cy="28" r="3.5" fill="#81C784"/>
+  <text x="326" y="31" fill="#DCEBF0" font-family="system-ui, sans-serif" font-size="8" font-weight="700">RTT 8ms · 0% LOSS</text>
+</svg>

@@ -1,4 +1,6 @@
 "use client";
+import { useTranslation } from "@/app/i18n/provider";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,11 +12,11 @@ import { updateSession, useQuiz } from "../use-quiz";
 import type { EssayAnalysis, QuizAnswers } from "../types";
 
 const pendingAnalyses = new Map<string, Promise<EssayAnalysis>>();
-function requestAnalysis(answers: QuizAnswers) {
-  const key = JSON.stringify(questions.map(question => answers[question.id] ?? null));
+function requestAnalysis(answers: QuizAnswers, locale: 'id' | 'en', sourceAnalysis?: EssayAnalysis) {
+  const key = locale + JSON.stringify(questions.map(question => answers[question.id] ?? null));
   let pending = pendingAnalyses.get(key);
   if (!pending) {
-    pending = fetch("/quiz/analyze", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answers }), cache: "no-store" })
+    pending = fetch("/quiz/analyze", { method: "POST", headers: { "Content-Type": "application/json", "X-FYP-Language": locale }, body: JSON.stringify({ answers, ...(sourceAnalysis ? { sourceAnalysis } : {}) }), cache: "no-store" })
       .then(async response => {
         if (!response.ok) throw new Error("Analisis gagal.");
         const body = await response.json();
@@ -27,27 +29,29 @@ function requestAnalysis(answers: QuizAnswers) {
 }
 
 export default function ResultsPage() {
+  const { t: tx, locale: language } = useTranslation();
   const state = useQuiz();
   const router = useRouter();
-  const [analysisError, setAnalysisError] = useState(false);
+  const [errorLanguage, setErrorLanguage] = useState<string | null>(null);
+  const analysisError = errorLanguage === language;
   const [retry, setRetry] = useState(0);
   const session = state?.session;
   const answers = session?.answers;
-  const savedAnalysis = session?.essayAnalysis;
+  const savedAnalysis = (session?.essayAnalysisLocale ?? 'id') === language ? session?.essayAnalysis : undefined;
   useEffect(() => {
     if (session?.phase !== "complete" || !answers || savedAnalysis) return;
     let active = true;
-    requestAnalysis(answers).then(analysis => {
-      if (active) updateSession({ ...session, essayAnalysis: analysis });
+    requestAnalysis(answers, language, session.essayAnalysis).then(analysis => {
+      if (active) updateSession({ ...session, essayAnalysis: analysis, essayAnalysisLocale: language });
     }).catch(() => {
-      if (active) setAnalysisError(true);
+      if (active) setErrorLanguage(language);
     });
     return () => { active = false; };
-  }, [session, answers, savedAnalysis, retry]);
-  if (!state) return <main className="quiz-intro" role="status">Menyiapkan hasilmu...</main>;
-  return <>{state.warning && <p className="quiz-warning" role="status">{state.warning}</p>}{state.session.phase !== "complete" || !state.session.result
-    ? <main className="quiz-intro quiz-empty"><h1>Lengkapi asesmenmu dulu</h1><p>Hasil muncul setelah semua soal pilihan dijawab dan kamu menekan Submit Asesmen.</p><Link href="/quiz" className="button quiz-primary">Mulai atau Lanjutkan Asesmen</Link></main>
-    : <QuizResults result={state.session.result} analysis={state.session.essayAnalysis} analysisLoading={!state.session.essayAnalysis && !analysisError} analysisError={analysisError} onRetry={() => { setAnalysisError(false); setRetry(value => value + 1); }} onRetake={() => {
+  }, [session, answers, savedAnalysis, retry, language]);
+  if (!state) return <main className="quiz-intro" role="status">{tx("Menyiapkan hasilmu...")}</main>;
+  return <>{tx(state.warning && <p className="quiz-warning" role="status">{tx(state.warning)}</p>)}{state.session.phase !== "complete" || !state.session.result
+    ? <main className="quiz-intro quiz-empty"><h1>{tx("Lengkapi asesmenmu dulu")}</h1><p>{tx("Hasil muncul setelah semua soal pilihan dijawab dan kamu menekan Submit Asesmen.")}</p><Link href="/quiz" className="button quiz-primary">{tx("Mulai atau Lanjutkan Asesmen")}</Link></main>
+    : <QuizResults result={state.session.result} analysis={savedAnalysis} analysisLoading={!savedAnalysis && !analysisError} analysisError={analysisError} onRetry={() => { setErrorLanguage(null); setRetry(value => value + 1); }} onRetake={() => {
       pendingAnalyses.clear(); updateSession(emptySession()); router.replace("/quiz");
     }} />}</>;
 }

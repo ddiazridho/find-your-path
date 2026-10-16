@@ -16,6 +16,8 @@ Primary buttons and category filters use pill shapes and purple selected states.
 
 Every route uses one fixed white navbar from the root layout, with a subtle lower shadow and the supplied FYP logo aligned to the shared container. Heights are 72px on desktop, 64px on tablet, and 60px on mobile; the body reserves the same space. Routes outside the homepage show a bordered back arrow before the logo within the same margins. Results return to the quiz, legacy software simulations return to the software lesson, and major simulations return to Explore. Every route begins with a separate angular divider below the navbar and a pale blue opening area. Quiz answers use purple selection and pastel surfaces. University form fields use neutral borders and purple focus. Simulation environments retain colors that explain their scenes and states.
 
+The navbar includes a right-aligned language button with a Languages icon. Indonesian is the default; the button names the destination language (English or Bahasa Indonesia). The preference persists across routes and reloads without resetting answers, projects, or story progress. Authored text, accessibility labels, SVG artwork, downloads, and AI explanations follow the selected language; user entries, code syntax, official names, and canonical simulation values remain intact. Longer Indonesian board lettering uses a smaller display size to fit the existing illustrated card.
+
 ## Interaction
 
 Find University reuses the angular section transitions: pale blue introduction into the pale gray form and results area, then pale gray into the white footer. The lower transition follows the results when they are displayed. Straight section and footer borders are omitted on this route.

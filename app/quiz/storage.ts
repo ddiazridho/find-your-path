@@ -36,6 +36,7 @@ export function readSession(): { session: QuizSession; warning: string } {
     const phase = parsed.phase === "complete" && complete ? "complete" : parsed.phase === "intro" ? "intro" : "active";
     if ((migrating || parsed.phase === "complete") && !complete) index = questions.findIndex(q => q.type !== "essay" && !isValidAnswer(q, answers[q.id]));
     const session: QuizSession = { version: 4, phase, index, answers, ...(phase === "complete" ? { result: calculateResults(answers) } : {}), ...(phase === "complete" && isEssayAnalysis(parsed.essayAnalysis, answers) ? { essayAnalysis: parsed.essayAnalysis } : {}) };
+    if (session.essayAnalysis) session.essayAnalysisLocale = parsed.essayAnalysisLocale === 'en' ? 'en' : 'id';
     memory = session;
     if (migrating) {
       const saved = saveSession(session);
@@ -53,8 +54,8 @@ export function saveSession(session: QuizSession): boolean {
     if (session.phase === "intro" && Object.keys(session.answers).length === 0) localStorage.removeItem(STORAGE_KEY);
     else {
       // RIASEC scores remain derived; only the short AI interpretation is cached.
-      const { version, phase, index, answers, essayAnalysis } = session;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version, phase, index, answers, ...(phase === "complete" && essayAnalysis ? { essayAnalysis } : {}) }));
+      const { version, phase, index, answers, essayAnalysis, essayAnalysisLocale } = session;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version, phase, index, answers, ...(phase === "complete" && essayAnalysis ? { essayAnalysis, ...(essayAnalysisLocale ? { essayAnalysisLocale } : {}) } : {}) }));
     }
     for (const key of OLD_KEYS) localStorage.removeItem(key);
     return true;

@@ -1,4 +1,6 @@
-﻿"use client";
+"use client";
+import { useTranslation } from "@/app/i18n/provider";
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { questions } from "./questions";
@@ -7,6 +9,7 @@ import { emptySession } from "./storage";
 import { updateSession, useQuiz } from "./use-quiz";
 import { QuizIntroduction, QuizNavigation, QuizProgress, QuizQuestion } from "./components";
 export default function QuizFlow() {
+  const { t: tx } = useTranslation();
   const state = useQuiz();
   const router = useRouter();
   const [error, setError] = useState("");
@@ -16,13 +19,13 @@ export default function QuizFlow() {
   useEffect(() => {
     if (state?.session.phase === "complete") router.replace("/quiz/results");
   }, [state?.session.phase, router]);
-  if (!state) return <main className="quiz-intro" role="status">Menyiapkan asesmen...</main>;
+  if (!state) return <main className="quiz-intro" role="status">{tx("Menyiapkan asesmen...")}</main>;
   const { session, warning } = state;
   const { answers, index } = session;
   const answered = questions.filter(q => isValidAnswer(q, answers[q.id])).length;
   function pause() { if (!locked.current) updateSession({ ...session, phase: "intro" }); }
   function clear() {
-    if (!window.confirm("Hapus semua jawaban dan hasil asesmen dari browser ini? Tindakan ini tidak dapat dibatalkan.")) return;
+    if (!window.confirm(tx("Hapus semua jawaban dan hasil asesmen dari browser ini? Tindakan ini tidak dapat dibatalkan."))) return;
     locked.current = false; setError(""); updateSession(emptySession());
   }
   function back() {
@@ -51,8 +54,8 @@ export default function QuizFlow() {
       setError("Jawaban belum bisa diproses. Periksa kelengkapannya dan coba lagi.");
     }
   }
-  return <>{warning && <p className="quiz-warning" role="status">{warning}</p>}{error && <p className="quiz-warning" role="alert">{error}</p>}
-    {session.phase === "complete" ? <main className="quiz-intro" role="status">Menampilkan hasil asesmen…</main>
+  return <>{tx(warning && <p className="quiz-warning" role="status">{tx(warning)}</p>)}{tx(error && <p className="quiz-warning" role="alert">{tx(error)}</p>)}
+    {session.phase === "complete" ? <main className="quiz-intro" role="status">{tx("Menampilkan hasil asesmen…")}</main>
     : session.phase === "intro" ? <QuizIntroduction resume={answered > 0} onClear={clear} onStart={() => { locked.current = false; setBusy(false); setError(""); updateSession({ ...session, phase: "active" }); }} />
     : <main className="quiz-active"><QuizProgress index={index} answered={answered} onBack={back} onClose={pause} /><QuizQuestion key={questions[index].id} question={questions[index]} value={answers[questions[index].id]} onChange={value => { if (locked.current) return; setError(""); updateSession({ ...session, answers: { ...answers, [questions[index].id]: value } }); }} /><QuizNavigation index={index} answered={isValidAnswer(questions[index], answers[questions[index].id])} busy={busy} onBack={back} onNext={next} /></main>}
   </>;

@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from "@/app/i18n/provider";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
@@ -29,6 +30,7 @@ export type Progress = ReturnType<typeof useProgress>;
 export function Guide({ track, steps, progress, validate, children }: {
   track: Track; steps: LessonStep[]; progress: Progress; validate: () => string | null; children?: ReactNode;
 }) {
+  const { t: tx } = useTranslation();
   const current = steps[progress.step];
   const lesson = lessons[track];
   const heading = useRef<HTMLHeadingElement>(null);
@@ -39,23 +41,24 @@ export function Guide({ track, steps, progress, validate, children }: {
       heading.current?.focus({ preventScroll: true });
     }
   }, [progress.step]);
-  return <aside className="lab-guide cs-workspace-dialogue" aria-label="Step-by-step guide">
-    <div className="cs-guide-speaker"><div className="cs-guide-portrait"><Instructor track={track} portrait mood={progress.verified ? "encouraging" : progress.feedback ? "thinking" : "speaking"} /></div><strong>{lesson.teacher}</strong><small>{lesson.role}</small></div>
+  return <aside className="lab-guide cs-workspace-dialogue" aria-label={tx("Step-by-step guide")}>
+    <div className="cs-guide-speaker"><div className="cs-guide-portrait"><Instructor track={track} portrait mood={progress.verified ? "encouraging" : progress.feedback ? "thinking" : "speaking"} /></div><strong>{tx(lesson.teacher)}</strong><small>{tx(lesson.role)}</small></div>
     <div className="lab-guide-body">
-      <div className="lab-step-dots" aria-label={`Step ${progress.step + 1} of ${steps.length}`}>{steps.map((step, index) => <span key={step.title} className={index <= progress.step ? "is-reached" : ""}>{index < progress.step ? <Check size={13} /> : index + 1}</span>)}</div>
-      <h2 ref={heading} tabIndex={-1}>{current.title}</h2><p key={`instruction-${progress.step}`} className="cs-step-copy">{current.instruction}</p>
-      {current.example && <pre className="lab-example"><code>{current.example}</code></pre>}
-      <details key={`hint-${progress.step}`} className="lab-hint"><summary><Lightbulb size={16} />Need a hint?</summary><p>{current.hint}</p></details>
-      {children}
-      <p className={`lab-feedback ${progress.verified ? "is-success" : progress.feedback ? "has-error" : ""}`} role="status">{progress.feedback || "Take your time. Review your work when you are ready."}</p>
+      <div className="lab-step-dots" aria-label={tx(`Step ${progress.step + 1} of ${steps.length}`)}>{steps.map((step, index) => <span key={step.title} className={index <= progress.step ? "is-reached" : ""}>{index < progress.step ? <Check size={13} /> : index + 1}</span>)}</div>
+      <h2 ref={heading} tabIndex={-1}>{tx(current.title)}</h2><p key={`instruction-${progress.step}`} className="cs-step-copy">{tx(current.instruction)}</p>
+      {tx(current.example && <pre className="lab-example"><code>{tx(current.example)}</code></pre>)}
+      <details key={`hint-${progress.step}`} className="lab-hint"><summary><Lightbulb size={16} />{tx("Need a hint?")}</summary><p>{tx(current.hint)}</p></details>
+      {tx(children)}
+      <p className={`lab-feedback ${progress.verified ? "is-success" : progress.feedback ? "has-error" : ""}`} role="status">{tx(progress.feedback || "Take your time. Review your work when you are ready.")}</p>
     </div>
-    <div className="lab-guide-actions"><span className="cs-guide-action-note">STEP {progress.step + 1} OF {steps.length}</span><button className="lab-primary" onClick={() => progress.check(validate())}><CheckCircle2 size={17} />Review this step</button><button className="lab-primary" disabled={!progress.verified} onClick={() => progress.next(steps.length)}>{progress.step === steps.length - 1 ? "Finish project" : "Next step"}<ArrowRight size={17} /></button><button className="lab-quiet" disabled={progress.step === 0} onClick={progress.previous}><ArrowLeft size={15} />Previous instructions</button></div>
+    <div className="lab-guide-actions"><span className="cs-guide-action-note">{tx("STEP ")}{progress.step + 1} {tx(" OF ")}{steps.length}</span><button className="lab-primary" onClick={() => progress.check(validate())}><CheckCircle2 size={17} />{tx("Review this step")}</button><button className="lab-primary" disabled={!progress.verified} onClick={() => progress.next(steps.length)}>{tx(progress.step === steps.length - 1 ? "Finish project" : "Next step")}<ArrowRight size={17} /></button><button className="lab-quiet" disabled={progress.step === 0} onClick={progress.previous}><ArrowLeft size={15} />{tx("Previous instructions")}</button></div>
   </aside>;
 }
 
 export function Completion({ track, progress, children }: { track: Track; progress: Progress; children?: ReactNode }) {
+  const { t: tx } = useTranslation();
   if (!progress.finished) return null;
-  return <section className="lab-completion" aria-label="Project complete"><CheckCircle2 size={44} /><h2>You made it happen.</h2><p>{lessons[track].outcome}</p><p>What did you enjoy most: the problem solving, the making, or seeing your idea come to life?</p><div>{children}<button className="lab-secondary" onClick={progress.continueEditing}>Keep experimenting</button><Link className="lab-primary" href="/#explore">Explore another field<ArrowRight size={16} /></Link></div></section>;
+  return <section className="lab-completion" aria-label={tx("Project complete")}><CheckCircle2 size={44} /><h2>{tx("You made it happen.")}</h2><p>{tx(lessons[track].outcome)}</p><p>{tx("What did you enjoy most: the problem solving, the making, or seeing your idea come to life?")}</p><div>{tx(children)}<button className="lab-secondary" onClick={progress.continueEditing}>{tx("Keep experimenting")}</button><Link className="lab-primary" href="/#explore">{tx("Explore another field")}<ArrowRight size={16} /></Link></div></section>;
 }
 
 export function saveFile(content: string, name: string, type: string) {

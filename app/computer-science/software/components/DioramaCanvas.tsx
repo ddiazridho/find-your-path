@@ -1,20 +1,21 @@
 "use client";
+import { useTranslation } from "@/app/i18n/provider";
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { 
-  ArrowLeft, 
-  Volume2, 
-  VolumeX, 
-  Sparkles, 
-  Code, 
-  Workflow, 
-  Database, 
-  Maximize2, 
-  Minimize2, 
-  CheckCircle2, 
-  Compass, 
+import {
+  ArrowLeft,
+  Volume2,
+  VolumeX,
+  Sparkles,
+  Code,
+  Workflow,
+  Database,
+  Maximize2,
+  Minimize2,
+  CheckCircle2,
+  Compass,
   Info,
   X,
   ExternalLink
@@ -83,6 +84,7 @@ const HOTSPOTS: HotspotConfig[] = [
 ];
 
 export default function DioramaCanvas({ initialModal = "none" }: { initialModal?: ActiveSimulation }) {
+  const { t: tx } = useTranslation();
   const router = useRouter();
   const [activeModal, setActiveModal] = useState<ActiveSimulation>(initialModal);
   const [hoveredHotspot, setHoveredHotspot] = useState<string | null>(null);
@@ -167,7 +169,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
         }}
       >
         {/* Clean 3/4 Isometric Architectural Office Cutaway Background */}
-        <div 
+        <div
           className="absolute inset-0 w-full h-full bg-contain bg-center bg-no-repeat pointer-events-none"
           style={{
             backgroundImage: "url('/images/office-diorama.jpg')",
@@ -175,7 +177,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
         />
 
         {/* Ambient Warm Lighting Overlay Gradient */}
-        <div 
+        <div
           className="absolute inset-0 pointer-events-none opacity-40 mix-blend-soft-light"
           style={{
             background: "radial-gradient(circle at 50% 40%, rgba(255,248,230,0.8) 0%, rgba(30,25,20,0.4) 100%)"
@@ -210,7 +212,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
                   width: spot.area.width,
                   height: spot.area.height,
                 }}
-                title={spot.tooltip}
+                title={tx(spot.tooltip)}
               />
 
               {/* Floating Pill Badge & Pulsing Beacon Pin */}
@@ -247,7 +249,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
                     />
                   </span>
 
-                  <span className="drop-shadow-sm">{spot.badge}</span>
+                  <span className="drop-shadow-sm">{tx(spot.badge)}</span>
 
                   {isVisited && (
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
@@ -260,10 +262,10 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
                 {/* Floating Hover Tooltip Card */}
                 {isHovered && (
                   <div className="mt-2 w-64 bg-slate-900/95 border border-slate-700/80 rounded-xl p-3 shadow-2xl backdrop-blur-xl text-center pointer-events-none animate-in fade-in zoom-in-95 duration-150">
-                    <div className="text-xs font-bold text-white mb-0.5">{spot.title}</div>
-                    <div className="text-[11px] text-slate-300 leading-snug">{spot.roleDescription}</div>
+                    <div className="text-xs font-bold text-white mb-0.5">{tx(spot.title)}</div>
+                    <div className="text-[11px] text-slate-300 leading-snug">{tx(spot.roleDescription)}</div>
                     <div className="mt-2 text-[10px] font-semibold text-emerald-400 bg-emerald-950/70 py-0.5 px-2 rounded-full border border-emerald-800/50 inline-block">
-                      {spot.tooltip}
+                      {tx(spot.tooltip)}
                     </div>
                   </div>
                 )}
@@ -282,7 +284,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
             setEasterEggInfo("Interactive Kiosk: Level 12 Software Engineering Track & Cloud Infrastructure");
           }}
           className="absolute left-[54%] top-[56%] -translate-x-1/2 -translate-y-1/2 w-8 h-14 rounded-lg hover:ring-2 hover:ring-cyan-400/50 hover:bg-cyan-500/10 cursor-pointer z-10"
-          title="Inspect Directory Kiosk"
+          title={tx("Inspect Directory Kiosk")}
         />
 
         {/* Turnstiles */}
@@ -292,7 +294,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
             setEasterEggInfo("Biometric Speed Gates: Access Granted - FYP Engineering Student");
           }}
           className="absolute left-[44%] top-[57%] -translate-x-1/2 -translate-y-1/2 w-16 h-12 rounded-lg hover:ring-2 hover:ring-emerald-400/50 hover:bg-emerald-500/10 cursor-pointer z-10"
-          title="Inspect Biometric Turnstiles"
+          title={tx("Inspect Biometric Turnstiles")}
         />
       </div>
 
@@ -305,19 +307,19 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
           href="/"
           onClick={() => sounds.playClick()}
           className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white backdrop-blur-xl border border-white/25 text-xs font-bold transition-all shadow-xl hover:shadow-2xl hover:scale-105 group"
-          aria-label="Back to Majors"
+          aria-label={tx("Back to Majors")}
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span>Back to Majors</span>
+          <span>{tx("Back to Majors")}</span>
         </Link>
       </div>
 
       {/* Top-Center: Immersive Room Identity Pill */}
       <div className="absolute top-6 left-1/2 -translate-x-1/2 z-40 hidden sm:flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/80 backdrop-blur-xl border border-slate-700/60 text-xs shadow-xl">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="font-semibold text-slate-200">FYP · Computer Science</span>
+        <span className="font-semibold text-slate-200">{tx("FYP · Computer Science")}</span>
         <span className="text-slate-500">|</span>
-        <span className="font-medium text-emerald-300">Software Track Interactive Room</span>
+        <span className="font-medium text-emerald-300">{tx("Software Track Interactive Room")}</span>
       </div>
 
       {/* Top-Right: Sound & Fullscreen Controls */}
@@ -325,14 +327,14 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
         <button
           onClick={toggleSound}
           className="p-2.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white backdrop-blur-xl border border-slate-700/60 transition-all shadow-lg hover:scale-105 cursor-pointer"
-          title={isMuted ? "Unmute Audio" : "Mute Audio"}
+          title={tx(isMuted ? "Unmute Audio" : "Mute Audio")}
         >
           {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
         </button>
         <button
           onClick={toggleFullscreen}
           className="p-2.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white backdrop-blur-xl border border-slate-700/60 transition-all shadow-lg hover:scale-105 cursor-pointer hidden md:flex"
-          title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+          title={tx(isFullscreen ? "Exit Fullscreen" : "Fullscreen")}
         >
           {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
         </button>
@@ -346,7 +348,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
         <div className="flex items-center gap-3 px-2">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-300">
             <Compass className="w-4 h-4 text-emerald-400" />
-            <span>Stations Explored:</span>
+            <span>{tx("Stations Explored:")}</span>
             <span className="font-mono font-bold text-white bg-slate-800 px-2 py-0.5 rounded-md border border-slate-700">
               {exploredCount} / 3
             </span>
@@ -364,7 +366,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
             }`}
           >
             <Code className="w-3.5 h-3.5" />
-            <span>Coding</span>
+            <span>{tx("Coding")}</span>
           </button>
 
           <button
@@ -376,7 +378,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
             }`}
           >
             <Workflow className="w-3.5 h-3.5" />
-            <span>Logic</span>
+            <span>{tx("Logic")}</span>
           </button>
 
           <button
@@ -388,15 +390,15 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
             }`}
           >
             <Database className="w-3.5 h-3.5" />
-            <span>SQL</span>
+            <span>{tx("SQL")}</span>
           </button>
         </div>
       </div>
 
       {/* Easter Egg Notice Toast */}
-      {easterEggInfo && (
+      {tx(easterEggInfo && (
         <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 border border-cyan-500/40 rounded-xl px-4 py-2.5 text-xs text-cyan-200 shadow-2xl backdrop-blur-xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2">
-          <span>✨ {easterEggInfo}</span>
+          <span>✨ {tx(easterEggInfo)}</span>
           <button
             onClick={() => setEasterEggInfo(null)}
             className="text-slate-400 hover:text-white"
@@ -404,7 +406,7 @@ export default function DioramaCanvas({ initialModal = "none" }: { initialModal?
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
-      )}
+      ))}
 
       {/* =========================================================================
           FULLSCREEN MODAL SIMULATION OVERLAYS
