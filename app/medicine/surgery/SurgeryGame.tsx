@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, Check, ClipboardCheck, RotateCcw, ScanLine } from "lucide-react";
+import { ArrowRight, BookOpen, Check, ClipboardCheck, RotateCcw, ScanLine } from "lucide-react";
 import { medicineTracks } from "../tracks";
 import "../emergency/emergency-game.css";
 import "./surgery-game.css";
@@ -93,7 +93,6 @@ export default function SurgeryGame() {
   function replay() { setCurrentStep("briefing"); setScore(0); setDialogueIndex(0); setClues([]); setActiveClue(null); setToolsChecked(false); setFeedback(""); }
 
   return <main className="eg-page sg-page">
-    <header className="eg-site-header"><Link href="/" className="eg-brand">find your path<span>.</span></Link><Link href="/" className="eg-back"><ArrowLeft size={15} /> Explore majors</Link></header>
     <div className="eg-shell">
       <div className="eg-page-intro"><div><p className="eg-chapter">MEDICINE LAB <span>/</span> INTERACTIVE STORY</p><h1>Before the first incision<span>.</span></h1><p>One mismatched detail. One important decision. Your first shift in the OR starts now.</p></div></div>
       <section className="eg-game" aria-label="Operating room visual novel game">

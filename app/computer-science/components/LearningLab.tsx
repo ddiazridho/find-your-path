@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock, RotateCcw } from "lucide-react";
 import { lessons, type Track } from "../lessons";
-import { LessonHeader } from "./LessonUI";
 import LabScene from "./LabScene";
 import SimulationFrame from "./SimulationFrame";
 import SoftwareLab from "../software/SoftwareLab";
@@ -31,7 +30,6 @@ export default function LearningLab({ track }: { track: Track }) {
     requestAnimationFrame(() => document.getElementById("cs-dialogue-title")?.focus());
   }
   return <div className={`learning-lab track-${track}`}>
-    <LessonHeader track={track} />
     <main className="cs-shell">
       <div className="cs-page-heading"><div><h1>{lesson.title}</h1><p>A little guidance. A lot of learning by doing.</p></div><span><Clock size={15} />{lesson.duration}</span></div>
       <SimulationFrame phase={started ? 2 : 1} total={2} label={started ? "Your workbench" : "Meet your instructor"}>

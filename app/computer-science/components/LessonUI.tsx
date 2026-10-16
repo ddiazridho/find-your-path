@@ -58,10 +58,6 @@ export function Completion({ track, progress, children }: { track: Track; progre
   return <section className="lab-completion" aria-label="Project complete"><CheckCircle2 size={44} /><h2>You made it happen.</h2><p>{lessons[track].outcome}</p><p>What did you enjoy most: the problem solving, the making, or seeing your idea come to life?</p><div>{children}<button className="lab-secondary" onClick={progress.continueEditing}>Keep experimenting</button><Link className="lab-primary" href="/#explore">Explore another field<ArrowRight size={16} /></Link></div></section>;
 }
 
-export function LessonHeader({ track }: { track: Track }) {
-  return <header className="lab-header"><Link href="/#explore" className="lab-back" aria-label="Back to majors"><ArrowLeft size={20} /></Link><Link href="/" className="lab-brand">find your path<span>.</span></Link><div className="lab-header-title"><strong>{lessons[track].name}</strong><span>Computer Science · Guided simulation</span></div></header>;
-}
-
 export function saveFile(content: string, name: string, type: string) {
   const url = URL.createObjectURL(new Blob([content], { type }));
   const anchor = document.createElement("a"); anchor.href = url; anchor.download = name; anchor.click();

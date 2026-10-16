@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, Check, Droplets, Heart, RotateCcw, Sparkles, Stethoscope, Thermometer } from "lucide-react";
+import { ArrowRight, BookOpen, Check, Droplets, Heart, RotateCcw, Sparkles, Stethoscope, Thermometer } from "lucide-react";
 import { medicineTracks } from "../tracks";
 import "../emergency/emergency-game.css";
 import "./pediatrics-game.css";
@@ -102,7 +102,6 @@ export default function PediatricsGame() {
   const choices = currentStep === "trust" ? ["Stand over him, hold his hand, and say, ‘Don't be a baby. You're a big boy now.’", "Crouch to his eye level, smile, and say hello to Mimi."] : currentStep === "historyChoice" ? ["‘Did you forget to give him an appetite vitamin?’", "‘You have been caring for him. How much has he drunk, and when did he last pee?’"] : currentStep === "exam" ? ["Ask Rina to hold Kiki's hands tightly so he cannot pull away.", "Warm the stethoscope in your palm and examine Mimi first."] : currentStep === "analysis" ? ["An acute stomach illness caused by the wrong snack.", "Fever with signs of dehydration; a doctor should assess the cause."] : ["Make Kiki finish a full meal, then wait until tomorrow.", "Offer small, frequent sips of oral rehydration solution, watch for urine, and follow the doctor's assessment."];
 
   return <main className="eg-page pd-page">
-    <header className="eg-site-header"><Link href="/" className="eg-brand">find your path<span>.</span></Link><Link href="/" className="eg-back"><ArrowLeft size={15} /> Explore majors</Link></header>
     <div className="eg-shell pd-shell"><div className="eg-page-intro pd-intro"><div><h1>Listening to those who cannot yet tell their story<span>.</span></h1><p>Step into the pediatric clinic. Earn Kiki&apos;s trust, spot the clues, and work alongside Dr. Sarah.</p></div></div>
       <section className="eg-game pd-game" aria-label="The Child Who Won't Play interactive story"><div className="pd-scene" data-step={currentStep} data-speaker={speaker} data-comfort={comfortLabel}>
         <div className="pd-room" aria-hidden="true"><div className="pd-window"><span className="pd-sun" /></div><div className="pd-wall-band" /><div className="pd-floor" /><div className="pd-door" /><div className="pd-mural"><span className="pd-giraffe-head" /><span className="pd-giraffe-neck" /><span className="pd-giraffe-leg" /><i /><b>120<br />100<br />80</b></div><div className="pd-toy-shelf"><div className="pd-blocks"><i /><i /><i /></div><span>PLAY CORNER</span></div><div className="pd-exam-bed" /><div className="pd-chair" /><div className="pd-rug" /></div>

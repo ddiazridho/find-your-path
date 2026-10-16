@@ -9,7 +9,7 @@ export function QuizIllustration() {
   return <div className="assessment-illustration" aria-hidden="true"><div className="assessment-telescope"><Telescope size={88} strokeWidth={1.8} /></div><Sparkles className="assessment-spark" size={38} strokeWidth={1.8} /><CircleHelp className="assessment-help" size={36} strokeWidth={1.8} /></div>;
 }
 export function QuizIntroduction({ onStart, resume, onClear }: { onStart: () => void; resume: boolean; onClear: () => void }) {
-  return <main className="quiz-intro assessment-welcome"><Link className="assessment-back" href="/"><ArrowLeft size={16} aria-hidden="true" /> Kembali ke beranda</Link><QuizIllustration /><h1>Yuk, Kenalan Sama <span>Minatmu!</span></h1>
+  return <main className="quiz-intro assessment-welcome"><QuizIllustration /><h1>Yuk, Kenalan Sama <span>Minatmu!</span></h1>
     <p className="assessment-lead">Temukan aktivitas yang menarik buatmu lewat pertanyaan minat, pilihan kegiatan, penalaran, dan refleksi singkat.</p>
     <div className="assessment-badges"><span><Clock3 size={20} aria-hidden="true" />Tanpa batas waktu</span><span><CircleHelp size={20} aria-hidden="true" />{questions.length} pertanyaan</span></div>
     <button className="button quiz-primary" onClick={onStart}>{resume ? "Lanjutkan Asesmen" : "Mulai Asesmen"}<ArrowRight size={19} /></button>

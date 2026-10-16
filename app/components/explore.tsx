@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { type Category, type Major } from "../majors";
-import Navbar from "./explore/navbar";
 import Hero from "./explore/hero";
 import ExplorationSection from "./explore/exploration-section";
 import ClosingSection from "./explore/closing-section";
@@ -33,8 +32,8 @@ export default function Explore({ majors }: { majors: Major[] }) {
     setSelected(null);
   }
   return <>
-    <Navbar />
     <main>
+      <div className="hero-divider" aria-hidden="true" />
       <Hero />
       <ExplorationSection filtered={filtered} query={query} setQuery={setQuery} category={category} setCategory={setCategory} openMajor={openMajor} />
       <ClosingSection />

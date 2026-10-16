@@ -22,7 +22,7 @@
 .recommend-art-stamp span { font-size: 9px; line-height: 1.2; font-weight: 800; text-align: center; max-width: 70px; }
 .recommend-form-section { background: var(--color-section); border-block: 1px solid var(--color-line); padding-block: 72px 88px; }
 .recommend-form-layout { display: grid; grid-template-columns: minmax(225px, .75fr) minmax(0, 1.45fr); gap: clamp(40px, 7vw, 112px); align-items: start; }
-.recommend-side { position: sticky; top: 30px; padding-top: 8px; }
+.recommend-side { position: sticky; top: calc(var(--navbar-height) + 24px); padding-top: 8px; }
 .recommend-side h2 { font-size: clamp(28px, 2.7vw, 37px); max-width: 13ch; line-height: 1.2; }
 .recommend-side > p { margin-top: 20px; color: var(--color-muted); font-size: 13px; line-height: 1.8; max-width: 32ch; }
 .recommend-side-note { display: flex; gap: 12px; border-top: 1px solid var(--color-line); padding-top: 22px; margin-top: 38px; color: var(--color-primary); }

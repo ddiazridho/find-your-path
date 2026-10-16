@@ -3,7 +3,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Compass, GripVertical, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, Compass, GripVertical, Sparkles } from "lucide-react";
 
 const fields = ["Teknologi", "Bisnis"];
 const levels = ["D3", "D4", "S1"];
@@ -85,14 +85,10 @@ export default function RecommendationForm() {
   }
 
   return <div className="recommend-page">
-    <header className="site-header"><div className="container header-inner">
-      <Link href="/" className="brand" aria-label="Find Your Path, kembali ke beranda"><span className="brand-symbol"><Compass size={25} strokeWidth={2} /></span><span>find your path<span className="brand-period">.</span></span></Link>
-    </div></header>
 
     <main>
       <section className="recommend-intro container" aria-labelledby="recommend-title">
         <div className="recommend-intro-copy">
-          <Link href="/" className="recommend-back"><ArrowLeft size={16} /> Kembali ke beranda</Link>
           <h1 id="recommend-title">Temukan universitas yang <em>lebih dekat</em> dengan dirimu.</h1>
           <p>Ceritakan minat, pilihan jenjang, dan batas biaya kuliahmu. Kami akan mencari program di universitas yang sesuai dengan pertimbanganmu.</p>
           <a href="#form-rekomendasi" className="button button-primary">Mulai isi pertimbangan <ArrowRight size={17} /></a>

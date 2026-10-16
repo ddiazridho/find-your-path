@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, ClipboardCheck, Image as ImageIcon, Maximize2, Minus, Plus, RotateCcw, ScanLine } from "lucide-react";
+import { ArrowRight, BookOpen, ClipboardCheck, Image as ImageIcon, Maximize2, Minus, Plus, RotateCcw, ScanLine } from "lucide-react";
 import { medicineTracks } from "../tracks";
 import "../emergency/emergency-game.css";
 import "./radiology-game.css";
@@ -128,7 +128,6 @@ export default function RadiologyGame() {
   const canAdvance = step === "arrival" || step === "verifyFeedback" || step === "compareFeedback" || step === "interpretFeedback" || step === "ending" || (step === "inspect" && foundBoth) || (step === "mark" && !!marker);
 
   return <main className="eg-page rd-page">
-    <header className="eg-site-header"><Link href="/" className="eg-brand">find your path<span>.</span></Link><Link href="/" className="eg-back"><ArrowLeft size={15} /> Explore majors</Link></header>
     <div className="eg-shell">
       <div className="eg-page-intro"><div><p className="eg-chapter">MEDICINE LAB <span>/</span> INTERACTIVE STORY</p><h1>What&apos;s inside the image<span>?</span></h1><p>Follow Maya&apos;s case from the first safety check to a careful specialist handoff.</p></div></div>
       <section className="eg-game" aria-label="What's inside the image interactive radiology story">

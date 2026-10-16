@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import confetti from "canvas-confetti";
 import { 
   ArrowLeft, 
@@ -158,7 +157,7 @@ export default function LogicFlowSimulation({ isModal = false, onClose }: { isMo
   return (
     <div className="legacy-simulation w-full min-h-screen bg-[#0b1329] text-slate-100 font-sans flex flex-col selection:bg-purple-500/30 selection:text-purple-200">
       {/* Top Floating Glass Navigation */}
-      <header className="sticky top-0 z-40 bg-[#0f172a]/90 backdrop-blur-md border-b border-purple-900/40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
+      <section aria-label="Simulation tools" className="bg-[#0f172a]/90 backdrop-blur-md border-b border-purple-900/40 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
           {isModal && onClose ? (
             <button
@@ -168,16 +167,7 @@ export default function LogicFlowSimulation({ isModal = false, onClose }: { isMo
               <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
               <span>Back to Office</span>
             </button>
-          ) : (
-            <Link
-              href="/computer-science/software"
-              onClick={() => sounds.playClick()}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-xs font-semibold transition-all shadow-sm group"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span>Back to Office</span>
-            </Link>
-          )}
+          ) : null}
 
           <div className="h-4 w-px bg-slate-700 mx-1 hidden sm:block" />
 
@@ -214,7 +204,7 @@ export default function LogicFlowSimulation({ isModal = false, onClose }: { isMo
             <span>{simState === "running" ? "Simulating..." : "Test Algorithm"}</span>
           </button>
         </div>
-      </header>
+      </section>
 
       {/* Main Grid */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">

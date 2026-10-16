@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, Check, HeartPulse, RotateCcw } from "lucide-react";
+import { ArrowRight, BookOpen, Check, HeartPulse, RotateCcw } from "lucide-react";
 import { medicineTracks } from "../tracks";
 import "./emergency-game.css";
 
@@ -88,7 +88,6 @@ export default function EmergencyGame() {
   function replay() { setCurrentStep("arrival"); setScore(0); setDialogueIndex(0); setClues([]); setActiveClue(null); setFeedback(""); }
 
   return <main className="eg-page">
-    <header className="eg-site-header"><Link href="/" className="eg-brand">find your path<span>.</span></Link><Link href="/" className="eg-back"><ArrowLeft size={15} /> Explore majors</Link></header>
     <div className="eg-shell">
       <div className="eg-page-intro"><div><p className="eg-chapter">MEDICINE LAB <span>/</span> INTERACTIVE STORY</p><h1>The first critical minutes<span>.</span></h1><p>One patient. Two clues. Your first shift in the emergency room starts now.</p></div></div>
       <section className="eg-game" aria-label="The first critical minutes visual novel game">

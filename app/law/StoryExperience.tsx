@@ -70,10 +70,6 @@ export default function StoryExperience({ story }: { story: LawStory }) {
   const progress = scene.ending ? 4 : Math.min(3, Math.max(1, decisions.length + 1));
 
   return <div className={`law-page law-page--${story.field}`}>
-    <header className="law-header">
-      <Link href="/" className="law-brand">find your path<span>.</span></Link>
-      <Link href="/" className="law-back"><ArrowLeft size={15} /> Explore majors</Link>
-    </header>
 
     <main className="law-main">
       <div className="law-intro">
