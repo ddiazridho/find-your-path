@@ -12,10 +12,10 @@ High school students exploring suitable university majors.
 Find Your Path helps students discover their interests, strengths, and preferences through real-world task simulations, with personalized AI insights to inform study choices.
 
 ## Capabilities and Constraints
-This implementation is a frontend prototype in an existing Next.js project. A backend is planned; personalized AI insights are not implemented. Computer Science offers four working client-side guided simulations: Software, Embedded System, Networking, and Multimedia. Each starts with an illustrated classroom or lab and English instructor dialogue, then provides reviewed lesson steps in an interactive workspace. Other major tasks remain illustrative previews. Existing legacy Software simulation subroutes remain available. Use reusable global CSS.
+The Next.js server includes a university recommendation route backed by Qdrant Cloud and OpenAI. It recommends universities from a limited 33-program dataset using hard metadata filters, vector retrieval, weighted scoring, LLM reranking, and generated reasoning. Tuition data has source and coverage limits documented in `data/universities/README.md`. Computer Science offers four working client-side guided simulations: Software, Embedded System, Networking, and Multimedia. Other major tasks remain illustrative previews. Existing legacy Software simulation subroutes remain available. Use reusable global CSS.
 
 ## Brand Commitments
 Name: FYP (Find Your Path). The user delegates the theme, buttons, icons, and logo design for a hackathon presentation.
 
 ## Evidence on Hand
-PROJECT.md, the user brief, and the implemented Computer Science lessons. Students edit HTML/CSS with a live preview, assemble and test a button-controlled LED circuit, configure a simulated network and send animated pings, or compose and adjust a downloadable poster. These browser simulations do not provide personalized recommendations or connect to a backend.
+PROJECT.md, the user brief, the implemented Computer Science lessons, and the Excel dataset supplied for university recommendations. Students edit HTML/CSS with a live preview, assemble and test a button-controlled LED circuit, configure a simulated network and send animated pings, or compose and adjust a downloadable poster. University recommendations are a separate server-backed feature and do not evaluate simulation performance.

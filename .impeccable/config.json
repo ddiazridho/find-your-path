@@ -4,57 +4,6 @@
     "ignoreFiles": [],
     "ignoreValues": [
       {
-        "rule": "design-system-font",
-        "value": "georgia",
-        "createdAt": "2026-10-13T06:34:34.901Z",
-        "reason": "Law storytelling pages intentionally use an editorial serif for their distinct visual identity requested by the user."
-      },
-      {
-        "rule": "border-accent-on-rounded",
-        "value": "*",
-        "files": [
-          "app/medicine/emergency/emergency-game.css"
-        ],
-        "createdAt": "2026-10-14T13:12:22.409Z",
-        "reason": "Codex reviewed: the 3px curved border draws the oxygen mask tube in the ER illustration, not a card accent."
-      },
-      {
-        "rule": "side-tab",
-        "value": "*",
-        "files": [
-          "app/medicine/emergency/emergency-game.css"
-        ],
-        "createdAt": "2026-10-14T13:12:27.054Z",
-        "reason": "Codex reviewed: inset shadows shade illustrated characters, not cards or side-tab accents."
-      },
-      {
-        "rule": "border-accent-on-rounded",
-        "value": "*",
-        "files": [
-          "app/medicine/surgery/surgery-game.css"
-        ],
-        "createdAt": "2026-10-14T21:44:41.119Z",
-        "reason": "Codex reviewed: the thick top border depicts the physical edge of the illustrated sterile instrument table, not a card accent."
-      },
-      {
-        "rule": "side-tab",
-        "value": "*",
-        "files": [
-          "app/medicine/surgery/surgery-game.css"
-        ],
-        "createdAt": "2026-10-14T21:44:42.493Z",
-        "reason": "Codex reviewed: inset shadows shade the illustrated blanket and characters, not card side accents."
-      },
-      {
-        "rule": "side-tab",
-        "value": "*",
-        "files": [
-          "app/medicine/radiology/radiology-game.css"
-        ],
-        "createdAt": "2026-10-14T23:16:21.265Z",
-        "reason": "Agent: inset shading on illustrated staff torso and arms matches Emergency figures; it is not a card accent border"
-      },
-      {
         "rule": "gradient-text",
         "value": "*",
         "files": [

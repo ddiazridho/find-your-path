@@ -9,16 +9,22 @@
     "lint": "eslint",
     "test": "node --test tests/quiz.test.mjs",
     "typecheck": "tsc --noEmit",
+    "seed:universities": "tsx scripts/seed-universities.ts",
+    "test:universities": "tsx --test tests/university.test.ts",
     "test:browser": "node tests/quiz.browser.mjs"
   },
   "dependencies": {
+    "@next/env": "^16.4.2",
+    "@qdrant/js-client-rest": "^1.19.0",
     "@types/canvas-confetti": "^1.9.0",
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^14.1.0",
     "lucide-react": "^1.55.0",
     "next": "16.4.0",
+    "openai": "^7.34.0",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
@@ -30,6 +36,7 @@
     "eslint-config-next": "16.4.0",
     "playwright": "1.64.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
