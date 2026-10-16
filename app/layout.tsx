@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Geist_Mono } from "next/font/google";
 import Navbar from "./components/explore/navbar";
+import Footer from "./components/explore/footer";
 import "./globals.css";
 import "./simulation-theme.css";
 
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body><Navbar />{children}</body>
+      <body><Navbar />{children}<Footer /></body>
     </html>
   );
 }

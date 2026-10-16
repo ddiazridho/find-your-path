@@ -4,8 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { type Category, type Major } from "../majors";
 import Hero from "./explore/hero";
 import ExplorationSection from "./explore/exploration-section";
-import ClosingSection from "./explore/closing-section";
-import Footer from "./explore/footer";
 import MajorPreviewDialog from "./explore/major-preview-dialog";
 
 export default function Explore({ majors }: { majors: Major[] }) {
@@ -38,11 +36,6 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <div className="section-divider section-divider-sky" aria-hidden="true" />
       <ExplorationSection filtered={filtered} query={query} setQuery={setQuery} category={category} setCategory={setCategory} openMajor={openMajor} />
     </main>
-    <div className="home-footer-area">
-      <div className="section-divider section-divider-paper" aria-hidden="true" />
-      <ClosingSection />
-      <Footer />
-    </div>
     <MajorPreviewDialog dialog={dialog} selected={selected} closeDialog={closeDialog} />
   </>
 }

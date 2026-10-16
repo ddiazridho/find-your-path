@@ -77,8 +77,6 @@ html { scroll-padding-top: calc(var(--navbar-height) + 24px); }
 .section-divider-sky::before { background: var(--color-sky); }
 .section-divider-paper { background: var(--color-section); }
 .section-divider-paper::before { background: var(--color-paper); }
-.home-footer-area { background: var(--color-section); }
-.home-footer-area .site-footer { border-top: 0; }
 .hero { display: grid; grid-template-columns: 1fr; justify-items: center; gap: 36px; padding-block: 72px 48px; text-align: center; background: var(--color-sky); box-shadow: 0 0 0 100vmax var(--color-sky); clip-path: inset(0 -100vmax); }
 .hero-copy { max-width: 850px; }
 .hero-copy h1 br { display: none; }
@@ -204,8 +202,6 @@ h2 { font-size: 28px; font-weight: 800; line-height: 1.3; letter-spacing: -.035e
 .plan-scale { display: block; font-size: 7px; text-align: right; margin-top: 10px; }
 .preview-note { text-align: center; font-size: 10px; line-height: 1.7; color: var(--color-muted); margin-top: 29px; }
 .closing-section { display: flex; align-items: center; gap: 20px; padding-block: 45px; }
-.closing-symbol { display: grid; place-items: center; width: 53px; height: 53px; flex-shrink: 0; border-radius: 50%; background: var(--color-lilac); color: var(--color-primary); }
-.closing-symbol .icon { width: 29px; height: 29px; }
 .closing-section h2 { font-size: 19px; }
 .closing-section p { color: var(--color-muted); font-size: 14px; line-height: 1.8; margin-top: 8px; }
 .closing-link { margin-left: auto; display: inline-flex; align-items: center; gap: 15px; font-size: 11px; font-weight: 700; white-space: nowrap; }
@@ -344,7 +340,6 @@ h2 { font-size: 28px; font-weight: 800; line-height: 1.3; letter-spacing: -.035e
   .health-cross { font-size: 75px; }
   .preview-note { font-size: 10px; max-width: 40ch; margin-inline: auto; }
   .closing-section { padding-block: 34px; gap: 14px; align-items: flex-start; }
-  .closing-symbol { width: 43px; height: 43px; }
   .closing-section h2 { font-size: 18px; }
   .closing-section p { font-size: 11px; }
   .closing-link { margin-left: 57px; }

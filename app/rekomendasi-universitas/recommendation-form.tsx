@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { ArrowDown, ArrowRight, ArrowUp, Compass, GripVertical, Sparkles } from "lucide-react";
 
@@ -101,6 +100,8 @@ export default function RecommendationForm() {
         </div>
       </section>
 
+      <div className="section-divider section-divider-paper" aria-hidden="true" />
+      <div className="recommend-content">
       <section className="recommend-form-section" id="form-rekomendasi" aria-labelledby="form-title"><div className="container recommend-form-layout">
         <aside className="recommend-side">
           <h2 id="form-title">Beri kami sedikit gambaran.</h2>
@@ -126,7 +127,7 @@ export default function RecommendationForm() {
         </form>
       </div></section>
       {results && <section className="recommend-results container" ref={resultsRef} aria-labelledby="results-title"><div className="recommend-results-heading"><div><h2 id="results-title">Pilihan universitas untukmu</h2><p>{results.recommendations.length ? `${results.searched_count} program lolos pencarian. Berikut pilihan kampus teratas berdasarkan prioritasmu.` : results.message}</p></div><a href="#form-rekomendasi" className="button button-text">Ubah pertimbangan <ArrowRight size={16} /></a></div>{results.recommendations.length > 0 && <div className="recommend-result-grid">{results.recommendations.map((item, index) => <article className="recommend-result-card" key={item.id}><div className="recommend-result-image"><Image src={item.image_url} alt={`Gedung kampus ${item.universitas}`} fill sizes="(max-width: 700px) 100vw, 33vw" /><span>Pilihan {index + 1}</span></div><div className="recommend-result-body"><span className="recommend-result-location">{item.lokasi} · {item.jenjang} · {item.bidang}</span><h3>{item.universitas}</h3><strong className="recommend-result-program">{item.jurusan}</strong><p>{item.reasoning}</p><div className="recommend-result-fee"><span>Biaya tercatat per semester</span><strong>{formatAmount(item.biaya_min_per_semester)} – {formatAmount(item.biaya_max_per_semester)}</strong><small>{item.catatan_biaya}</small></div><div className="recommend-result-links"><a href={item.url_sumber.split(" ; ")[0]} target="_blank" rel="noopener noreferrer">Sumber biaya <ArrowRight size={14} /></a></div></div></article>)}</div>}<p className="recommend-results-note">Data dikumpulkan {results.recommendations[0]?.tanggal_data ?? "dari dataset awal"}. Rentang biaya belum tentu mencakup biaya masuk, biaya hidup, atau perubahan tarif. Periksa informasi resmi kampus sebelum mengambil keputusan.</p></section>}
+      </div>
     </main>
-    <footer className="site-footer container"><Link href="/" className="footer-brand">find your path.</Link><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
   </div>;
 }

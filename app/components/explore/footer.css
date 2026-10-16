@@ -1,0 +1,20 @@
+.fyp-footer {
+  background: var(--color-section);
+}
+
+.fyp-footer-university,
+.fyp-footer-university-divider {
+  background: var(--color-paper);
+}
+
+.fyp-footer-university-divider::before {
+  background: var(--color-section);
+}
+
+.fyp-footer .site-footer {
+  border-top: 0;
+}
+
+body:has(.quiz-navigation) .fyp-footer {
+  padding-bottom: calc(200px + env(safe-area-inset-bottom));
+}
