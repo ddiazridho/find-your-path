@@ -1,4 +1,4 @@
-.learning-lab { min-height: 100dvh; background: #f2f5ee; color: var(--color-ink); font-size: 14px; line-height: 1.6; }
+.learning-lab { min-height: 100dvh; background: var(--color-sky); color: var(--color-ink); font-size: 14px; line-height: 1.6; }
 .learning-lab button, .learning-lab input, .learning-lab select, .learning-lab textarea { font: inherit; }
 .learning-lab button, .learning-lab a, .learning-lab input, .learning-lab select, .learning-lab textarea, .learning-lab summary { touch-action: manipulation; }
 .learning-lab button:focus-visible, .learning-lab a:focus-visible, .learning-lab summary:focus-visible { outline: 3px solid #428764; outline-offset: 3px; }

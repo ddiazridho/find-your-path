@@ -1,8 +1,8 @@
-.quiz-shell { --quiz-indigo: #4f46c7; --quiz-light: #f0efff; min-height: 100dvh; }
+.quiz-shell { --quiz-indigo: var(--color-primary); --quiz-light: var(--color-lilac); min-height: 100dvh; background: var(--color-sky); }
 .quiz-shell :focus-visible { outline-color: var(--quiz-indigo); }
 .quiz-shell .button { font-size: 14px; gap: 12px; min-height: 50px; }
-.quiz-primary { color: white; background: linear-gradient(115deg, #455bcd, #7650bf); border: 0; }
-.quiz-primary:hover:not(:disabled) { box-shadow: 0 5px 16px #4f46c726; transform: translateY(-1px); }
+.quiz-primary { color: white; background: var(--color-primary); border: 0; }
+.quiz-primary:hover:not(:disabled) { background: var(--color-primary-hover); box-shadow: 0 5px 16px #88619a26; transform: translateY(-1px); }
 .quiz-secondary { background: white; border-color: var(--color-line); }
 .quiz-secondary:hover:not(:disabled) { background: var(--color-section); }
 .quiz-intro, .quiz-submitting { max-width: 740px; margin: auto; padding: 35px 24px 64px; text-align: center; }
@@ -41,7 +41,7 @@
 .rating-card input, .choice-card input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .rating-card:has(input:focus-visible), .choice-card:has(input:focus-visible) { outline: 3px solid var(--quiz-indigo); outline-offset: 4px; }
 .rating-card:hover, .choice-card:hover { border-color: #a6a1e6; transform: translateY(-2px); }
-.rating-card.is-selected, .choice-card.is-selected { background: var(--quiz-light); border-color: var(--quiz-indigo); color: #4139ac; }
+.rating-card.is-selected, .choice-card.is-selected { background: var(--quiz-light); border-color: var(--quiz-indigo); color: #614573; }
 .rating-card { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13px; text-align: center; padding: 20px 10px; font-size: 12px; }
 .rating-number { font-size: 29px; font-weight: 800; }
 .answer-check { position: absolute; right: 10px; top: 10px; opacity: 0; }
@@ -50,7 +50,7 @@
 .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .choice-card { padding: 18px; display: flex; align-items: center; gap: 15px; font-size: 14px; line-height: 1.5; min-height: 91px; }
 .choice-icon { flex-shrink: 0; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; background: var(--color-section); }
-.is-selected .choice-icon { background: #e0dcff; }
+.is-selected .choice-icon { background: #e3d5eb; }
 .choice-dot { width: 21px; height: 21px; flex-shrink: 0; margin-left: auto; border: 1px solid #bdc7bc; border-radius: 50%; display: grid; place-items: center; }
 .is-selected .choice-dot { background: var(--quiz-indigo); color: white; border-color: var(--quiz-indigo); }
 .quiz-navigation { position: fixed; z-index: 10; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--color-line); background: var(--color-paper); padding: 21px 24px calc(21px + env(safe-area-inset-bottom)); }
@@ -69,8 +69,8 @@
 .results-content { max-width: 1120px; margin: auto; padding: 0 24px 60px; }
 .insight-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .insight-card { min-width: 0; padding: 28px 30px; border: 1px solid var(--color-line); border-radius: var(--radius-card); display: flex; flex-direction: column; }
-.insight-dominant { background: #edf4ed; }
-.insight-essay { background: #f1eff8; }
+.insight-dominant { background: var(--color-mint); }
+.insight-essay { background: var(--color-lilac); }
 .insight-card h3 { font-size: 20px; font-weight: 800; line-height: 1.35; letter-spacing: -.025em; }
 .insight-card p { max-width: 68ch; color: var(--color-ink); font-size: 14px; line-height: 1.8; }
 .insight-card strong { display: block; margin-top: 18px; color: var(--color-primary); font-size: 13px; }
@@ -147,7 +147,7 @@
   .quiz-shell *, .quiz-shell *::before, .quiz-shell *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 /* Assessment extends the studio palette and existing quiz controls. */
-.quiz-shell { --quiz-indigo: var(--color-primary); --quiz-light: var(--color-mint); }
+.quiz-shell { --quiz-indigo: var(--color-primary); --quiz-light: var(--color-lilac); }
 .quiz-primary { background: var(--color-primary); }
 .quiz-primary:hover:not(:disabled) { background: var(--color-primary-hover); }
 .rating-card.is-selected, .choice-card.is-selected { color: var(--color-ink); }
