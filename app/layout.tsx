@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Find Your Path — Discover what clicks",
+  title: "Find Your Path",
   description: "Explore university majors through real-world task previews. Follow your curiosity and discover a future that feels like you.",
 };
 

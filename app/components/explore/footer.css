@@ -23,7 +23,3 @@
 .fyp-footer .site-footer {
   border-top: 0;
 }
-
-body:has(.quiz-navigation) .fyp-footer {
-  padding-bottom: calc(200px + env(safe-area-inset-bottom));
-}

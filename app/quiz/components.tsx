@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import FeedbackCard from "./feedback-card";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, X, Check, Telescope, Sparkles, CircleHelp, Clock3, ListChecks, Repeat2, Wrench, FlaskConical, Palette, HandHeart, Megaphone } from "lucide-react";
 import { dimensions, questions, ratingLabels, sectionLabel, ESSAY_MAX_LENGTH } from "./questions";
@@ -80,5 +81,5 @@ export function QuizResults({ result, analysis, analysisLoading, analysisError, 
     {analysis ? <ol className="recommendation-grid">{analysis.recommendations.map((item, index) => <RecommendedMajorCard key={item.name} recommendation={item} rank={index + 1} />)}</ol>
       : analysisLoading ? <p role="status">AI sedang menyiapkan rekomendasi jurusan…</p>
       : analysisError ? <div className="recommendation-unavailable"><p>Rekomendasi jurusan belum berhasil dibuat.</p><button className="button quiz-secondary" onClick={onRetry}>Coba analisis lagi</button></div> : null}
-  </section><div className="quiz-actions result-actions"><Link href="/#explore" className="button quiz-primary">Eksplore Semua Jurusan<ArrowRight size={17} /></Link><button className="button quiz-secondary" onClick={onRetake}><Repeat2 size={18} aria-hidden="true" />Ulangi Kuis</button></div></div></main>;
+  </section><div className="quiz-actions result-actions"><Link href="/#explore" className="button quiz-primary">Eksplore Semua Jurusan<ArrowRight size={17} /></Link><button className="button quiz-secondary" onClick={onRetake}><Repeat2 size={18} aria-hidden="true" />Ulangi Kuis</button></div><FeedbackCard /></div></main>;
 }

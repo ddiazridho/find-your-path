@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --test tests/quiz.test.mjs",
+    "test:feedback": "tsx --test tests/feedback.test.ts",
     "typecheck": "tsc --noEmit",
     "seed:universities": "tsx scripts/seed-universities.ts",
     "test:universities": "tsx --test tests/university.test.ts",

@@ -20,6 +20,14 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## App feedback
+
+Completed quiz results include one feedback card below the exploration actions. It accepts a satisfaction choice, a topic, and an optional message of up to 2,000 characters. The quiz itself has no site footer; results retain it.
+
+`POST /api/feedback` validates submissions and stores them in Qdrant using the existing `QDRANT_URL` / `QDRANT_API_KEY` settings (or the existing Cloud aliases). The collection defaults to `fyp_app_feedback_v1`; set `QDRANT_FEEDBACK_COLLECTION` to override it. The collection is created on the first submission, so the configured credentials need create-collection and write access. Feedback is stored as payload-only points, separately from university records. The same submission ID is reused on retry. Quiz answers, names, and contact details are not added to the payload.
+
+Run `npm run test:feedback` to check validation, persistence, retry IDs, and storage failures against a local mock Qdrant server, without writing to the configured database.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

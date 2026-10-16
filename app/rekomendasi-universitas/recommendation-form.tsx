@@ -100,7 +100,7 @@ export default function RecommendationForm() {
         </div>
       </section>
 
-      <div className="section-divider recommend-intro-divider" aria-hidden="true" />
+      <div className="section-divider section-divider-sky" style={{ background: "var(--color-section)" }} aria-hidden="true" />
       <div className="recommend-content">
       <section className="recommend-form-section" id="form-rekomendasi" aria-labelledby="form-title"><div className="container recommend-form-layout">
         <aside className="recommend-side">

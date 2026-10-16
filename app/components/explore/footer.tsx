@@ -10,6 +10,8 @@ export default function Footer() {
   const isHome = pathname === "/";
   const isUniversity = pathname === "/rekomendasi-universitas";
 
+  if (pathname === "/quiz") return null;
+
   return (
     <footer className={`fyp-footer${isHome ? " fyp-footer-home" : ""}${isUniversity ? " fyp-footer-university" : ""}`} aria-label="Find Your Path">
       <div className="section-divider fyp-footer-divider" aria-hidden="true" />

@@ -1,0 +1,30 @@
+.feedback-card { margin-top: 56px; padding: 36px 40px; background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-lg); text-align: left; }
+.feedback-card h2 { font-size: clamp(24px, 2.5vw, 30px); }
+.feedback-description, .feedback-confirmation p { max-width: 65ch; margin-top: 12px; font-size: 14px; line-height: 1.75; color: var(--color-muted); }
+.feedback-fields, .feedback-satisfaction { min-width: 0; margin: 0; padding: 0; border: 0; }
+.feedback-fields { display: grid; gap: 24px; margin-top: 28px; }
+.feedback-satisfaction legend, .feedback-field > label { display: block; margin-bottom: 12px; font-size: 14px; font-weight: 700; }
+.feedback-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.feedback-options label { position: relative; cursor: pointer; }
+.feedback-options input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.feedback-options span { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 58px; border: 1px solid var(--color-line); border-radius: var(--radius-card); font-size: 14px; font-weight: 700; }
+.feedback-options input:checked + span { border-color: var(--color-primary); background: var(--color-lilac); color: #614573; box-shadow: inset 0 0 0 1px var(--color-primary); }
+.feedback-options input:focus-visible + span { outline: 3px solid var(--color-primary); outline-offset: 4px; }
+.feedback-options label:hover span { background: var(--color-lilac); }
+.feedback-field > label > span { font-weight: 400; color: var(--color-muted); }
+.feedback-field select, .feedback-field textarea { width: 100%; padding: 14px 16px; border: 1px solid var(--color-line); border-radius: var(--radius-card); background: var(--color-paper); color: var(--color-ink); font: inherit; font-size: 16px; line-height: 1.6; }
+.feedback-field textarea { display: block; resize: vertical; }
+.feedback-field textarea::placeholder { color: var(--color-muted); }
+.feedback-count { margin-top: 8px; text-align: right; font-size: 12px; color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.feedback-submit { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.feedback-submit p { font-size: 12px; line-height: 1.6; color: var(--color-muted); }
+.feedback-submit .button { flex-shrink: 0; }
+.feedback-error { margin-top: 16px; color: #8a312b; font-size: 14px; line-height: 1.6; }
+.feedback-confirmation > svg { color: var(--color-green); margin-bottom: 16px; }
+.feedback-fields:disabled { opacity: .65; }
+@media (max-width: 600px) {
+  .feedback-card { margin-top: 36px; padding: 26px 20px; }
+  .feedback-options { gap: 8px; }
+  .feedback-options span { flex-direction: column; gap: 8px; padding: 12px 4px; font-size: 12px; }
+  .feedback-submit { flex-direction: column; align-items: stretch; gap: 16px; }
+}
