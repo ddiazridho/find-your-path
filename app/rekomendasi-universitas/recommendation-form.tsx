@@ -87,8 +87,6 @@ export default function RecommendationForm() {
   return <div className="recommend-page">
     <header className="site-header"><div className="container header-inner">
       <Link href="/" className="brand" aria-label="Find Your Path, kembali ke beranda"><span className="brand-symbol"><Compass size={25} strokeWidth={2} /></span><span>find your path<span className="brand-period">.</span></span></Link>
-      <nav aria-label="Navigasi utama"><Link href="/" className="recommend-nav-link">Jelajahi jurusan</Link><span className="nav-active" aria-current="page">Rekomendasi universitas</span></nav>
-      <span className="header-note">A little curiosity goes a long way <Sparkles size={16} /></span>
     </div></header>
 
     <main>

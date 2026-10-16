@@ -12,25 +12,23 @@ export default function Explore({ majors }: { majors: Major[] }) {
   const [category, setCategory] = useState<Category>("All majors");
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Major | null>(() => majors.find(major => major.id === searchParams.get("major")) ?? null);
-  const [showHow, setShowHow] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const filtered = majors.filter(major => (category === "All majors" || major.category === category) && `${major.name} ${major.category} ${major.skills.join(" ")}`.toLowerCase().includes(query.toLowerCase().trim()));
   useEffect(() => {
-    if (selected || showHow) {
+    if (selected) {
       dialog.current?.showModal();
       const previous = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => { document.body.style.overflow = previous; };
     }
     dialog.current?.close();
-  }, [selected, showHow]);
+  }, [selected]);
   function openMajor(major: Major) {
     setSelected(major);
   }
   function closeDialog() {
     dialog.current?.close();
     setSelected(null);
-    setShowHow(false);
   }
   return <>
     <header className="site-header"><div className="container header-inner">
@@ -42,7 +40,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="hero container" aria-labelledby="hero-title">
         <div className="hero-copy"><h1 id="hero-title">Your future.<br />Yours to <span className="explore-word">explore<svg viewBox="0 0 310 16" fill="none" aria-hidden="true"><path d="M3 12C83 1 199 1 306 9" stroke="currentColor" strokeWidth="5" strokeLinecap="round" /></svg></span>.</h1>
           <p>You don’t have to have it all figured out.<br className="desktop-break" /> Try real-world challenges, discover what clicks,<br className="desktop-break" /> and find a major that feels like you.</p>
-          <div className="hero-actions"><Link className="button button-primary" href="/quiz">Explore the possibilities<Icon name="arrow" /></Link><button className="button button-text" onClick={() => setShowHow(true)}>Find University<span className="play-icon"><svg width="11" height="12" viewBox="0 0 11 12" aria-hidden="true"><path d="m2 1 8 5-8 5Z" fill="currentColor" /></svg></span></button></div>
+          <div className="hero-actions"><Link className="button button-primary" href="/quiz">Explore the possibilities<Icon name="arrow" /></Link><Link className="button button-text" href="/rekomendasi-universitas">Find University<Icon name="arrow" /></Link></div>
           <div className="hero-reassurance"><span><Icon name="check" />No right or wrong answers</span><span><Icon name="check" />Go at your own pace</span></div>
         </div>
         <div className="possibility-board" aria-label="Explore by doing: build, create, and understand">
@@ -66,7 +64,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
       <section className="closing-section container"><span className="closing-symbol"><Icon name="compass" /></span><div><h2>You’re exploring, not committing.</h2><p>Follow your curiosity. Try something unexpected. Your path can change as you do.</p></div><a href="#explore" className="closing-link">Find your first spark<Icon name="arrow" /></a></section>
     </main>
     <footer className="site-footer container"><a href="#" className="footer-brand">find your path.</a><p>A little more clarity. A lot more possibility.</p><span>Made for your next chapter.</span></footer>
-    <dialog ref={dialog} className={`preview-dialog ${selected ? "major-preview-dialog" : ""}`} aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
+    <dialog ref={dialog} className="preview-dialog major-preview-dialog" aria-labelledby="dialog-title" onCancel={closeDialog} onClose={closeDialog} onClick={event => { if (event.target === event.currentTarget) closeDialog(); }}>
       <button className="dialog-close" aria-label="Close preview" onClick={closeDialog} autoFocus><Icon name="close" /></button>
       {selected ? <div className="dialog-content">
         <h2 id="dialog-title">{selected.name}</h2>
@@ -74,7 +72,7 @@ export default function Explore({ majors }: { majors: Major[] }) {
         <p>{selected.description}</p>
         <div className="skill-list">{selected.skills.map(skill => <span key={skill}>{skill}</span>)}</div>
         <MajorPreview key={selected.id} preview={selected.preview} onNavigate={closeDialog} />
-      </div> : <div className="dialog-content how-content"><span className="how-compass"><Icon name="compass" /></span><h2 id="dialog-title">Find out by trying it out.</h2><p>Small experiences can lead to big discoveries.</p><ol className="how-steps"><li><h3>Follow your curiosity</h3><p>Browse majors and choose a challenge that catches your eye.</p></li><li><h3>Step into the work</h3><p>Try guided tasks in Computer Science, Law, and Medicine.</p></li><li><h3>Get to know yourself</h3><p>Reflect on what you enjoyed making and which challenges sparked your curiosity.</p></li></ol><div className="how-recommendation"><h3>Want to narrow down your options?</h3><p>Tell us what you enjoy, your study plans, and what matters most to you.</p><Link className="button button-primary" href="/rekomendasi-universitas" onClick={closeDialog}>Explore university recommendations<Icon name="arrow" /></Link></div><p className="how-note">Computer Science, Law, and Medicine simulations are ready to explore. University recommendations use the available campus dataset.</p><button className="button button-text" onClick={closeDialog}>Keep exploring majors<Icon name="arrow" /></button></div>}
+      </div> : null}
     </dialog>
   </>
 }
